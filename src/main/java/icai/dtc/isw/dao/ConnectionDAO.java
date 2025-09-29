@@ -4,7 +4,7 @@ import java.sql.*;
 
 import icai.dtc.isw.configuration.PropertiesISW;
 
-hhhh
+
 
 public class ConnectionDAO {
 	private static ConnectionDAO connectionDAO;
