@@ -1,78 +1,229 @@
 package icai.dtc.isw.ui;
 
-import icai.dtc.isw.client.Client;
-import icai.dtc.isw.domain.Customer;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 
 public class JVentana extends JFrame {
-    public static void main(String[] args) {
-        new JVentana();
-    }
-    private int id;
+    private CardLayout cardLayout;
+    private JPanel mainPanel;
+
+    private JTextField usuarioField;
+    private JPasswordField contrasenaField;
+    private JPasswordField confirmarContrasenaField;
+    private JComboBox<String> sexoComboBox;
+    private JSpinner edadSpinner;
+    private JCheckBox glutenCheckBox, lactosaCheckBox, otroAlergiaCheckBox;
+    private JTextField alimentosNoComeField;
+
     public JVentana() {
-        super("INGENIERÍA DEL SOFTWARE");
-        this.setLayout(new BorderLayout());
-        //Pongo un panel arriba con el título
-        JPanel pnlNorte = new JPanel();
-        JLabel lblTitulo = new JLabel("Prueba COMUNICACIÓN", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Courier", Font.BOLD, 20));
-        pnlNorte.add(lblTitulo);
-        this.add(pnlNorte, BorderLayout.NORTH);
+        setTitle("Proyecto ISW");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 600);
+        setLocationRelativeTo(null);
 
-        //Pongo el panel central el botón
-        JPanel pnlCentro = new JPanel();
-
-        JLabel lblId = new JLabel("Introduzca el id", SwingConstants.CENTER);
-        JButton btnInformacion = new JButton("Recibir información");
-        JTextField txtId = new JTextField();
-        txtId.setBounds(new Rectangle(250,150,250,150));
-        txtId.setHorizontalAlignment(JTextField.LEFT);
-        pnlCentro.add(lblId);
-        pnlCentro.add(txtId);
-        pnlCentro.add(btnInformacion);
-        pnlCentro.setLayout(new BoxLayout(pnlCentro, BoxLayout.	X_AXIS));
-        this.add(pnlCentro, BorderLayout.CENTER);
-
-        //El Sur lo hago para recoger el resultado
-        JPanel pnlSur = new JPanel();
-        JLabel lblResultado = new JLabel("El resultado obtenido es: ", SwingConstants.CENTER);
-        JTextField txtResultado = new JTextField();
-        txtResultado.setBounds(new Rectangle(250,150,250,150));
-        txtResultado.setEditable(false);
-        txtResultado.setHorizontalAlignment(JTextField.LEFT);
-        pnlSur.add(lblResultado);
-        pnlSur.add(txtResultado);
-        //Añado el listener al botón
-        btnInformacion.addActionListener(actionEvent -> {
-            id=Integer.parseInt(txtId.getText());
-            txtResultado.setText(recuperarInformacion());
-        });
-        pnlSur.setLayout(new BoxLayout(pnlSur, BoxLayout.X_AXIS));
-        this.add(pnlSur,BorderLayout.SOUTH);
-
-        this.setSize(550,120);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+        inicializarComponentes();
+        configurarInterfaz();
     }
 
-    public String recuperarInformacion() {
-        Client cliente=new Client();
-        HashMap<String,Object> session=new HashMap<>();
-        String context="/getCustomer";
-        session.put("id",id);
-        session=cliente.sentMessage(context,session);
-        Customer cu=(Customer)session.get("Customer");
-        String nombre;
-        if (cu==null) {
-            nombre="Error - No encontrado en la base de datos";
-        }else {
-            nombre=cu.getName();
-        }
-        return nombre;
+    private void inicializarComponentes() {
+        usuarioField = new JTextField(15);
+        contrasenaField = new JPasswordField(15);
+        confirmarContrasenaField = new JPasswordField(15);
+
+        // ComboBox para sexo
+        String[] opcionesSexo = {"HOMBRE", "MUJER", "OTRO"};
+        sexoComboBox = new JComboBox<>(opcionesSexo);
+
+        // Spinner para edad
+        SpinnerModel edadModel = new SpinnerNumberModel(18, 1, 120, 1);
+        edadSpinner = new JSpinner(edadModel);
+
+        // Checkboxes para alergias
+        glutenCheckBox = new JCheckBox("GLUTEN");
+        lactosaCheckBox = new JCheckBox("LACTOSA");
+        otroAlergiaCheckBox = new JCheckBox("OTRO");
+        alimentosNoComeField = new JTextField(15);
+    }
+
+    private void configurarInterfaz() {
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+
+        // Crear los paneles
+        mainPanel.add(crearPanelInicio(), "inicio");
+        // He puesto un scroll panel porque el layout actual no cabe en la ventana
+        mainPanel.add(new JScrollPane(crearPanelRegistro()), "registro");
+        mainPanel.add(crearPanelLogin(), "login");
+
+        add(mainPanel);
+    }
+
+    private JPanel crearPanelInicio() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+
+        JLabel titulo = new JLabel("MENU", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        titulo.setBorder(BorderFactory.createEmptyBorder(50, 0, 100, 0));
+
+        JPanel botonesPanel = new JPanel(new GridLayout(2, 1, 0, 20));
+        botonesPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 100, 50));
+        botonesPanel.setBackground(Color.WHITE);
+
+        JButton btnIniciarSesion = new JButton("Iniciar sesion");
+        JButton btnRegistrarse = new JButton("Registrarse");
+        estilizarBoton(btnIniciarSesion);
+        estilizarBoton(btnRegistrarse);
+
+        //conectar con métodos
+        btnIniciarSesion.addActionListener(e -> cardLayout.show(mainPanel, "login"));
+        btnRegistrarse.addActionListener(e -> cardLayout.show(mainPanel, "registro"));
+
+        botonesPanel.add(btnIniciarSesion);
+        botonesPanel.add(btnRegistrarse);
+
+        panel.add(titulo, BorderLayout.NORTH);
+        panel.add(botonesPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private JPanel crearPanelRegistro() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        // Título
+        JLabel titulo = new JLabel("Crea tu cuenta", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+
+        // Campos de formulario
+        JPanel formularioPanel = new JPanel(new GridLayout(0, 1, 5, 10));
+        formularioPanel.setBackground(Color.WHITE);
+
+        // Usuario
+        formularioPanel.add(new JLabel("USUARIO"));
+        formularioPanel.add(usuarioField);
+
+        // Contraseña
+        formularioPanel.add(new JLabel("CONTRASEÑA"));
+        formularioPanel.add(contrasenaField);
+
+        // Confirmar contraseña
+        formularioPanel.add(new JLabel("CONFIRMAR CONTRASEÑA"));
+        formularioPanel.add(confirmarContrasenaField);
+
+        // Sexo
+        formularioPanel.add(new JLabel("SEXO"));
+        formularioPanel.add(sexoComboBox);
+
+        // Edad
+        formularioPanel.add(new JLabel("EDAD"));
+        formularioPanel.add(edadSpinner);
+
+        // Alergias
+        formularioPanel.add(new JLabel("ALERGIAS/INTOLERANCIAS"));
+        JPanel alergiasPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        alergiasPanel.setBackground(Color.WHITE);
+        alergiasPanel.add(glutenCheckBox);
+        alergiasPanel.add(lactosaCheckBox);
+        alergiasPanel.add(otroAlergiaCheckBox);
+        formularioPanel.add(alergiasPanel);
+
+        // Alimentos que no comes
+        formularioPanel.add(new JLabel("ALIMENTOS QUE NO COMES"));
+        formularioPanel.add(alimentosNoComeField);
+
+        // Botón de registro
+        JButton btnRegistrar = new JButton("REGISTRARSE");
+        estilizarBoton(btnRegistrar);
+        btnRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnRegistrar.addActionListener(e -> {
+            // Aquí iría la lógica de registro
+            JOptionPane.showMessageDialog(this, "Registro completado");
+            cardLayout.show(mainPanel, "inicio");
+        });
+
+        // Botón para volver
+        JButton btnVolver = new JButton("Volver al inicio");
+        btnVolver.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnVolver.addActionListener(e -> cardLayout.show(mainPanel, "inicio"));
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(formularioPanel);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(btnRegistrar);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(btnVolver);
+
+        return panel;
+    }
+
+    private JPanel crearPanelLogin() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+
+        // Título
+        JLabel titulo = new JLabel("Inicio de sesión", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
+
+        // Campos de login
+        JPanel loginPanel = new JPanel(new GridLayout(0, 1, 10, 15));
+        loginPanel.setBackground(Color.WHITE);
+
+        loginPanel.add(new JLabel("USUARIO"));
+        JTextField usuarioLoginField = new JTextField(15);
+        loginPanel.add(usuarioLoginField);
+
+        loginPanel.add(new JLabel("CONTRASEÑA"));
+        JPasswordField contrasenaLoginField = new JPasswordField(15);
+        loginPanel.add(contrasenaLoginField);
+
+        // Botón de entrar
+        JButton btnEntrar = new JButton("Entrar");
+        estilizarBoton(btnEntrar);
+        btnEntrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnEntrar.addActionListener(e -> {
+            // Aquí iría la lógica de login
+            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+            // cardLayout.show(mainPanel, "menuPrincipal"); // Para ir al menú principal
+        });
+
+        // Botón para volver
+        JButton btnVolver = new JButton("Volver al inicio");
+        btnVolver.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnVolver.addActionListener(e -> cardLayout.show(mainPanel, "inicio"));
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(loginPanel);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(btnEntrar);
+        panel.add(Box.createVerticalStrut(15));
+        panel.add(btnVolver);
+
+        return panel;
+    }
+
+    private void estilizarBoton(JButton boton) {
+        boton.setBackground(new Color(70, 130, 180)); // Color azul
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 14));
+        boton.setFocusPainted(false);
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new JVentana().setVisible(true);
+        });
     }
 }

@@ -1,40 +1,39 @@
 package icai.dtc.isw.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Customer implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String id;
-	private String name;
-	
-	public Customer() {
-		this.setId(new String());
-		this.setName(new String());
-	}
-	
-	public Customer(String id, String name) {
-		this.setName(name);
-		this.setId(id);
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private String userId;
+    private String userPass;
+    private String userGender;
+    private int userAge;
+    private ArrayList<String> illegalFood;
 
-	public String getId() {
-		return id;
-	}
+    public Customer(String userId, String userPass, String userGender, int userAge, ArrayList<String> illegalFood) {
+        this.userId = userId;
+        this.userPass = userPass;
+        this.userGender = userGender;
+        this.userAge = userAge;
+        this.illegalFood = illegalFood;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getUserId() {return userId;}
+    public void setUserId(String userId) {this.userId = userId;}
+    public String getUserPass() {return userPass;}
+    public void setUserPass(String userPass) {this.userPass = userPass;}
+    public String getUserGender() {return userGender;}
+    public void setUserGender(String userGender) {this.userGender = userGender;}
+    public int getUserAge() {return userAge;}
+    public void setUserAge(int userAge) {this.userAge = userAge;}
+    public ArrayList<String> getIllegalFood() {return illegalFood;}
+    public void setIllegalFood(ArrayList<String> illegalFood) {
+        this.illegalFood = illegalFood;
+    }
 
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
 }
