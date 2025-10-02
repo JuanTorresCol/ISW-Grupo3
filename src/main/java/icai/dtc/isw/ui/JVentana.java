@@ -170,7 +170,7 @@ public class JVentana extends JFrame {
             if (frutosSecosCheckBox.isSelected()) seleccionAlergia.add("Frutos secos");
             if (pescadoCheckBox.isSelected()) seleccionAlergia.add("Pescado");
             if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
-            if (realizarRegistro()) {
+            if (realizarRegistro(userId, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome)) {
                 JOptionPane.showMessageDialog(this, "Registro completado");
             }   else{
                 JOptionPane.showMessageDialog(this, "El registro no se pudo completar");
@@ -195,8 +195,15 @@ public class JVentana extends JFrame {
     }
 
     // Lógica de verificación de registro adecuado e inserción de datos en la db
-    private boolean realizarRegistro() {
-        return false;
+    private boolean realizarRegistro(String userId, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
+        CustomerDAO customerDAO = new CustomerDAO();
+        boolean flag = false;
+        if(pass.equals(passCheck) && pass != null && userId != null && sexo != null){
+            Customer customerEnter = new Customer(userId, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
+            CustomerDAO.registerCliente(customerEnter);
+            flag = true;
+        }
+        return flag;
     }
 
     private JPanel crearPanelLogin() {

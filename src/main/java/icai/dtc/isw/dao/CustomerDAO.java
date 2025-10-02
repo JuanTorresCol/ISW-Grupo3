@@ -27,7 +27,7 @@ public class CustomerDAO {
 
     public static void registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO usuarios (id, password, gender, age, food_restriction) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO usuarios (id, password, gender, age, foodrestriction, alimentosnocome) VALUES (?,?,?,?,?,?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, customer.getUserId());
@@ -35,7 +35,7 @@ public class CustomerDAO {
             pst.setString(3, customer.getUserGender());
             pst.setInt(4, customer.getUserAge());
             pst.setArray(5, pst.getConnection().createArrayOf("VARCHAR", customer.getIllegalFood().toArray(new String[0])));
-
+            pst.setString(6,customer.getAlimentosNoCome());
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("Cliente insertado con éxito: " + customer.getUserId());
@@ -53,7 +53,7 @@ public class CustomerDAO {
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
-                lista.add(new Customer(rs.getString(1),rs.getString(2),rs.getString(3), rs.getInt(4),toArrayList(rs.getArray(5))));
+                lista.add(new Customer(rs.getString(1),rs.getString(2),rs.getString(3), rs.getInt(4),toArrayList(rs.getArray(5)), rs.getString(6)));
             }
 
         } catch (SQLException ex) {
@@ -68,7 +68,7 @@ public class CustomerDAO {
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
-                cu= new Customer(rs.getString(1),rs.getString(2),rs.getString(3), rs.getInt(4),toArrayList(rs.getArray(5)));
+                cu= new Customer(rs.getString(1),rs.getString(2),rs.getString(3), rs.getInt(4),toArrayList(rs.getArray(5)), rs.getString(6));
             }
 
         } catch (SQLException ex) {

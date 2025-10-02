@@ -13,13 +13,15 @@ public class Customer implements Serializable{
     private String userGender;
     private int userAge;
     private ArrayList<String> illegalFood;
+    private String alimentosNoCome;
 
-    public Customer(String userId, String userPass, String userGender, int userAge, ArrayList<String> illegalFood) {
+    public Customer(String userId, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
         this.userId = userId;
         this.userPass = userPass;
         this.userGender = userGender;
         this.userAge = userAge;
         this.illegalFood = illegalFood;
+        this.alimentosNoCome = alimentosNoCome;
     }
 
     public String getUserId() {return userId;}
@@ -34,6 +36,7 @@ public class Customer implements Serializable{
     public void setIllegalFood(ArrayList<String> illegalFood) {
         this.illegalFood = illegalFood;
     }
-
-
+    public String getAlimentosNoCome() {
+        return alimentosNoCome;
+    }
 }
