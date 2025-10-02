@@ -61,7 +61,7 @@ public class CustomerDAO {
             System.out.println(ex.getMessage());
         }
     }
-    public static Customer getCliente(int id) {
+    public static Customer getCliente(String id) {
         Connection con=ConnectionDAO.getInstance().getConnection();
         Customer cu=null;
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios WHERE id="+id);

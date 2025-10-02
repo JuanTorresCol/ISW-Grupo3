@@ -54,11 +54,11 @@ public class SocketServer extends Thread {
 		    		objectOutputStream.writeObject(mensajeOut);		    		
 		    		break;
 				case "/getCustomer":
-					int id= (int) session.get("id");
+					String id= session.get("id").toString();
 					customerControler=new CustomerControler();
 					Customer cu=customerControler.getCustomer(id);
 					if (cu!=null){
-						System.out.println("id:"+cu.getId());
+						System.out.println("id:"+cu.getUserId());
 					}else {
 						System.out.println("No encontrado en la base de datos");
 					}

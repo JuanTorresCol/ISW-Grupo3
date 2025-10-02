@@ -1,9 +1,15 @@
 package icai.dtc.isw.ui;
 
+import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.dao.CustomerDAO;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class JVentana extends JFrame {
+    CustomerDAO customerDAO = new CustomerDAO();
+
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
@@ -12,7 +18,8 @@ public class JVentana extends JFrame {
     private JPasswordField confirmarContrasenaField;
     private JComboBox<String> sexoComboBox;
     private JSpinner edadSpinner;
-    private JCheckBox glutenCheckBox, lactosaCheckBox, otroAlergiaCheckBox;
+    private JCheckBox glutenCheckBox, lactosaCheckBox, huevoCheckBox, frutosSecosCheckBox,
+    pescadoCheckBox, mariscoCheckBox;
     private JTextField alimentosNoComeField;
 
     public JVentana() {
@@ -41,7 +48,10 @@ public class JVentana extends JFrame {
         // Checkboxes para alergias
         glutenCheckBox = new JCheckBox("GLUTEN");
         lactosaCheckBox = new JCheckBox("LACTOSA");
-        otroAlergiaCheckBox = new JCheckBox("OTRO");
+        huevoCheckBox = new JCheckBox("HUEVO");
+        frutosSecosCheckBox = new JCheckBox("FRUTOS SECOS");
+        pescadoCheckBox = new JCheckBox("PESCADO");
+        mariscoCheckBox = new JCheckBox("MARISCO");
         alimentosNoComeField = new JTextField(15);
     }
 
@@ -130,7 +140,10 @@ public class JVentana extends JFrame {
         alergiasPanel.setBackground(Color.WHITE);
         alergiasPanel.add(glutenCheckBox);
         alergiasPanel.add(lactosaCheckBox);
-        alergiasPanel.add(otroAlergiaCheckBox);
+        alergiasPanel.add(huevoCheckBox);
+        alergiasPanel.add(frutosSecosCheckBox);
+        alergiasPanel.add(pescadoCheckBox);
+        alergiasPanel.add(mariscoCheckBox);
         formularioPanel.add(alergiasPanel);
 
         // Alimentos que no comes
@@ -142,8 +155,26 @@ public class JVentana extends JFrame {
         estilizarBoton(btnRegistrar);
         btnRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnRegistrar.addActionListener(e -> {
-            // Aquí iría la lógica de registro
-            JOptionPane.showMessageDialog(this, "Registro completado");
+
+            String userId = usuarioField.getText();
+            String pass = new String(contrasenaField.getPassword());
+            String passCheck = new String(confirmarContrasenaField.getPassword());
+            String sexo = sexoComboBox.getSelectedItem().toString();
+            int edad = (int) edadSpinner.getValue();
+            ArrayList<String> seleccionAlergia = new ArrayList<>();
+            String alimentosNoCome = alimentosNoComeField.getText();
+
+            if (glutenCheckBox.isSelected()) seleccionAlergia.add("Gluten");
+            if (lactosaCheckBox.isSelected()) seleccionAlergia.add("Lactosa");
+            if (huevoCheckBox.isSelected()) seleccionAlergia.add("Huevo");
+            if (frutosSecosCheckBox.isSelected()) seleccionAlergia.add("Frutos secos");
+            if (pescadoCheckBox.isSelected()) seleccionAlergia.add("Pescado");
+            if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
+            if (realizarRegistro()) {
+                JOptionPane.showMessageDialog(this, "Registro completado");
+            }   else{
+                JOptionPane.showMessageDialog(this, "El registro no se pudo completar");
+            }
             cardLayout.show(mainPanel, "inicio");
         });
 
@@ -161,6 +192,11 @@ public class JVentana extends JFrame {
         panel.add(btnVolver);
 
         return panel;
+    }
+
+    // Lógica de verificación de registro adecuado e inserción de datos en la db
+    private boolean realizarRegistro() {
+        return false;
     }
 
     private JPanel crearPanelLogin() {
@@ -192,9 +228,16 @@ public class JVentana extends JFrame {
         estilizarBoton(btnEntrar);
         btnEntrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnEntrar.addActionListener(e -> {
-            // Aquí iría la lógica de login
-            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-            // cardLayout.show(mainPanel, "menuPrincipal"); // Para ir al menú principal
+            cardLayout.show(mainPanel, "menuPrincipal"); // Para ir al menú principal
+            String userId = usuarioLoginField.getText();
+            String pass = new String(contrasenaLoginField.getPassword());
+
+            Customer customerCheck = customerDAO.getCliente(userId);
+            if(customerCheck != null){
+                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+            } else{
+                JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
+            }
         });
 
         // Botón para volver
