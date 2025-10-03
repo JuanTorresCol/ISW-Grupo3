@@ -25,8 +25,10 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("Proyecto ISW");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 600);
+        setSize(700, 800);
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(false);
 
         inicializarComponentes();
         configurarInterfaz();
@@ -61,9 +63,10 @@ public class JVentana extends JFrame {
 
         // Crear los paneles
         mainPanel.add(crearPanelInicio(), "inicio");
-        // He puesto un scroll panel porque el layout actual no cabe en la ventana
         mainPanel.add(new JScrollPane(crearPanelRegistro()), "registro");
         mainPanel.add(crearPanelLogin(), "login");
+        mainPanel.add(crearVistaUsuario(), "pantalla principal");
+        mainPanel.add(crearPanelMenuSemana(), "menu semanal");
 
         add(mainPanel);
     }
@@ -155,8 +158,7 @@ public class JVentana extends JFrame {
         estilizarBoton(btnRegistrar);
         btnRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnRegistrar.addActionListener(e -> {
-
-            String userId = usuarioField.getText();
+            String userName = usuarioField.getText();
             String pass = new String(contrasenaField.getPassword());
             String passCheck = new String(confirmarContrasenaField.getPassword());
             String sexo = sexoComboBox.getSelectedItem().toString();
@@ -170,12 +172,14 @@ public class JVentana extends JFrame {
             if (frutosSecosCheckBox.isSelected()) seleccionAlergia.add("Frutos secos");
             if (pescadoCheckBox.isSelected()) seleccionAlergia.add("Pescado");
             if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
-            if (realizarRegistro(userId, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome)) {
+
+            if (realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome)) {
                 JOptionPane.showMessageDialog(this, "Registro completado");
-            }   else{
+                cardLayout.show(mainPanel, "pantalla principal");
+            } else {
                 JOptionPane.showMessageDialog(this, "El registro no se pudo completar");
+                cardLayout.show(mainPanel, "inicio");
             }
-            cardLayout.show(mainPanel, "inicio");
         });
 
         // Botón para volver
@@ -195,11 +199,11 @@ public class JVentana extends JFrame {
     }
 
     // Lógica de verificación de registro adecuado e inserción de datos en la db
-    private boolean realizarRegistro(String userId, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
+    private boolean realizarRegistro(String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
         CustomerDAO customerDAO = new CustomerDAO();
         boolean flag = false;
-        if(pass.equals(passCheck) && pass != null && userId != null && sexo != null){
-            Customer customerEnter = new Customer(userId, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
+        if(pass.equals(passCheck) && pass != null && userName != null && sexo != null){
+            Customer customerEnter = new Customer(userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
             CustomerDAO.registerCliente(customerEnter);
             flag = true;
         }
@@ -235,13 +239,17 @@ public class JVentana extends JFrame {
         estilizarBoton(btnEntrar);
         btnEntrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnEntrar.addActionListener(e -> {
-            cardLayout.show(mainPanel, "menuPrincipal"); // Para ir al menú principal
-            String userId = usuarioLoginField.getText();
+            String userName = usuarioLoginField.getText();
             String pass = new String(contrasenaLoginField.getPassword());
 
-            Customer customerCheck = customerDAO.getCliente(userId);
-            if(customerCheck != null){
-                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+            Customer customerCheck = customerDAO.getCliente(userName);
+            if(customerCheck != null ){
+                if(customerCheck.getUserPass().equals(pass)){
+                    JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+                    cardLayout.show(mainPanel, "pantalla principal");
+                } else{
+                    JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
+                }
             } else{
                 JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
             }
@@ -259,6 +267,167 @@ public class JVentana extends JFrame {
         panel.add(btnEntrar);
         panel.add(Box.createVerticalStrut(15));
         panel.add(btnVolver);
+
+        return panel;
+    }
+    private JPanel crearVistaUsuario() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Encabezado
+        JLabel titulo = new JLabel("MI PLANIFICACIÓN SEMANAL", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+
+        // Panel principal con botones
+        JPanel botonesPanel = new JPanel(new GridLayout(3, 1, 0, 20));
+        botonesPanel.setBackground(Color.WHITE);
+        botonesPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+
+        JButton btnMenuSemanal = new JButton("Ver Menú Semanal");
+        JButton btnPreferencias = new JButton("Mis Preferencias");
+        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
+
+        estilizarBoton(btnMenuSemanal);
+        estilizarBoton(btnPreferencias);
+
+        // Cerrar sesión
+        btnCerrarSesion.setBackground(new Color(220, 53, 69)); // Color rojo
+        btnCerrarSesion.setForeground(Color.WHITE);
+        btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));
+        btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        // Acciones de los botones
+        btnMenuSemanal.addActionListener(e -> cardLayout.show(mainPanel, "menu semanal"));
+        btnPreferencias.addActionListener(e -> {
+            // Aquí puedes añadir la funcionalidad para ver/editar preferencias
+            JOptionPane.showMessageDialog(this, "En desarrollo...");
+        });
+        btnCerrarSesion.addActionListener(e -> {
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro de que quieres cerrar sesión?",
+                    "Cerrar Sesión",
+                    JOptionPane.YES_NO_OPTION);
+            if (respuesta == JOptionPane.YES_OPTION) {
+                cardLayout.show(mainPanel, "inicio");
+            }
+        });
+
+        botonesPanel.add(btnMenuSemanal);
+        botonesPanel.add(btnPreferencias);
+        botonesPanel.add(btnCerrarSesion);
+
+        panel.add(titulo, BorderLayout.NORTH);
+        panel.add(botonesPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private JPanel crearPanelMenuSemana() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Encabezado
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.WHITE);
+
+        JLabel titulo = new JLabel("MENÚ SEMANAL", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
+
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.addActionListener(e -> cardLayout.show(mainPanel, "pantalla principal"));
+
+        headerPanel.add(btnVolver, BorderLayout.WEST);
+        headerPanel.add(titulo, BorderLayout.CENTER);
+        headerPanel.add(Box.createHorizontalStrut(btnVolver.getPreferredSize().width), BorderLayout.EAST);
+
+        // Panel para los días de la semana
+        JPanel diasPanel = new JPanel(new GridLayout(2, 4, 15, 15));
+        diasPanel.setBackground(Color.WHITE);
+        diasPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
+
+        String[] dias = {"LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"};
+
+        for (String dia : dias) {
+            JPanel diaPanel = crearPanelDia(dia);
+            diasPanel.add(diaPanel);
+        }
+
+        // Panel de botones adicionales
+        JPanel accionesPanel = new JPanel(new FlowLayout());
+        accionesPanel.setBackground(Color.WHITE);
+
+        JButton btnGenerarMenu = new JButton("Generar Nuevo Menú");
+        JButton btnGuardar = new JButton("Guardar Menú");
+
+        estilizarBoton(btnGenerarMenu);
+        estilizarBoton(btnGuardar);
+
+        btnGenerarMenu.addActionListener(e -> {
+            // Aquí iría la lógica para generar un nuevo menú automáticamente
+            JOptionPane.showMessageDialog(this, "En desarrollo...");
+        });
+
+        btnGuardar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "En desarrollo");
+        });
+
+        accionesPanel.add(btnGenerarMenu);
+        accionesPanel.add(btnGuardar);
+
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(diasPanel, BorderLayout.CENTER);
+        panel.add(accionesPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private JPanel crearPanelDia(String dia) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(240, 240, 240));
+        panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
+        // Título del día
+        JLabel labelDia = new JLabel(dia, SwingConstants.CENTER);
+        labelDia.setFont(new Font("Arial", Font.BOLD, 14));
+        labelDia.setBackground(new Color(70, 130, 180));
+        labelDia.setOpaque(true);
+        labelDia.setForeground(Color.WHITE);
+
+        // Panel para las comidas
+        JPanel comidasPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        comidasPanel.setBackground(new Color(240, 240, 240));
+        comidasPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String[] comidas = {"Desayuno", "Almuerzo", "Cena"};
+
+        for (String comida : comidas) {
+            JPanel comidaPanel = new JPanel(new BorderLayout());
+            comidaPanel.setBackground(Color.WHITE);
+            comidaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+
+            JLabel labelComida = new JLabel(comida);
+            labelComida.setFont(new Font("Arial", Font.BOLD, 12));
+            labelComida.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            JTextArea textAreaComida = new JTextArea(2, 10);
+            textAreaComida.setLineWrap(true);
+            textAreaComida.setWrapStyleWord(true);
+            textAreaComida.setFont(new Font("Arial", Font.PLAIN, 11));
+            textAreaComida.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            textAreaComida.setText("Ejemplo de plato...");
+
+            comidaPanel.add(labelComida, BorderLayout.NORTH);
+            comidaPanel.add(new JScrollPane(textAreaComida), BorderLayout.CENTER);
+
+            comidasPanel.add(comidaPanel);
+        }
+
+        panel.add(labelDia, BorderLayout.NORTH);
+        panel.add(comidasPanel, BorderLayout.CENTER);
 
         return panel;
     }

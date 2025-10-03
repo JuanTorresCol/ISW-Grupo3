@@ -9,14 +9,16 @@ public class Customer implements Serializable{
      */
     private static final long serialVersionUID = 1L;
     private String userId;
+    private String userName;
     private String userPass;
     private String userGender;
     private int userAge;
     private ArrayList<String> illegalFood;
     private String alimentosNoCome;
 
-    public Customer(String userId, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
-        this.userId = userId;
+    public Customer( String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
+        this.userId = createUserId(userName);
+        this.userName = userName;
         this.userPass = userPass;
         this.userGender = userGender;
         this.userAge = userAge;
@@ -38,5 +40,18 @@ public class Customer implements Serializable{
     }
     public String getAlimentosNoCome() {
         return alimentosNoCome;
+    }
+    public String getUserName() {
+        return userName;
+    }
+    public static String createUserId(String username) {
+        char firstLetter = Character.toUpperCase(username.charAt(0));
+        int hash = 0;
+        for (char c : username.toCharArray()) {
+            hash += (int) c;
+        }
+        int digits = Math.abs(hash % 100000);
+        String formattedDigits = String.format("%05d", digits);
+        return firstLetter + formattedDigits;
     }
 }

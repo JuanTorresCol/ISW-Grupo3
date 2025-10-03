@@ -27,15 +27,16 @@ public class CustomerDAO {
 
     public static void registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO usuarios (id, password, gender, age, foodrestriction, alimentosnocome) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome) VALUES (?,?,?,?,?,?,?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, customer.getUserId());
-            pst.setString(2, customer.getUserPass());
-            pst.setString(3, customer.getUserGender());
-            pst.setInt(4, customer.getUserAge());
-            pst.setArray(5, pst.getConnection().createArrayOf("VARCHAR", customer.getIllegalFood().toArray(new String[0])));
-            pst.setString(6,customer.getAlimentosNoCome());
+            pst.setString(2, customer.getUserName());
+            pst.setString(3, customer.getUserPass());
+            pst.setString(4, customer.getUserGender());
+            pst.setInt(5, customer.getUserAge());
+            pst.setArray(6, pst.getConnection().createArrayOf("VARCHAR", customer.getIllegalFood().toArray(new String[0])));
+            pst.setString(7,customer.getAlimentosNoCome());
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("Cliente insertado con éxito: " + customer.getUserId());
@@ -53,7 +54,7 @@ public class CustomerDAO {
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
-                lista.add(new Customer(rs.getString(1),rs.getString(2),rs.getString(3), rs.getInt(4),toArrayList(rs.getArray(5)), rs.getString(6)));
+                lista.add(new Customer(rs.getString(2),rs.getString(3),rs.getString(4), rs.getInt(5),toArrayList(rs.getArray(6)), rs.getString(7)));
             }
 
         } catch (SQLException ex) {
@@ -61,22 +62,22 @@ public class CustomerDAO {
             System.out.println(ex.getMessage());
         }
     }
-    public static Customer getCliente(String id) {
-        Connection con=ConnectionDAO.getInstance().getConnection();
-        Customer cu=null;
-        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios WHERE id="+id);
-             ResultSet rs = pst.executeQuery()) {
+    public static Customer getCliente(String inputId) {
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        Customer cu = null;
 
-            while (rs.next()) {
-                cu= new Customer(rs.getString(1),rs.getString(2),rs.getString(3), rs.getInt(4),toArrayList(rs.getArray(5)), rs.getString(6));
+        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios WHERE name = ?")) {
+            pst.setString(1, inputId);  // bind parameter safely
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    cu = new Customer(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), toArrayList(rs.getArray(6)), rs.getString(7));
+                }
             }
-
         } catch (SQLException ex) {
-
             System.out.println(ex.getMessage());
         }
         return cu;
-        //return new Customer("1","Atilano");
     }
 
     public static void main(String[] args) {
