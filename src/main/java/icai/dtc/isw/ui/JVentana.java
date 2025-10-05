@@ -6,12 +6,15 @@ import icai.dtc.isw.dao.CustomerDAO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class JVentana extends JFrame {
     CustomerDAO customerDAO = new CustomerDAO();
 
     private CardLayout cardLayout;
     private JPanel mainPanel;
+
+    private String customerId;
 
     private JTextField usuarioField;
     private JPasswordField contrasenaField;
@@ -173,8 +176,10 @@ public class JVentana extends JFrame {
             if (pescadoCheckBox.isSelected()) seleccionAlergia.add("Pescado");
             if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
 
-            if (realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome)) {
+            Map.Entry<Customer, String> resultado = realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome);
+            if (resultado.getValue().equals("a")) {
                 JOptionPane.showMessageDialog(this, "Registro completado");
+                customerId = resultado.getKey().getUserId();
                 cardLayout.show(mainPanel, "pantalla principal");
             } else {
                 JOptionPane.showMessageDialog(this, "El registro no se pudo completar");
@@ -199,15 +204,16 @@ public class JVentana extends JFrame {
     }
 
     // Lógica de verificación de registro adecuado e inserción de datos en la db
-    private boolean realizarRegistro(String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
+    private Map.Entry<Customer, String> realizarRegistro(String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
         CustomerDAO customerDAO = new CustomerDAO();
-        boolean flag = false;
+        Customer customerEnter = null;
+        String flag = "a";
         if(pass.equals(passCheck) && pass != null && userName != null && sexo != null){
-            Customer customerEnter = new Customer(userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
+            customerEnter = new Customer(userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
             CustomerDAO.registerCliente(customerEnter);
-            flag = true;
+            flag = "b";
         }
-        return flag;
+        return Map.entry(customerEnter, flag);
     }
 
     private JPanel crearPanelLogin() {
@@ -246,6 +252,7 @@ public class JVentana extends JFrame {
             if(customerCheck != null ){
                 if(customerCheck.getUserPass().equals(pass)){
                     JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+                    customerId = customerCheck.getUserId();
                     cardLayout.show(mainPanel, "pantalla principal");
                 } else{
                     JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
@@ -302,8 +309,7 @@ public class JVentana extends JFrame {
         // Acciones de los botones
         btnMenuSemanal.addActionListener(e -> cardLayout.show(mainPanel, "menu semanal"));
         btnPreferencias.addActionListener(e -> {
-            // Aquí puedes añadir la funcionalidad para ver/editar preferencias
-            JOptionPane.showMessageDialog(this, "En desarrollo...");
+            abrirVentanaPreferencias();
         });
         btnCerrarSesion.addActionListener(e -> {
             int respuesta = JOptionPane.showConfirmDialog(this,
@@ -324,7 +330,91 @@ public class JVentana extends JFrame {
 
         return panel;
     }
+    private void abrirVentanaPreferencias() {
+        // Crear un JDialog para las preferencias
+        JDialog dialog = new JDialog(this, "Mis Preferencias", true);
+        dialog.setSize(500, 600);
+        dialog.setLocationRelativeTo(this);
+        dialog.setLayout(new BorderLayout());
 
+        // Panel principal
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        panel.setBackground(Color.WHITE);
+
+        // Título
+        JLabel titulo = new JLabel("MIS PREFERENCIAS", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+
+        // Panel de información del usuario
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBorder(BorderFactory.createTitledBorder("Información Personal"));
+
+        // Obtener datos del usuario desde la base de datos
+        Customer usuario = customerDAO.getClienteId(customerId);
+
+        if (usuario != null) {
+            infoPanel.add(new JLabel("Usuario:"));
+            infoPanel.add(new JLabel(usuario.getUserName()));
+
+            infoPanel.add(new JLabel("Sexo:"));
+            infoPanel.add(new JLabel(usuario.getUserGender()));
+
+            infoPanel.add(new JLabel("Edad:"));
+            infoPanel.add(new JLabel(String.valueOf(usuario.getUserAge())));
+
+            infoPanel.add(new JLabel("Alergias:"));
+            JTextArea alergiasArea = new JTextArea(
+                    usuario.getIllegalFood() != null ? String.join(", ", usuario.getIllegalFood()) : "Ninguna"
+            );
+            alergiasArea.setEditable(false);
+            alergiasArea.setBackground(infoPanel.getBackground());
+            infoPanel.add(new JScrollPane(alergiasArea));
+
+            infoPanel.add(new JLabel("Alimentos que no come:"));
+            JTextArea alimentosArea = new JTextArea(
+                    usuario.getAlimentosNoCome() != null ? usuario.getAlimentosNoCome() : "Ninguno"
+            );
+            alimentosArea.setEditable(false);
+            alimentosArea.setBackground(infoPanel.getBackground());
+            infoPanel.add(new JScrollPane(alimentosArea));
+        } else {
+            infoPanel.add(new JLabel("No se pudo cargar la información del usuario"));
+        }
+
+        // Botones
+        JPanel botonesPanel = new JPanel(new FlowLayout());
+        botonesPanel.setBackground(Color.WHITE);
+
+        JButton btnEditar = new JButton("Editar Información");
+        JButton btnCerrar = new JButton("Cerrar");
+
+        estilizarBoton(btnEditar);
+        estilizarBoton(btnCerrar);
+
+        btnEditar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(dialog, "Funcionalidad de edición en desarrollo");
+        });
+
+        btnCerrar.addActionListener(e -> dialog.dispose());
+
+        botonesPanel.add(btnEditar);
+        botonesPanel.add(btnCerrar);
+
+        // Ensamblar el diálogo
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(infoPanel);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(botonesPanel);
+
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
     private JPanel crearPanelMenuSemana() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);

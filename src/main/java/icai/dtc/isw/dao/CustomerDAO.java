@@ -62,12 +62,29 @@ public class CustomerDAO {
             System.out.println(ex.getMessage());
         }
     }
+    public static Customer getClienteId(String inputId) {
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        Customer cu = null;
+
+        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios WHERE id = ?")) {
+            pst.setString(1, inputId);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    cu = new Customer(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), toArrayList(rs.getArray(6)), rs.getString(7));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return cu;
+    }
     public static Customer getCliente(String inputId) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         Customer cu = null;
 
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios WHERE name = ?")) {
-            pst.setString(1, inputId);  // bind parameter safely
+            pst.setString(1, inputId);
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
