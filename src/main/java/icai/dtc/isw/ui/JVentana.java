@@ -28,9 +28,9 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("Proyecto ISW");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 800);
+        setSize(460,660);
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
 
         inicializarComponentes();
@@ -38,9 +38,9 @@ public class JVentana extends JFrame {
     }
 
     private void inicializarComponentes() {
-        usuarioField = new JTextField(15);
-        contrasenaField = new JPasswordField(15);
-        confirmarContrasenaField = new JPasswordField(15);
+        usuarioField = new JTextField(10);
+        contrasenaField = new JPasswordField(10);
+        confirmarContrasenaField = new JPasswordField(10);
 
         // ComboBox para sexo
         String[] opcionesSexo = {"HOMBRE", "MUJER", "OTRO"};
@@ -57,7 +57,7 @@ public class JVentana extends JFrame {
         frutosSecosCheckBox = new JCheckBox("FRUTOS SECOS");
         pescadoCheckBox = new JCheckBox("PESCADO");
         mariscoCheckBox = new JCheckBox("MARISCO");
-        alimentosNoComeField = new JTextField(15);
+        alimentosNoComeField = new JTextField(10);
     }
 
     private void configurarInterfaz() {
@@ -66,7 +66,11 @@ public class JVentana extends JFrame {
 
         // Crear los paneles
         mainPanel.add(crearPanelInicio(), "inicio");
-        mainPanel.add(new JScrollPane(crearPanelRegistro()), "registro");
+        JScrollPane scrollPane = new JScrollPane(crearPanelRegistro());
+        //Quitar scrollbar horizontal
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        mainPanel.add(scrollPane, "registro");
         mainPanel.add(crearPanelLogin(), "login");
         mainPanel.add(crearVistaUsuario(), "pantalla principal");
         mainPanel.add(crearPanelMenuSemana(), "menu semanal");
@@ -142,7 +146,7 @@ public class JVentana extends JFrame {
 
         // Alergias
         formularioPanel.add(new JLabel("ALERGIAS/INTOLERANCIAS"));
-        JPanel alergiasPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel alergiasPanel = new JPanel(new GridLayout(0,3,3,3));
         alergiasPanel.setBackground(Color.WHITE);
         alergiasPanel.add(glutenCheckBox);
         alergiasPanel.add(lactosaCheckBox);
