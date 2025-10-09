@@ -28,7 +28,7 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("Proyecto ISW");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(460,660);
+        setSize(460, 660);
         setLocationRelativeTo(null);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
@@ -38,9 +38,9 @@ public class JVentana extends JFrame {
     }
 
     private void inicializarComponentes() {
-        usuarioField = new JTextField(10);
-        contrasenaField = new JPasswordField(10);
-        confirmarContrasenaField = new JPasswordField(10);
+        usuarioField = new JTextField(15);
+        contrasenaField = new JPasswordField(15);
+        confirmarContrasenaField = new JPasswordField(15);
 
         // ComboBox para sexo
         String[] opcionesSexo = {"HOMBRE", "MUJER", "OTRO"};
@@ -57,7 +57,7 @@ public class JVentana extends JFrame {
         frutosSecosCheckBox = new JCheckBox("FRUTOS SECOS");
         pescadoCheckBox = new JCheckBox("PESCADO");
         mariscoCheckBox = new JCheckBox("MARISCO");
-        alimentosNoComeField = new JTextField(10);
+        alimentosNoComeField = new JTextField(15);
     }
 
     private void configurarInterfaz() {
@@ -66,11 +66,7 @@ public class JVentana extends JFrame {
 
         // Crear los paneles
         mainPanel.add(crearPanelInicio(), "inicio");
-        JScrollPane scrollPane = new JScrollPane(crearPanelRegistro());
-        //Quitar scrollbar horizontal
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        mainPanel.add(scrollPane, "registro");
+        mainPanel.add(new JScrollPane(crearPanelRegistro()), "registro");
         mainPanel.add(crearPanelLogin(), "login");
         mainPanel.add(crearVistaUsuario(), "pantalla principal");
         mainPanel.add(crearPanelMenuSemana(), "menu semanal");
@@ -181,7 +177,7 @@ public class JVentana extends JFrame {
             if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
 
             Map.Entry<Customer, String> resultado = realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome);
-            if (resultado.getValue().equals("a")) {
+            if (resultado.getValue().equals("b")) {
                 JOptionPane.showMessageDialog(this, "Registro completado");
                 customerId = resultado.getKey().getUserId();
                 cardLayout.show(mainPanel, "pantalla principal");
@@ -305,7 +301,7 @@ public class JVentana extends JFrame {
 
         // Cerrar sesión
         btnCerrarSesion.setBackground(new Color(220, 53, 69)); // Color rojo
-        btnCerrarSesion.setForeground(Color.WHITE);
+        btnCerrarSesion.setForeground(Color.BLACK);
         btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));
         btnCerrarSesion.setFocusPainted(false);
         btnCerrarSesion.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -438,6 +434,7 @@ public class JVentana extends JFrame {
         headerPanel.add(titulo, BorderLayout.CENTER);
         headerPanel.add(Box.createHorizontalStrut(btnVolver.getPreferredSize().width), BorderLayout.EAST);
 
+        //Vista sermanal
         // Panel para los días de la semana
         JPanel diasPanel = new JPanel(new GridLayout(2, 4, 15, 15));
         diasPanel.setBackground(Color.WHITE);
@@ -528,7 +525,7 @@ public class JVentana extends JFrame {
 
     private void estilizarBoton(JButton boton) {
         boton.setBackground(new Color(70, 130, 180)); // Color azul
-        boton.setForeground(Color.WHITE);
+        boton.setForeground(Color.BLACK);
         boton.setFont(new Font("Arial", Font.BOLD, 14));
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
