@@ -29,9 +29,9 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("Proyecto ISW");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 800);
+        setSize(460, 670);
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
 
         inicializarComponentes();
@@ -143,7 +143,7 @@ public class JVentana extends JFrame {
 
         // Alergias
         formularioPanel.add(new JLabel("ALERGIAS/INTOLERANCIAS"));
-        JPanel alergiasPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel alergiasPanel = new JPanel(new GridLayout(0,3,3,3));
         alergiasPanel.setBackground(Color.WHITE);
         alergiasPanel.add(glutenCheckBox);
         alergiasPanel.add(lactosaCheckBox);
@@ -178,7 +178,7 @@ public class JVentana extends JFrame {
             if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
 
             Map.Entry<Customer, String> resultado = controler.realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome);
-            if (resultado.getValue().equals("a")) {
+            if (resultado.getValue().equals("b")) {
                 JOptionPane.showMessageDialog(this, "Registro completado");
                 customerId = resultado.getKey().getUserId();
                 cardLayout.show(mainPanel, "pantalla principal");
@@ -321,7 +321,7 @@ public class JVentana extends JFrame {
     private void abrirVentanaPreferencias() {
         // Crear un JDialog para las preferencias
         JDialog dialog = new JDialog(this, "Mis Preferencias", true);
-        dialog.setSize(500, 600);
+        dialog.setSize(460, 670);
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout());
 
