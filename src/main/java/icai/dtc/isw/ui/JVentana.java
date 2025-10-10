@@ -1,5 +1,6 @@
 package icai.dtc.isw.ui;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.dao.CustomerDAO;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class JVentana extends JFrame {
-    CustomerDAO customerDAO = new CustomerDAO();
+    CustomerControler controler = new CustomerControler();
 
     private CardLayout cardLayout;
     private JPanel mainPanel;
@@ -176,7 +177,7 @@ public class JVentana extends JFrame {
             if (pescadoCheckBox.isSelected()) seleccionAlergia.add("Pescado");
             if (mariscoCheckBox.isSelected()) seleccionAlergia.add("Marisco");
 
-            Map.Entry<Customer, String> resultado = realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome);
+            Map.Entry<Customer, String> resultado = controler.realizarRegistro(userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome);
             if (resultado.getValue().equals("a")) {
                 JOptionPane.showMessageDialog(this, "Registro completado");
                 customerId = resultado.getKey().getUserId();
@@ -201,19 +202,6 @@ public class JVentana extends JFrame {
         panel.add(btnVolver);
 
         return panel;
-    }
-
-    // Lógica de verificación de registro adecuado e inserción de datos en la db
-    private Map.Entry<Customer, String> realizarRegistro(String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
-        CustomerDAO customerDAO = new CustomerDAO();
-        Customer customerEnter = null;
-        String flag = "a";
-        if(pass.equals(passCheck) && pass != null && userName != null && sexo != null){
-            customerEnter = new Customer(userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
-            CustomerDAO.registerCliente(customerEnter);
-            flag = "b";
-        }
-        return Map.entry(customerEnter, flag);
     }
 
     private JPanel crearPanelLogin() {
@@ -248,7 +236,7 @@ public class JVentana extends JFrame {
             String userName = usuarioLoginField.getText();
             String pass = new String(contrasenaLoginField.getPassword());
 
-            Customer customerCheck = customerDAO.getCliente(userName);
+            Customer customerCheck = CustomerDAO.getCliente(userName);
             if(customerCheck != null ){
                 if(customerCheck.getUserPass().equals(pass)){
                     JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
@@ -355,7 +343,7 @@ public class JVentana extends JFrame {
         infoPanel.setBorder(BorderFactory.createTitledBorder("Información Personal"));
 
         // Obtener datos del usuario desde la base de datos
-        Customer usuario = customerDAO.getClienteId(customerId);
+        Customer usuario = CustomerDAO.getClienteId(customerId);
 
         if (usuario != null) {
             infoPanel.add(new JLabel("Usuario:"));
@@ -415,6 +403,7 @@ public class JVentana extends JFrame {
         dialog.add(panel);
         dialog.setVisible(true);
     }
+
     private JPanel crearPanelMenuSemana() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);

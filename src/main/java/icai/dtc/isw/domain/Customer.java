@@ -48,7 +48,7 @@ public class Customer implements Serializable{
         char firstLetter = Character.toUpperCase(username.charAt(0));
         int hash = 0;
         for (char c : username.toCharArray()) {
-            hash += (int) c;
+            hash += c;
         }
         int digits = Math.abs(hash % 100000);
         String formattedDigits = String.format("%05d", digits);
