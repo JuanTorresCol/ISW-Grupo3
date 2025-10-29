@@ -21,7 +21,10 @@ public class CustomerControler {
             CustomerDAO.registerCliente(customerEnter);
             flag = "b";
         }
-        assert customerEnter != null;
+        else{
+            customerEnter = new Customer();
+        }
+
         return Map.entry(customerEnter, flag);
     }
 

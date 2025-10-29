@@ -25,6 +25,15 @@ public class Customer implements Serializable{
         this.illegalFood = illegalFood;
         this.alimentosNoCome = alimentosNoCome;
     }
+    public Customer(){
+        this.userId = createUserId("error");
+        this.userName = "e";
+        this.userPass = "e";
+        this.userGender = "e";
+        this.userAge = 1;
+        this.illegalFood = new ArrayList<>();
+        this.alimentosNoCome = "e";
+    }
 
     public String getUserId() {return userId;}
     public void setUserId(String userId) {this.userId = userId;}
@@ -44,6 +53,7 @@ public class Customer implements Serializable{
     public String getUserName() {
         return userName;
     }
+
     public static String createUserId(String username) {
         char firstLetter = Character.toUpperCase(username.charAt(0));
         int hash = 0;
