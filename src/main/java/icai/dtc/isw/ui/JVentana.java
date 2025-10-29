@@ -450,7 +450,7 @@ public class JVentana extends JFrame {
         if (resultado.getValue().equals("b")) {
             JOptionPane.showMessageDialog(this, "Registro completado");
             customerId = resultado.getKey().getUserId();
-            cardLayout.show(mainPanel, "pantalla principal");
+            cardLayout.show(mainPanel, "presupuesto");
         } else {
             JOptionPane.showMessageDialog(this, "El registro no se pudo completar");
             cardLayout.show(mainPanel, "inicio");
