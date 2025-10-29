@@ -58,6 +58,7 @@ public class JVentana extends JFrame {
 
     public JVentana() {
         setTitle("MENUMASTER");
+        //setSize(450,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -77,6 +78,7 @@ public class JVentana extends JFrame {
         sexoComboBox = new JComboBox<>(new String[]{"HOMBRE","MUJER","OTRO"});
         edadSpinner = new JSpinner(new SpinnerNumberModel(18, 1, 120, 1));
 
+        // Checkboxes para alergias
         glutenCheckBox = new JCheckBox("GLUTEN");
         lactosaCheckBox = new JCheckBox("LACTOSA");
         huevoCheckBox = new JCheckBox("HUEVO");
@@ -101,7 +103,7 @@ public class JVentana extends JFrame {
         // ------------ Paneles a usar -------------------
 
         mainPanel.add(crearPanelInicio(), "inicio");
-        mainPanel.add(crearPanelRegistro(), "registro");
+        mainPanel.add(new JScrollPane(crearPanelRegistro()), "registro");
         mainPanel.add(crearPanelLogin(), "login");
         mainPanel.add(crearPanelPresupuesto(), "presupuesto");
         mainPanel.add(crearPanelMenuDia(), "menuDia");
@@ -117,23 +119,18 @@ public class JVentana extends JFrame {
     private JPanel crearPanelInicio() {
         JPanel panel = basePanel(new BorderLayout());
 
-        // el classPath en proyectos maves empieza desde src MARCA RESOURCES
-        java.net.URL url = getClass().getResource("/imageResources/logoMenuMasterBg.png");
 
-        ImageIcon icono = url != null ? new ImageIcon(url) : null;
+        JLabel labelLogo = new JLabel(cargarIcono("logotipo",500,300),SwingConstants.CENTER);
+        //titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        labelLogo.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
 
-        JLabel labelLogo = new JLabel();
-        labelLogo.setHorizontalAlignment(SwingConstants.CENTER);
-        if (icono != null) labelLogo.setIcon(icono);
+        JPanel botonesPanel = new JPanel(new GridLayout(2, 1, 0, 20));
+        botonesPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 100, 50));
+        botonesPanel.setBackground(Color.WHITE);
 
-        panel.addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override public void componentResized(java.awt.event.ComponentEvent e) {
-                if (icono == null) return;
-                Image esc = icono.getImage().getScaledInstance(450, 450, Image.SCALE_SMOOTH);
-                labelLogo.setIcon(new ImageIcon(esc));
-            }
-        });
 
+
+        //conectar con métodos
         JPanel botones = new JPanel(new GridLayout(2,1,0,30));
         botones.setOpaque(false);
         JButton btnLogin = pillButton("Iniciar sesión");
@@ -143,9 +140,9 @@ public class JVentana extends JFrame {
         botones.add(btnLogin);
         botones.add(btnRegistro);
 
-
         panel.add(labelLogo, BorderLayout.NORTH);
         panel.add(wrapCentered(botones), BorderLayout.CENTER);
+
         return panel;
     }
 
@@ -809,6 +806,17 @@ public class JVentana extends JFrame {
     private void cargarPerfilUsuario() {
         if (customerId == null) return;
         Customer usuario = CustomerDAO.getClienteId(customerId);
+
+
+    }
+
+    private ImageIcon cargarIcono(String nombreImagen, int ancho, int alto){
+        String ruta = '/'+nombreImagen+".png";
+        java.net.URL url = getClass().getResource(ruta);
+        ImageIcon icono = url != null ? new ImageIcon(url) : null;
+        Image iconoEscalado = icono != null ? icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH) : null;
+        return iconoEscalado != null ? new ImageIcon(iconoEscalado): null;
+        //System.out.println(icono);
 
     }
 
