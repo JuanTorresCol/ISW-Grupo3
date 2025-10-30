@@ -1,18 +1,18 @@
 package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
-import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.dao.CustomerDAO;
+import icai.dtc.isw.domain.Customer;
+
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
-import java.util.Map;
+import java.util.function.Supplier;
 
 public class JVentana extends JFrame {
 
@@ -48,6 +48,11 @@ public class JVentana extends JFrame {
     private JTextField otroAlergiaField;
     private JTextField alimentosNoComeArea;
 
+    // Creación de paneles a posteriori
+    private final Map<String, Supplier<JComponent>> postAuthFactories = new HashMap<>();
+    private final Map<String, JComponent> createdCards = new HashMap<>();
+    private boolean postAuthPanelsCreated = false;
+
     // Presupuesto
     private JSpinner presupuestoSpinner;
 
@@ -55,6 +60,9 @@ public class JVentana extends JFrame {
     private final String[] diasSemana = {"LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES"};
     private int idxDia = 0;
     private JLabel tituloDiaLabel;
+
+    // Actual usuario
+    private Customer usuario = new Customer();
 
     public JVentana() {
         setTitle("MENUMASTER");
@@ -100,20 +108,22 @@ public class JVentana extends JFrame {
         mainPanel = new JPanel(cardLayout);
         mainPanel.setBackground(BG);
 
-        // ------------ Paneles a usar -------------------
-
+        //PRE-AUTH
         mainPanel.add(crearPanelInicio(), "inicio");
-        mainPanel.add(new JScrollPane(crearPanelRegistro()), "registro");
+        mainPanel.add(crearPanelRegistro(), "registro");
         mainPanel.add(crearPanelLogin(), "login");
-        mainPanel.add(crearPanelPresupuesto(), "presupuesto");
-        mainPanel.add(crearPanelMenuDia(), "menuDia");
-        mainPanel.add(new JScrollPane(crearPanelRecetaDetalle()), "recetaDetalle");
-        mainPanel.add(new JScrollPane(crearPanelRecetasSimilares()), "recetasSimilares");
-        mainPanel.add(new JScrollPane(crearPanelListaCompra()), "listaCompra");
-        mainPanel.add(new JScrollPane(crearPanelPerfil()), "perfil");
+
+        //POST-AUTH
+        postAuthFactories.put("presupuesto", this::crearPanelPresupuesto);
+        postAuthFactories.put("menuDia", this::crearPanelMenuDia);
+        postAuthFactories.put("recetaDetalle", () -> new JScrollPane(crearPanelRecetaDetalle()));
+        postAuthFactories.put("recetasSimilares", () -> new JScrollPane(crearPanelRecetasSimilares()));
+        postAuthFactories.put("listaCompra", () -> new JScrollPane(crearPanelListaCompra()));
+        postAuthFactories.put("perfil", () -> new JScrollPane(crearPanelPerfil()));
 
         add(mainPanel);
     }
+
 
     // --- Pantalla 1: Master MENU ---
     private JPanel crearPanelInicio() {
@@ -225,6 +235,10 @@ public class JVentana extends JFrame {
             if (customerCheck != null && pass.equals(customerCheck.getUserPass())) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
                 customerId = customerCheck.getUserId();
+
+                usuario = cargarPerfilUsuario();
+                ensurePostAuthPanels();
+
                 cardLayout.show(mainPanel, "presupuesto");
             } else {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
@@ -392,7 +406,7 @@ public class JVentana extends JFrame {
         // Header de perfil
         JPanel cab = roundedCard();
         cab.setLayout(new BoxLayout(cab, BoxLayout.Y_AXIS));
-        JLabel user = new JLabel("MARIA123", SwingConstants.CENTER);
+        JLabel user = new JLabel(usuario.getUserName(), SwingConstants.CENTER);
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
         JButton editar = pillButton("Editar perfil");
@@ -408,10 +422,10 @@ public class JVentana extends JFrame {
         content.add(cab);
         content.add(Box.createVerticalStrut(14));
 
-        content.add(keyValue("SEXO:", "MUJER"));
-        content.add(keyValue("EDAD:", "21"));
-        content.add(keyValue("ALERGIAS/INTOLERANCIAS:", "LACTOSA, FRUTOS SECOS, MAÍZ, HUEVO"));
-        content.add(keyValue("ALIMENTOS QUE NO COMES:", "ALUBIAS, PLÁTANOS"));
+        content.add(keyValue("SEXO:", usuario.getUserGender()));
+        content.add(keyValue("EDAD:", String.valueOf(usuario.getUserAge())));
+        content.add(keyValue("ALERGIAS/INTOLERANCIAS:", usuario.illegalFoodToString()));
+        content.add(keyValue("ALIMENTOS QUE NO COMES:", usuario.getAlimentosNoCome()));
 
         content.add(Box.createVerticalStrut(12));
         JLabel prev = labelBold("VER MENÚS ANTERIORES");
@@ -431,7 +445,7 @@ public class JVentana extends JFrame {
         String userName = usuarioField.getText();
         String pass = new String(contrasenaField.getPassword());
         String passCheck = new String(confirmarContrasenaField.getPassword());
-        String sexo = sexoComboBox.getSelectedItem().toString();
+        String sexo = Objects.requireNonNull(sexoComboBox.getSelectedItem()).toString();
         int edad = (int) edadSpinner.getValue();
         ArrayList<String> seleccionAlergia = new ArrayList<>();
         String alimentosNoCome = alimentosNoComeArea.getText();
@@ -447,6 +461,10 @@ public class JVentana extends JFrame {
         if (resultado.getValue().equals("b")) {
             JOptionPane.showMessageDialog(this, "Registro completado");
             customerId = resultado.getKey().getUserId();
+
+            usuario = cargarPerfilUsuario();
+            ensurePostAuthPanels();
+
             cardLayout.show(mainPanel, "presupuesto");
         } else {
             JOptionPane.showMessageDialog(this, "El registro no se pudo completar");
@@ -512,6 +530,7 @@ public class JVentana extends JFrame {
         p.setAlignmentX(Component.CENTER_ALIGNMENT);
         return p;
     }
+
     private Component fieldWrap(Component c, Dimension size) {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
@@ -569,18 +588,6 @@ public class JVentana extends JFrame {
         p.add(top);
         p.add(Box.createVerticalStrut(10));
         p.add(mid);
-        return p;
-    }
-
-    private JPanel stack(Component top, Component mid, Component bottom) {
-        JPanel p = new JPanel();
-        p.setOpaque(false);
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.add(top);
-        p.add(Box.createVerticalStrut(10));
-        p.add(mid);
-        p.add(Box.createVerticalStrut(10));
-        p.add(bottom);
         return p;
     }
 
@@ -784,7 +791,8 @@ public class JVentana extends JFrame {
         JButton menu = navItem("MENÚ", e -> cardLayout.show(mainPanel, "menuDia"));
         JButton lista = navItem("LISTA", e -> cardLayout.show(mainPanel, "listaCompra"));
         JButton perfil = navItem("PERFIL", e -> {
-            cargarPerfilUsuario();
+            usuario = cargarPerfilUsuario();
+            refreshCard("perfil");
             cardLayout.show(mainPanel, "perfil");
         });
 
@@ -803,10 +811,10 @@ public class JVentana extends JFrame {
         return b;
     }
 
-    private void cargarPerfilUsuario() {
-        if (customerId == null) return;
-        Customer usuario = CustomerDAO.getClienteId(customerId);
-
+    private Customer cargarPerfilUsuario() {
+        if (customerId == null) {return new Customer();}
+        else{
+            return CustomerDAO.getClienteId(customerId);}
 
     }
 
@@ -819,6 +827,41 @@ public class JVentana extends JFrame {
         //System.out.println(icono);
 
     }
+
+    // Crea todas las tarjetas post-auth
+    private void ensurePostAuthPanels() {
+        if (postAuthPanelsCreated) return;
+
+        // Si vamos a usar datos de usuario en pantallas (p.ej. perfil), precargamos
+        if (customerId != null) {
+            usuario = cargarPerfilUsuario();
+        }
+
+        for (Map.Entry<String, Supplier<JComponent>> e : postAuthFactories.entrySet()) {
+            JComponent comp = e.getValue().get();
+            mainPanel.add(comp, e.getKey());
+            createdCards.put(e.getKey(), comp);
+        }
+        postAuthPanelsCreated = true;
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
+    // Reconstruye una tarjeta concreta
+    private void refreshCard(String key) {
+        Supplier<JComponent> f = postAuthFactories.get(key);
+        if (f == null) return;
+        JComponent old = createdCards.get(key);
+        if (old != null) {
+            mainPanel.remove(old);
+        }
+        JComponent comp = f.get();
+        mainPanel.add(comp, key);
+        createdCards.put(key, comp);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
 
     // ---------- Main ----------
     public static void main(String[] args) {

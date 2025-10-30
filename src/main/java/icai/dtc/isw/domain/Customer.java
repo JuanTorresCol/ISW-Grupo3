@@ -1,5 +1,6 @@
 package icai.dtc.isw.domain;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -7,14 +8,15 @@ public class Customer implements Serializable{
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 1L;
-    private String userId;
-    private String userName;
-    private String userPass;
-    private String userGender;
-    private int userAge;
-    private ArrayList<String> illegalFood;
-    private String alimentosNoCome;
+    private String userId = createUserId("e");
+    private String userName = "e";
+    private String userPass = "e";
+    private String userGender = "e";
+    private int userAge = 1;
+    private ArrayList<String> illegalFood = new ArrayList<>();
+    private String alimentosNoCome = "e";
 
     public Customer( String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
         this.userId = createUserId(userName);
@@ -26,13 +28,7 @@ public class Customer implements Serializable{
         this.alimentosNoCome = alimentosNoCome;
     }
     public Customer(){
-        this.userId = createUserId("error");
-        this.userName = "e";
-        this.userPass = "e";
-        this.userGender = "e";
-        this.userAge = 1;
-        this.illegalFood = new ArrayList<>();
-        this.alimentosNoCome = "e";
+
     }
 
     public String getUserId() {return userId;}
@@ -63,5 +59,17 @@ public class Customer implements Serializable{
         int digits = Math.abs(hash % 100000);
         String formattedDigits = String.format("%05d", digits);
         return firstLetter + formattedDigits;
+    }
+    public String illegalFoodToString() {
+        StringBuilder nS = new StringBuilder();
+        if (illegalFood != null) {
+
+            for (String s : illegalFood) {
+                nS.append(s);
+            }
+            return nS.toString();
+        } else {
+            return "e";
+        }
     }
 }
