@@ -60,14 +60,14 @@ class CustomerTest {
     }
 
     @Test
-    void testCreateUserIdConsistency() {
+    void testCreateUserId() {
         String id1 = Customer.createUserId("maria");
         String id2 = Customer.createUserId("maria");
         assertEquals(id1, id2, "El mismo nombre debería generar el mismo userId");
     }
 
     @Test
-    void testDifferentNamesProduceDifferentIds() {
+    void testDifferentIds() {
         String id1 = Customer.createUserId("maria");
         String id2 = Customer.createUserId("juan");
         assertNotEquals(id1, id2, "Nombres distintos deben generar IDs distintos");

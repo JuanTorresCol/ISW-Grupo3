@@ -20,22 +20,24 @@ import static org.mockito.Mockito.*;
 class CustomerDAOTest{
 
 
+    //prueba para que si se recibe un null no de error
     @Test
-    void toArrayList_null_devuelveVacia() {
+    void testToArrayList() {
         assertTrue(CustomerDAO.toArrayList(null).isEmpty());
     }
-
+    //prueba que se capture correctamente la excepcion SQL
     @Test
-    void toArrayList_wrappeaSQLException_enRuntimeException() throws Exception {
+    void testToArrayList_SQLException() throws Exception {
         Array sqlArray = mock(Array.class);
         when(sqlArray.getArray()).thenThrow(new SQLException("boom"));
         RuntimeException ex = assertThrows(RuntimeException.class, () -> CustomerDAO.toArrayList(sqlArray));
         assertTrue(ex.getMessage().contains("Error converting SQL Array"));
     }
 
-    //getClienteId (encontrado)
+    //Lectura correcta de la tabla
+    //prueba que se ha encontrado al cliente
     @Test
-    void getClienteId_encontrado_mapeaCampos() throws Exception {
+    void testGetCustomerId() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
@@ -66,7 +68,7 @@ class CustomerDAOTest{
             assertEquals("M", c.getUserGender());
             assertEquals(21, c.getUserAge());
             assertEquals(1, c.getIllegalFood().size());
-            assertEquals("gluten", c.getIllegalFood().get(0));
+            assertEquals("gluten", c.getIllegalFood().getFirst());
             assertEquals("pescado", c.getAlimentosNoCome());
 
             verify(pst).setString(1, "ID123");
@@ -74,9 +76,9 @@ class CustomerDAOTest{
         }
     }
 
-    // getCliente (no encontrado)
+    // prueba que si no ha encontrado al cliente devuelva null
     @Test
-    void getCliente_noEncontrado_devuelveNull() throws Exception {
+    void testGetCustomerNotFound() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
@@ -95,9 +97,9 @@ class CustomerDAOTest{
         }
     }
 
-    //  getClientes (lista con varias filas)
+    // prueba que funciona con varios users
     @Test
-    void getClientes_rellenaLista() throws Exception {
+    void testGetDifferentCustomers() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
@@ -117,7 +119,7 @@ class CustomerDAOTest{
 
             when(rs.getString(2)).thenReturn("Maria", "Pablo");  // 1ª llamada -> "Maria", 2ª -> "Pablo"
             when(rs.getString(3)).thenReturn("pass1", "pass2");
-            when(rs.getString(4)).thenReturn("F", "M");
+            when(rs.getString(4)).thenReturn("M", "H");
             when(rs.getInt(5)).thenReturn(21, 22);
 
             when(rs.getArray(6)).thenReturn(sqlArray1, sqlArray2);
@@ -137,9 +139,9 @@ class CustomerDAOTest{
     }
 
 
-    //  registerCliente (parámetros de INSERT)
+    //  prueba que funciona el registro del customer
     @Test
-    void registerCliente_seteaParametrosCorrectos() throws Exception {
+    void testRegisterCustomer() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         Array createdArray = mock(Array.class);
