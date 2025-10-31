@@ -2,10 +2,11 @@ package icai.dtc.isw.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
 
@@ -24,14 +25,14 @@ class CustomerTest {
                 "Carne"
         );
     }
-
+    //prueba generar id con formato correcto
     @Test
     void testCreateUserIdFormat() {
         String userId = Customer.createUserId("maria");
         assertTrue(userId.matches("[A-Z]\\d{5}"),
                 "El userId debe empezar por una mayúscula y seguir con 5 dígitos");
     }
-
+    //prueba el constructor y mira que los getters funcionen
     @Test
     void testConstructorAndGetters() {
         assertEquals("maria", customer.getUserName());
@@ -40,9 +41,9 @@ class CustomerTest {
         assertEquals(21, customer.getUserAge());
         assertEquals(illegalFood, customer.getIllegalFood());
         assertEquals("Carne", customer.getAlimentosNoCome());
-        assertNotNull(customer.getUserId(), "El userId no debe ser nulo");
+        assertEquals("M00522", customer.getUserId(), "Para 'maria' el userId esperado es M00522");
     }
-
+    //prueba que los setters funcionen
     @Test
     void testSetters() {
         customer.setUserId("A00001");
@@ -59,17 +60,35 @@ class CustomerTest {
         assertEquals(nuevaLista, customer.getIllegalFood());
     }
 
+    //prueba que se cree correctamente el id test para un mismo nombre
     @Test
     void testCreateUserId() {
         String id1 = Customer.createUserId("maria");
         String id2 = Customer.createUserId("maria");
         assertEquals(id1, id2, "El mismo nombre debería generar el mismo userId");
+        assertEquals("M00522", id1);
     }
 
+    //prueba que para dos nombres distintos se creen 2 id
     @Test
     void testDifferentIds() {
-        String id1 = Customer.createUserId("maria");
-        String id2 = Customer.createUserId("juan");
+        String id1 = Customer.createUserId("maria"); // M00522
+        String id2 = Customer.createUserId("juan");  // J00430
         assertNotEquals(id1, id2, "Nombres distintos deben generar IDs distintos");
+        assertEquals("J00430", id2);
+    }
+
+    //prueba la lista illegalfood con diferentes estados
+    @Test
+    void illegalFoodToString() {
+        // caso normal (concatena sin separador)
+        assertEquals("GlutenLácteos", customer.illegalFoodToString());
+        // lista vacía
+        customer.setIllegalFood(new ArrayList<>());
+        assertEquals("", customer.illegalFoodToString());
+        // null => "e"
+        customer.setIllegalFood(null);
+        assertEquals("e", customer.illegalFoodToString());
     }
 }
+
