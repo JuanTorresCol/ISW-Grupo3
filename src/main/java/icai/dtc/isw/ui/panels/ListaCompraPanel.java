@@ -27,9 +27,9 @@ public class ListaCompraPanel extends JPanel {
         add(t, BorderLayout.NORTH);
         add(new JScrollPane(lista), BorderLayout.CENTER);
         add(bottomNav(
-                e -> app.showCard("menuDia"),
-                e -> app.showCard("listaCompra"),
-                e -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> app.showCard("menuDia"),
+                _ -> app.showCard("listaCompra"),
+                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
 }

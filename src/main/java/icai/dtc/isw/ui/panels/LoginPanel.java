@@ -32,7 +32,7 @@ public class LoginPanel extends JPanel {
         form.add(fieldWrap(contrasenaLoginField,new Dimension(600,50)));
 
         JButton btnEntrar = pillButton("Entrar");
-        btnEntrar.addActionListener(e -> {
+        btnEntrar.addActionListener(_ -> {
             String userName = usuarioLoginField.getText().trim();
             String pass = new String(contrasenaLoginField.getPassword());
             Customer customerCheck = CustomerDAO.getCliente(userName);
@@ -44,7 +44,7 @@ public class LoginPanel extends JPanel {
         });
 
         JButton btnBack = pillButton("Volver al inicio");
-        btnBack.addActionListener(e -> app.showCard("inicio"));
+        btnBack.addActionListener(_ -> app.showCard("inicio"));
 
         setBorder(BorderFactory.createEmptyBorder(0, 0, 80, 0));
         add(t, BorderLayout.NORTH);

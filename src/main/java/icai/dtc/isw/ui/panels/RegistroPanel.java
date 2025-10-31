@@ -72,10 +72,10 @@ public class RegistroPanel extends JPanel {
         form.add(fieldWrap(alimentosNoComeField));
 
         JButton btnRegistrar = pillButton("REGISTRARSE");
-        btnRegistrar.addActionListener(e -> onRegistrar(app));
+        btnRegistrar.addActionListener(_ -> onRegistrar(app));
 
         JButton btnBack = pillButton("Volver al inicio");
-        btnBack.addActionListener(e -> app.showCard("inicio"));
+        btnBack.addActionListener(_ -> app.showCard("inicio"));
 
         JPanel actions = flowCenter();
         actions.add(btnRegistrar);

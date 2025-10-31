@@ -14,7 +14,7 @@ public class RecetaDetallePanel extends JPanel {
         setBackground(BG);
 
         JPanel header = flowLeft();
-        JButton back = flatLink("< ATRÁS", e -> app.showCard("menuDia"));
+        JButton back = flatLink("< ATRÁS", _ -> app.showCard("menuDia"));
         header.add(back);
 
         JLabel t = pillTitle("RECETA");
@@ -42,9 +42,9 @@ public class RecetaDetallePanel extends JPanel {
         add(header, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);
         add(bottomNav(
-                e -> app.showCard("menuDia"),
-                e -> app.showCard("listaCompra"),
-                e -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> app.showCard("menuDia"),
+                _ -> app.showCard("listaCompra"),
+                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
 }

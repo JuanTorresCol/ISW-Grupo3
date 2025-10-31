@@ -26,9 +26,9 @@ public class RecetasSimilaresPanel extends JPanel {
         add(t, BorderLayout.NORTH);
         add(wrapCentered(lista), BorderLayout.CENTER);
         add(bottomNav(
-                e -> app.showCard("menuDia"),
-                e -> app.showCard("listaCompra"),
-                e -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> app.showCard("menuDia"),
+                _ -> app.showCard("listaCompra"),
+                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
 
@@ -48,7 +48,7 @@ public class RecetasSimilaresPanel extends JPanel {
         name.setFont(H3);
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
-        JButton sel = outlineButton("SELECCIONAR", e -> {
+        JButton sel = outlineButton("SELECCIONAR", _ -> {
             JOptionPane.showMessageDialog(this, "Seleccionada receta similar");
             app.showCard("menuDia");
         });

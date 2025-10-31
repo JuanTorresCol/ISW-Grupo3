@@ -12,7 +12,7 @@ public class MenuDiaPanel extends JPanel {
 
     private final String[] diasSemana = {"LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES"};
     private int idxDia = 0;
-    private JLabel tituloDiaLabel;
+    private final JLabel tituloDiaLabel;
 
     public MenuDiaPanel(JVentana app) {
         setLayout(new BorderLayout());
@@ -20,8 +20,8 @@ public class MenuDiaPanel extends JPanel {
 
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
-        JButton prev = navArrow("<", e -> cambiarDia(-1));
-        JButton next = navArrow(">", e -> cambiarDia(1));
+        JButton prev = navArrow("<", _ -> cambiarDia(-1));
+        JButton next = navArrow(">", _ -> cambiarDia(1));
         tituloDiaLabel = new JLabel(dayTitle(), SwingConstants.CENTER);
         tituloDiaLabel.setFont(H2);
         tituloDiaLabel.setForeground(TITLE);
@@ -45,9 +45,9 @@ public class MenuDiaPanel extends JPanel {
         add(header, BorderLayout.NORTH);
         add(stack(tiraDias, cards), BorderLayout.CENTER);
         add(bottomNav(
-                e -> app.showCard("menuDia"),
-                e -> app.showCard("listaCompra"),
-                e -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> app.showCard("menuDia"),
+                _ -> app.showCard("listaCompra"),
+                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
 
@@ -88,8 +88,8 @@ public class MenuDiaPanel extends JPanel {
         card.add(Box.createVerticalStrut(6));
 
         JPanel acciones = flowLeft();
-        JButton ver = outlineButton("VER RECETA", e -> app.showCard("recetaDetalle"));
-        JButton cambiar = outlineButton("CAMBIAR", e -> app.showCard("recetasSimilares"));
+        JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));
+        JButton cambiar = outlineButton("CAMBIAR", _ -> app.showCard("recetasSimilares"));
         acciones.add(ver);
         acciones.add(cambiar);
         card.add(acciones);

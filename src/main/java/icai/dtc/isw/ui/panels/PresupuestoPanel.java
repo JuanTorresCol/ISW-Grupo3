@@ -27,7 +27,7 @@ public class PresupuestoPanel extends JPanel {
         ((JSpinner.DefaultEditor) presupuestoSpinner.getEditor()).getTextField().setColumns(6);
 
         JButton generar = pillButton("Generar menú");
-        generar.addActionListener(e -> app.showCard("menuDia"));
+        generar.addActionListener(_ -> app.showCard("menuDia"));
 
         center.add(Box.createVerticalStrut(10));
         center.add(dinero);
@@ -37,9 +37,9 @@ public class PresupuestoPanel extends JPanel {
         add(t, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);
         add(bottomNav(
-                e -> app.showCard("menuDia"),
-                e -> app.showCard("listaCompra"),
-                e -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> app.showCard("menuDia"),
+                _ -> app.showCard("listaCompra"),
+                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
 

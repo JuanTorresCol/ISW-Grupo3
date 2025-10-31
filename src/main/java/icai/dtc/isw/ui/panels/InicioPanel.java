@@ -6,7 +6,6 @@ import icai.dtc.isw.ui.UiUtils;
 import javax.swing.*;
 import java.awt.*;
 
-import static icai.dtc.isw.ui.UiUtils.*;
 
 public class InicioPanel extends JPanel {
 
@@ -22,8 +21,8 @@ public class InicioPanel extends JPanel {
 
         JButton btnLogin = UiUtils.pillButton("Iniciar sesión");
         JButton btnRegistro = UiUtils.pillButton("Registrarse");
-        btnLogin.addActionListener(e -> app.showCard("login"));
-        btnRegistro.addActionListener(e -> app.showCard("registro"));
+        btnLogin.addActionListener(_ -> app.showCard("login"));
+        btnRegistro.addActionListener(_ -> app.showCard("registro"));
         botones.add(btnLogin);
         botones.add(btnRegistro);
 

@@ -32,7 +32,7 @@ public class PerfilPanel extends JPanel {
         user.setFont(H3);
         JButton editar = pillButton("Editar perfil");
         editar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        editar.addActionListener(e -> JOptionPane.showMessageDialog(this, "Funcionalidad de edición en desarrollo"));
+        editar.addActionListener(_ -> JOptionPane.showMessageDialog(this, "Funcionalidad de edición en desarrollo"));
         cab.add(center(user));
         cab.add(Box.createVerticalStrut(6));
         cab.add(center(editar));
@@ -50,17 +50,17 @@ public class PerfilPanel extends JPanel {
 
         content.add(Box.createVerticalStrut(12));
         JLabel prev = labelBold("VER MENÚS ANTERIORES");
-        JButton s1 = flatLink("Hace 1 semana >", e -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
-        JButton s2 = flatLink("Hace 2 semanas >", e -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
+        JButton s1 = flatLink("Hace 1 semana >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
+        JButton s2 = flatLink("Hace 2 semanas >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
         content.add(prev);
         content.add(center(s1));
         content.add(center(s2));
 
         add(content, BorderLayout.CENTER);
         add(bottomNav(
-                e -> app.showCard("menuDia"),
-                e -> app.showCard("listaCompra"),
-                e -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> app.showCard("menuDia"),
+                _ -> app.showCard("listaCompra"),
+                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
 }
