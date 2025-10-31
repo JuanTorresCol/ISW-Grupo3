@@ -56,6 +56,7 @@ public class JVentana extends JFrame {
         postAuthFactories.put("recetasSimilares", () -> new JScrollPane(new RecetasSimilaresPanel(this)));
         postAuthFactories.put("listaCompra", () -> new JScrollPane(new ListaCompraPanel(this)));
         postAuthFactories.put("perfil", () -> new JScrollPane(new PerfilPanel(this)));
+        postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
 
         add(mainPanel);
         showCard("inicio");
@@ -110,9 +111,18 @@ public class JVentana extends JFrame {
         showCard("presupuesto");
     }
 
+    public void onEditSuccess() {
+        JOptionPane.showMessageDialog(this, "Edición completada");
+        showCard("menuDia");
+    }
+
     public void onAuthFailed(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("inicio");
+    }
+    public void onAuthFailed2(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+        showCard("perfil");
     }
 
     public Customer cargarPerfilUsuario() {

@@ -11,10 +11,11 @@ public class CustomerControler {
 	public void getCustomers(ArrayList<Customer> lista) {
 		customerDAO.getClientes(lista);
 	}
+
 	public Customer getCustomer(String id) {return(customerDAO.getCliente(id));}
 
     public Map.Entry<Customer, String> realizarRegistro(String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
-        Customer customerEnter = null;
+        Customer customerEnter;
         String flag = "a";
         if(pass.equals(passCheck) && userName != null && sexo != null){
             customerEnter = new Customer(userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
@@ -30,9 +31,16 @@ public class CustomerControler {
 
     public static Customer getClienteId(String inputId){return(CustomerDAO.getClienteId(inputId));}
 
-
-    // método para cambiar las preferencias del usuario, a editar
-    public void editarPreferencias(Customer usuario){
-
+    public String editarPreferencias(Customer usuario, String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
+        Customer customerEdit;
+        String flag = "a";
+        if(pass.equals(passCheck)|pass.equals("")&&passCheck.equals("")){
+            if(userName.equals("")){userName = usuario.getUserName();}
+            if(pass.equals("")){pass = usuario.getUserPass();}
+            customerEdit = new Customer(usuario.getUserId(), userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
+            CustomerDAO.editCliente(customerEdit);
+            flag = "b";
+        }
+        return flag;
     }
 }

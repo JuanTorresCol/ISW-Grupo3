@@ -46,8 +46,6 @@ public class CustomerDAO {
         }
     }
 
-
-
     public static void getClientes(ArrayList<Customer> lista) {
         Connection con=ConnectionDAO.getInstance().getConnection();
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios");
@@ -62,6 +60,7 @@ public class CustomerDAO {
             System.out.println(ex.getMessage());
         }
     }
+
     public static Customer getClienteId(String inputId) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         Customer cu = null;
@@ -79,6 +78,7 @@ public class CustomerDAO {
         }
         return cu;
     }
+
     public static Customer getCliente(String inputId) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         Customer cu = null;
@@ -97,8 +97,27 @@ public class CustomerDAO {
         return cu;
     }
 
-    public static void main(String[] args) {
+    public static void editCliente(Customer customerEdit){
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        String sql = "UPDATE usuarios SET name = ?, password = ?, gender = ?, age = ?, foodrestriction = ?, alimentosnocome = ? WHERE id = ?";
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(7, customerEdit.getUserId());
+            pst.setString(1, customerEdit.getUserName());
+            pst.setString(2, customerEdit.getUserPass());
+            pst.setString(3, customerEdit.getUserGender());
+            pst.setInt(4, customerEdit.getUserAge());
+            pst.setArray(5, pst.getConnection().createArrayOf("VARCHAR", customerEdit.getIllegalFood().toArray(new String[0])));
+            pst.setString(6,customerEdit.getAlimentosNoCome());
+            int rowsInserted = pst.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Cliente editado con éxito: " + customerEdit.getUserId());
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al editar cliente: " + ex.getMessage());
+        }
+    }
 
+    public static void main(String[] args) {
 
         ArrayList<Customer> lista= new ArrayList<>();
         CustomerDAO.getClientes(lista);

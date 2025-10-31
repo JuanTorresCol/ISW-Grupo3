@@ -27,12 +27,12 @@ public class PerfilPanel extends JPanel {
         // Header de perfil
         JPanel cab = roundedCard();
         cab.setLayout(new BoxLayout(cab, BoxLayout.Y_AXIS));
-        JLabel user = new JLabel(usuario.getUserName(), SwingConstants.CENTER);
+        JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
         JButton editar = pillButton("Editar perfil");
         editar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        editar.addActionListener(_ -> JOptionPane.showMessageDialog(this, "Funcionalidad de edición en desarrollo"));
+        editar.addActionListener(_ -> app.showCard("editarPerfil"));
         cab.add(center(user));
         cab.add(Box.createVerticalStrut(6));
         cab.add(center(editar));
@@ -45,8 +45,12 @@ public class PerfilPanel extends JPanel {
 
         content.add(keyValue("SEXO:", usuario.getUserGender()));
         content.add(keyValue("EDAD:", String.valueOf(usuario.getUserAge())));
-        content.add(keyValue("ALERGIAS/INTOLERANCIAS:", usuario.illegalFoodToString()));
-        content.add(keyValue("ALIMENTOS QUE NO COMES:", usuario.getAlimentosNoCome()));
+        String illegal = usuario.illegalFoodToString();
+        if(illegal.equals("")){illegal = "NINGUNO";}else{illegal = illegal.toUpperCase();}
+        content.add(keyValue("ALERGIAS/INTOLERANCIAS:", illegal));
+        String noCome = usuario.getAlimentosNoCome();
+        if(noCome.equals("")){noCome = "NINGUNO";}else{noCome = noCome.toUpperCase();}
+        content.add(keyValue("ALIMENTOS QUE NO COMES:", noCome));
 
         content.add(Box.createVerticalStrut(12));
         JLabel prev = labelBold("VER MENÚS ANTERIORES");

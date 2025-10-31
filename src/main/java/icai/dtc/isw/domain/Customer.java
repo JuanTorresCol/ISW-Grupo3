@@ -27,8 +27,17 @@ public class Customer implements Serializable{
         this.illegalFood = illegalFood;
         this.alimentosNoCome = alimentosNoCome;
     }
-    public Customer(){
 
+    public Customer(){
+    }
+    public Customer(String userId, String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userPass = userPass;
+        this.userGender = userGender;
+        this.userAge = userAge;
+        this.illegalFood = illegalFood;
+        this.alimentosNoCome = alimentosNoCome;
     }
 
     public String getUserId() {return userId;}
