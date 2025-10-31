@@ -34,9 +34,9 @@ public class CustomerControler {
     public String editarPreferencias(Customer usuario, String userName, String pass, String passCheck, String sexo, int edad, ArrayList<String> seleccionAlergia, String alimentosNoCome) {
         Customer customerEdit;
         String flag = "a";
-        if(pass.equals(passCheck)|pass.equals("")&&passCheck.equals("")){
-            if(userName.equals("")){userName = usuario.getUserName();}
-            if(pass.equals("")){pass = usuario.getUserPass();}
+        if(pass.equals(passCheck)){
+            if(userName.isEmpty()){userName = usuario.getUserName();}
+            if(pass.isEmpty()){pass = usuario.getUserPass();}
             customerEdit = new Customer(usuario.getUserId(), userName, pass, sexo, edad, seleccionAlergia, alimentosNoCome);
             CustomerDAO.editCliente(customerEdit);
             flag = "b";
