@@ -28,6 +28,9 @@ public class CustomerControler {
         return Map.entry(customerEnter, flag);
     }
 
+    public static Customer getClienteId(String inputId){return(CustomerDAO.getClienteId(inputId));}
+
+
     // método para cambiar las preferencias del usuario, a editar
     public void editarPreferencias(Customer usuario){
 

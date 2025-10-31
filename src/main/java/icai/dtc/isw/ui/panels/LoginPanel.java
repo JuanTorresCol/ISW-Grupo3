@@ -1,6 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
-import icai.dtc.isw.dao.CustomerDAO;
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.ui.JVentana;
 
@@ -10,6 +10,8 @@ import java.awt.*;
 import static icai.dtc.isw.ui.UiUtils.*;
 
 public class LoginPanel extends JPanel {
+
+    CustomerControler controler = new CustomerControler();
 
     public LoginPanel(JVentana app) {
         setLayout(new BorderLayout());
@@ -35,7 +37,7 @@ public class LoginPanel extends JPanel {
         btnEntrar.addActionListener(_ -> {
             String userName = usuarioLoginField.getText().trim();
             String pass = new String(contrasenaLoginField.getPassword());
-            Customer customerCheck = CustomerDAO.getCliente(userName);
+            Customer customerCheck = controler.getCustomer(userName);
             if (customerCheck != null && pass.equals(customerCheck.getUserPass())) {
                 app.onLoginSuccess(customerCheck);
             } else {

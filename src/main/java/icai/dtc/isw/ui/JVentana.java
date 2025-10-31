@@ -1,7 +1,6 @@
 package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
-import icai.dtc.isw.dao.CustomerDAO;
 import icai.dtc.isw.domain.Customer;
 
 import icai.dtc.isw.ui.panels.*;
@@ -118,7 +117,7 @@ public class JVentana extends JFrame {
 
     public Customer cargarPerfilUsuario() {
         if (customerId == null) return new Customer();
-        return CustomerDAO.getClienteId(customerId);
+        return CustomerControler.getClienteId(customerId);
     }
 
     public String getCustomerId() { return customerId; }
