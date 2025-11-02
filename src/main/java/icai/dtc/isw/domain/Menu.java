@@ -38,6 +38,14 @@ public class Menu {
         recetas.put("cena",receta);
     }
 
+    public double getprecio(){
+        double precio_menu = 0;
+        for (Receta r: recetas.values()){
+            precio_menu += r.getPrecio();
+        }
+        return precio_menu;
+    }
+
 
 
 }
