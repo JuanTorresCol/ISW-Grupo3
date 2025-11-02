@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Receta {
 
+    private String nombre;
     private double precio;
     private Map<Producto,Integer> ingredientes;
     private String descripcion;
@@ -31,7 +32,8 @@ public class Receta {
     // tiene un tiempo de preparacion
     // tiene una dificultad
 
-    public Receta(String descripcion, int duracion, Dificultad dificultad, Map<Producto,Integer> ingredientes) {
+    public Receta(String nombre, String descripcion, int duracion, Dificultad dificultad, Map<Producto,Integer> ingredientes) {
+        this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.ingredientes = new HashMap<>(ingredientes);
