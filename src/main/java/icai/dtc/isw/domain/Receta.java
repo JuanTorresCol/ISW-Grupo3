@@ -14,6 +14,7 @@ public class Receta {
     private String descripcion;
     private int duracion;
     private Dificultad dificultad;
+    private String id;
 
 
     private void calcularPrecio() {
@@ -32,46 +33,40 @@ public class Receta {
     // tiene un tiempo de preparacion
     // tiene una dificultad
 
-    public Receta(String nombre, String descripcion, int duracion, Dificultad dificultad, Map<Producto,Integer> ingredientes) {
+    public Receta(String id, String nombre, Dificultad dificultad, int duracion, String descripcion, Map<Producto,Integer> ingredientes) {
+
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.ingredientes = new HashMap<>(ingredientes);
         calcularPrecio();
+        this.id = id;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public int getDuracion() {
-        return duracion;
-    }
-
-    public void setDuracion(int duracion) {
-        this.duracion = duracion;
-    }
-
-    public Dificultad getDificultad() {
-        return dificultad;
-    }
-
-    public void setDificultad(Dificultad dificultad) {
+    public Receta(String id, String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<Producto,Integer> ingredientes) {
+        this.nombre = nombre;
         this.dificultad = dificultad;
+        this.duracion = duracion;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.ingredientes = new HashMap<>(ingredientes);
+        this.id = id;
     }
 
-    public List<Producto> getIngredientes() {
-        return new ArrayList<>(ingredientes.keySet());
-    }
+    public String getDescripcion() {return descripcion;}
+    public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
+    public int getDuracion() {return duracion;}
+    public void setDuracion(int duracion) {this.duracion = duracion;}
+    public Dificultad getDificultad() {return dificultad;}
+    public void setDificultad(Dificultad dificultad) {this.dificultad = dificultad;}
+    public List<Producto> getIngredientes() {return new ArrayList<>(ingredientes.keySet());}
+    public String getId() {return id;}
+    public String getNombre() {return nombre;}
+    public double getPrecio() {return precio;}
 
-
-
-    public double getPrecio() {
-        return precio;
+    @Override
+    public String toString() {
+        return getNombre() + " - " + getDuracion() + " mins - " + getPrecio() + " $ \n"  + getDescripcion();
     }
 
 }

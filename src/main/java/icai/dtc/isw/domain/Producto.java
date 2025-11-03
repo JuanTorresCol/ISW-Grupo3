@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Producto {
 
+    private String nombre;
     private double precio_unitario;
     private ArrayList<String> illegal_food = new ArrayList<>();
 
@@ -12,9 +13,15 @@ public class Producto {
     // tiene alérgenos
     //
 
-    public Producto(double precio_unitario, ArrayList<String> illegal_food) {
+    public Producto(String nombre, double precio_unitario, ArrayList<String> illegal_food) {
+        this.nombre = nombre;
         this.precio_unitario = precio_unitario;
         this.illegal_food = illegal_food;
+    }
+
+    public Producto(String nombre) {
+        this.nombre = nombre;
+
     }
 
     public double getPrecio_unitario() {
