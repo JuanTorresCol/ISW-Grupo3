@@ -4,13 +4,17 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import icai.dtc.isw.utils.Util;
+
 public class Customer implements Serializable{
     /**
      *
      */
+    Util util = new Util();
+
     @Serial
     private static final long serialVersionUID = 1L;
-    private String userId = createUserId("e");
+    private String userId = util.createUserId("e");
     private String userName = "e";
     private String userPass = "e";
     private String userGender = "e";
@@ -19,7 +23,7 @@ public class Customer implements Serializable{
     private String alimentosNoCome = "e";
 
     public Customer( String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
-        this.userId = createUserId(userName);
+        this.userId = util.createUserId(userName);
         this.userName = userName;
         this.userPass = userPass;
         this.userGender = userGender;
@@ -59,16 +63,7 @@ public class Customer implements Serializable{
         return userName;
     }
 
-    public static String createUserId(String username) {
-        char firstLetter = Character.toUpperCase(username.charAt(0));
-        int hash = 0;
-        for (char c : username.toCharArray()) {
-            hash += c;
-        }
-        int digits = Math.abs(hash % 100000);
-        String formattedDigits = String.format("%05d", digits);
-        return firstLetter + formattedDigits;
-    }
+
     public String illegalFoodToString() {
         StringBuilder nS = new StringBuilder();
         if (illegalFood != null) {

@@ -1,5 +1,7 @@
 package icai.dtc.isw.domain;
 
+import icai.dtc.isw.utils.Util;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Receta {
+    Util util = new Util();
 
     private String nombre;
     private double precio;
@@ -33,16 +36,25 @@ public class Receta {
     // tiene un tiempo de preparacion
     // tiene una dificultad
 
-    public Receta(String id, String nombre, Dificultad dificultad, int duracion, String descripcion, Map<Producto,Integer> ingredientes) {
+    public Receta(String nombre, Dificultad dificultad, int duracion, String descripcion, Map<Producto,Integer> ingredientes) {
 
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.ingredientes = new HashMap<>(ingredientes);
         calcularPrecio();
-        this.id = id;
+        this.id = util.createUserId(nombre);
     }
 
+    public Receta(String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<Producto,Integer> ingredientes) {
+        this.nombre = nombre;
+        this.dificultad = dificultad;
+        this.duracion = duracion;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.ingredientes = new HashMap<>(ingredientes);
+        this.id = util.createUserId(nombre);
+    }
     public Receta(String id, String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<Producto,Integer> ingredientes) {
         this.nombre = nombre;
         this.dificultad = dificultad;
