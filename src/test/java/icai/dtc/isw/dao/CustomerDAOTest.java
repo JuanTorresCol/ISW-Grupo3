@@ -1,6 +1,9 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.utils.Util;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
@@ -18,19 +21,23 @@ import static org.mockito.Mockito.*;
 
 
 class CustomerDAOTest{
-
+    private Util util;
+    @BeforeEach
+    void setUp() {
+        util = new Util();
+    }
 
     //prueba para que si se recibe un null no de error
     @Test
     void testToArrayList() {
-        assertTrue(CustomerDAO.toArrayList(null).isEmpty());
+        assertTrue(util.toArrayList(null).isEmpty());
     }
     //prueba que se capture correctamente la excepcion SQL
     @Test
     void testToArrayList_SQLException() throws Exception {
         Array sqlArray = mock(Array.class);
         when(sqlArray.getArray()).thenThrow(new SQLException("boom"));
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> CustomerDAO.toArrayList(sqlArray));
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> util.toArrayList(sqlArray));
         assertTrue(ex.getMessage().contains("Error converting SQL Array"));
     }
 

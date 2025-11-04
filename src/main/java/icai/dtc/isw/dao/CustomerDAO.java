@@ -9,21 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.utils.Util;
 
 public class CustomerDAO {
 
-    public static ArrayList<String> toArrayList(Array sqlArray) {
-        if (sqlArray == null) {
-            return new ArrayList<>();
-        }
-
-        try {
-            String[] stringArray = (String[]) sqlArray.getArray();
-            return new ArrayList<>(Arrays.asList(stringArray));
-        } catch (SQLException e) {
-            throw new RuntimeException("Error converting SQL Array to ArrayList", e);
-        }
-    }
+    private static final Util util = new Util();
 
     public static void registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
@@ -52,7 +42,7 @@ public class CustomerDAO {
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
-                lista.add(new Customer(rs.getString(2),rs.getString(3),rs.getString(4), rs.getInt(5),toArrayList(rs.getArray(6)), rs.getString(7)));
+                lista.add(new Customer(rs.getString(2),rs.getString(3),rs.getString(4), rs.getInt(5),util.toArrayList(rs.getArray(6)), rs.getString(7)));
             }
 
         } catch (SQLException ex) {
@@ -70,7 +60,7 @@ public class CustomerDAO {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    cu = new Customer(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), toArrayList(rs.getArray(6)), rs.getString(7));
+                    cu = new Customer(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), util.toArrayList(rs.getArray(6)), rs.getString(7));
                 }
             }
         } catch (SQLException ex) {
@@ -88,7 +78,7 @@ public class CustomerDAO {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    cu = new Customer(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), toArrayList(rs.getArray(6)), rs.getString(7));
+                    cu = new Customer(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), util.toArrayList(rs.getArray(6)), rs.getString(7));
                 }
             }
         } catch (SQLException ex) {

@@ -1,6 +1,8 @@
 package icai.dtc.isw.domain;
 
+import icai.dtc.isw.dao.RecetaDAO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ public class Menu {
 
     private final int size = 2;
     private Map<String, Receta> recetas = new HashMap<>(size);;
+    private RecetaDAO dao = new RecetaDAO();
     // menu se compone de dos recetas
     // se usará un algorítmo de knapsack pará encontrar la combinacion de dos recetas que resulta en el mejor menu
     // menu tendra el metodo crear un menu distinto
@@ -16,6 +19,11 @@ public class Menu {
     public Menu(Receta receta, Receta receta2) {
         recetas.put("comida",receta);
         recetas.put("cena",receta2);
+    }
+
+    public ArrayList<Receta> loadRecetas(){
+        ArrayList<Receta> recetas = new ArrayList<>();
+        return dao.getRecetas();
     }
 
     public Map<String,Receta> getRecetas() {

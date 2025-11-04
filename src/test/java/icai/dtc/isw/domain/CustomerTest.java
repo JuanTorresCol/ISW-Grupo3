@@ -5,16 +5,19 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import icai.dtc.isw.utils.Util;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
 
     private Customer customer;
     private ArrayList<String> illegalFood;
+    private Util util;
+
 
     @BeforeEach
     void setUp() {
+        util = new Util();
         illegalFood = new ArrayList<>(Arrays.asList("Gluten", "Lácteos"));
         customer = new Customer(
                 "maria",
@@ -28,7 +31,7 @@ class CustomerTest {
     //prueba generar id con formato correcto
     @Test
     void testCreateUserIdFormat() {
-        String userId = Customer.createUserId("maria");
+        String userId = util.createUserId("maria");
         assertTrue(userId.matches("[A-Z]\\d{5}"),
                 "El userId debe empezar por una mayúscula y seguir con 5 dígitos");
     }
@@ -63,8 +66,8 @@ class CustomerTest {
     //prueba que se cree correctamente el id test para un mismo nombre
     @Test
     void testCreateUserId() {
-        String id1 = Customer.createUserId("maria");
-        String id2 = Customer.createUserId("maria");
+        String id1 = util.createUserId("maria");
+        String id2 = util.createUserId("maria");
         assertEquals(id1, id2, "El mismo nombre debería generar el mismo userId");
         assertEquals("M00522", id1);
     }
@@ -72,8 +75,8 @@ class CustomerTest {
     //prueba que para dos nombres distintos se creen 2 id
     @Test
     void testDifferentIds() {
-        String id1 = Customer.createUserId("maria"); // M00522
-        String id2 = Customer.createUserId("juan");  // J00430
+        String id1 = util.createUserId("maria"); // M00522
+        String id2 = util.createUserId("juan");  // J00430
         assertNotEquals(id1, id2, "Nombres distintos deben generar IDs distintos");
         assertEquals("J00430", id2);
     }

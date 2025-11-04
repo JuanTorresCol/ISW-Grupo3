@@ -1,5 +1,10 @@
 package icai.dtc.isw.utils;
 
+import java.sql.Array;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Util {
 
     public Util() {
@@ -14,6 +19,19 @@ public class Util {
         int digits = Math.abs(hash % 100000);
         String formattedDigits = String.format("%05d", digits);
         return firstLetter + formattedDigits;
+    }
+
+    public static ArrayList<String> toArrayList(Array sqlArray) {
+        if (sqlArray == null) {
+            return new ArrayList<>();
+        }
+
+        try {
+            String[] stringArray = (String[]) sqlArray.getArray();
+            return new ArrayList<>(Arrays.asList(stringArray));
+        } catch (SQLException e) {
+            throw new RuntimeException("Error converting SQL Array to ArrayList", e);
+        }
     }
 
 }

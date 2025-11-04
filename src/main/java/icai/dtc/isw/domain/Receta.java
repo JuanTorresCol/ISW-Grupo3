@@ -8,12 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class Receta {
     Util util = new Util();
 
     private String nombre;
     private double precio;
-    private Map<Producto,Integer> ingredientes;
+    private Map<String,Ingrediente> ingredientes;
     private String descripcion;
     private int duracion;
     private Dificultad dificultad;
@@ -24,8 +25,8 @@ public class Receta {
 
         //calcular el precio en función del precio unitario de los productos y la cantidad necesaria de cada uno de ellos
         double calculo = 0;
-        for (Producto p : ingredientes.keySet()) {
-            calculo += p.getPrecio_unitario() * ingredientes.get(p);
+        for (Ingrediente p : ingredientes.values()) {
+            calculo += p.getPrecio_unitario() * ingredientes.get(p).getCantidad();
         }
         // sustituir con la lógica para calcular el precio
         precio = calculo;
@@ -36,7 +37,7 @@ public class Receta {
     // tiene un tiempo de preparacion
     // tiene una dificultad
 
-    public Receta(String nombre, Dificultad dificultad, int duracion, String descripcion, Map<Producto,Integer> ingredientes) {
+    public Receta(String nombre, Dificultad dificultad, int duracion, String descripcion, Map<String,Ingrediente> ingredientes) {
 
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -46,7 +47,7 @@ public class Receta {
         this.id = util.createUserId(nombre);
     }
 
-    public Receta(String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<Producto,Integer> ingredientes) {
+    public Receta(String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<String,Ingrediente> ingredientes) {
         this.nombre = nombre;
         this.dificultad = dificultad;
         this.duracion = duracion;
@@ -55,7 +56,7 @@ public class Receta {
         this.ingredientes = new HashMap<>(ingredientes);
         this.id = util.createUserId(nombre);
     }
-    public Receta(String id, String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<Producto,Integer> ingredientes) {
+    public Receta(String id, String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<String,Ingrediente> ingredientes) {
         this.nombre = nombre;
         this.dificultad = dificultad;
         this.duracion = duracion;
@@ -71,7 +72,7 @@ public class Receta {
     public void setDuracion(int duracion) {this.duracion = duracion;}
     public Dificultad getDificultad() {return dificultad;}
     public void setDificultad(Dificultad dificultad) {this.dificultad = dificultad;}
-    public List<Producto> getIngredientes() {return new ArrayList<>(ingredientes.keySet());}
+    public Map<String,Ingrediente> getIngredientes() {return ingredientes;}
     public String getId() {return id;}
     public String getNombre() {return nombre;}
     public double getPrecio() {return precio;}
