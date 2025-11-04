@@ -1,6 +1,7 @@
 package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.ui.JVentana;
+import icai.dtc.isw.domain.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,17 @@ public class PresupuestoPanel extends JPanel {
         ((JSpinner.DefaultEditor) presupuestoSpinner.getEditor()).getTextField().setColumns(6);
 
         JButton generar = pillButton("Generar menú");
-        generar.addActionListener(_ -> app.showCard("menuDia"));
+        generar.addActionListener(_ -> {
+            // Obtener el valor del spinner
+            double presupuesto = ((Number) presupuestoSpinner.getValue()).doubleValue();
+
+            // Asignar el presupuesto al menú
+            Menu menu = new Menu();
+            menu.setPresupuesto(presupuesto);
+
+            // Mostrar la siguiente pantalla
+            app.showCard("menuDia");
+        });
 
         center.add(Box.createVerticalStrut(10));
         center.add(dinero);

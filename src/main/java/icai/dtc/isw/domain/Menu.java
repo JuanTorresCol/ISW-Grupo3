@@ -9,6 +9,7 @@ import java.util.Map;
 public class Menu {
 
     private final int size = 2;
+    private static double presupuesto;
     private Map<String, Receta> recetas = new HashMap<>(size);;
     private RecetaDAO dao = new RecetaDAO();
     // menu se compone de dos recetas
@@ -16,14 +17,26 @@ public class Menu {
     // menu tendra el metodo crear un menu distinto
     // menu tendra el metodo devolver informacion del menu
 
+    public Menu() {}
+
     public Menu(Receta receta, Receta receta2) {
         recetas.put("comida",receta);
         recetas.put("cena",receta2);
     }
 
+    public void setPresupuesto(double presupuesto) {
+        this.presupuesto = presupuesto;
+    }
+
     public ArrayList<Receta> loadRecetas(){
         ArrayList<Receta> recetas = new ArrayList<>();
         return dao.getRecetas();
+    }
+
+    public void generateMenu(){
+        ArrayList<Receta> recetas;
+        recetas = loadRecetas();
+
     }
 
     public Map<String,Receta> getRecetas() {
@@ -53,7 +66,5 @@ public class Menu {
         }
         return precio_menu;
     }
-
-
 
 }

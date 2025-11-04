@@ -2,10 +2,7 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.utils.Util;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -42,11 +39,11 @@ public class Receta {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
+        this.dificultad = dificultad;
         this.ingredientes = new HashMap<>(ingredientes);
         calcularPrecio();
         this.id = util.createUserId(nombre);
     }
-
     public Receta(String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<String,Ingrediente> ingredientes) {
         this.nombre = nombre;
         this.dificultad = dificultad;
