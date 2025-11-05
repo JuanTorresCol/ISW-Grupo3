@@ -92,7 +92,7 @@ public class RecetaDAO {
             String key = entry.getKey();
             Ingrediente values = entry.getValue();
 
-            String concatenado = key + "," + values.getCantidad() + "," + String.valueOf(values.getUnidad());
+            String concatenado = key + "," + values.getCantidad() + "," + values.getPrecio_unitario();
             lista.add(concatenado);
         }
         try (PreparedStatement pst = con.prepareStatement(sql)) {

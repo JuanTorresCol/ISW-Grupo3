@@ -1,5 +1,6 @@
 package icai.dtc.isw.utils;
 
+import icai.dtc.isw.dao.RecetaDAO;
 import icai.dtc.isw.domain.Dificultad;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.domain.Ingrediente;
@@ -13,13 +14,10 @@ import java.util.*;
 /**
  * Lector de recetas desde un CSV con columnas:
  * nombre (String), duracion (int), descripcion (String),
- * dificultad (FACIL|MEDIO|DIFICIL), alimentos (String con items "nombre;cantidad;precio" separados por "|").
- *
+ * dificultad (FACIL|MEDIO|DIFICIL), alimentos (String con items "nombre;cantidad;precio" separados por "|")
  * Uso:
  *  Leer recetas del csv y cargarlas a la db con RecetasDAO
- *
  * EJECUTAR UNA SOLA VEZ !!!!!!!!!!!!!!!!!
- *
  */
 public final class RecetasCsv {
 
@@ -178,7 +176,7 @@ public final class RecetasCsv {
     }
 
     // Solo ejecutar una vez
-    public static void main(String[] args) throws Exception {
+    static void main(String[] args) throws Exception {
         Path path;
         if (args.length == 0) {
 
@@ -188,8 +186,10 @@ public final class RecetasCsv {
             path = Path.of(args[0]);
         }
         List<Receta> recetas = leer(path);
-        System.out.println("Recetas leídas: " + recetas.size());
-        recetas.stream().limit(5).forEach(System.out::println);
+        RecetaDAO recetaDAO = new RecetaDAO();
+        for (Receta receta : recetas) {
+            recetaDAO.registerReceta(receta);
+        }
     }
 }
 
