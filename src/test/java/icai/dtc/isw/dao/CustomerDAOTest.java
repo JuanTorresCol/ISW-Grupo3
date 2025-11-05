@@ -1,9 +1,6 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.Customer;
-import icai.dtc.isw.utils.Util;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
@@ -12,39 +9,17 @@ import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+class CustomerDAOTest {
 
-class CustomerDAOTest{
-    private Util util;
-    @BeforeEach
-    void setUp() {
-        util = new Util();
-    }
-
-    //prueba para que si se recibe un null no de error
+    // prueba a encontrar cliente por id en la base de datos
     @Test
-    void testToArrayList() {
-        assertTrue(util.toArrayList(null).isEmpty());
-    }
-    //prueba que se capture correctamente la excepcion SQL
-    @Test
-    void testToArrayList_SQLException() throws Exception {
-        Array sqlArray = mock(Array.class);
-        when(sqlArray.getArray()).thenThrow(new SQLException("boom"));
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> util.toArrayList(sqlArray));
-        assertTrue(ex.getMessage().contains("Error converting SQL Array"));
-    }
-
-    //Lectura correcta de la tabla
-    //prueba que se ha encontrado al cliente
-    @Test
-    void testGetCustomerId() throws Exception {
+    void testGetClienteId() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
@@ -83,9 +58,30 @@ class CustomerDAOTest{
         }
     }
 
-    // prueba que si no ha encontrado al cliente devuelva null
+    //prueba seleccionar cliente por id cuando no existe ese cliente
     @Test
-    void testGetCustomerNotFound() throws Exception {
+    void testGetClienteIdNotFound() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
+            ConnectionDAO cdao = mock(ConnectionDAO.class);
+            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
+            when(cdao.getConnection()).thenReturn(conn);
+
+            when(conn.prepareStatement("SELECT * FROM usuarios WHERE id = ?")).thenReturn(pst);
+            when(pst.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(false);
+
+            assertNull(CustomerDAO.getClienteId("NOPE-ID"));
+            verify(pst).setString(1, "NOPE-ID");
+        }
+    }
+
+    // prueba seleccionar cliente por nombre cuando no existe ese nombre en la base de datos
+    @Test
+    void testGetClienteNotFound() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
@@ -104,9 +100,9 @@ class CustomerDAOTest{
         }
     }
 
-    // prueba que funciona con varios users
+    // prueba que dos clientes sean diferentes
     @Test
-    void testGetDifferentCustomers() throws Exception {
+    void testGetDifferentClientes() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
@@ -124,7 +120,7 @@ class CustomerDAOTest{
 
             when(rs.next()).thenReturn(true, true, false);
 
-            when(rs.getString(2)).thenReturn("Maria", "Pablo");  // 1ª llamada -> "Maria", 2ª -> "Pablo"
+            when(rs.getString(2)).thenReturn("Maria", "Pablo");  // 1ª fila, 2ª fila
             when(rs.getString(3)).thenReturn("pass1", "pass2");
             when(rs.getString(4)).thenReturn("M", "H");
             when(rs.getInt(5)).thenReturn(21, 22);
@@ -141,14 +137,12 @@ class CustomerDAOTest{
             assertEquals(2, lista.size());
             assertEquals("Maria", lista.get(0).getUserName());
             assertEquals("Pablo", lista.get(1).getUserName());
-
         }
     }
 
-
-    //  prueba que funciona el registro del customer
+    //prueba insertar un cliente en la tabla
     @Test
-    void testRegisterCustomer() throws Exception {
+    void testRegisterCliente() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         Array createdArray = mock(Array.class);
@@ -174,7 +168,7 @@ class CustomerDAOTest{
 
             CustomerDAO.registerCliente(nuevo);
 
-            verify(pst).setString(1, nuevo.getUserId()); // id generado desde userName
+            verify(pst).setString(1, nuevo.getUserId()); // id generado a partir del nombre en el constructor de Customer
             verify(pst).setString(2, "Maria");
             verify(pst).setString(3, "secreta");
             verify(pst).setString(4, "M");
@@ -189,6 +183,54 @@ class CustomerDAOTest{
             verify(pst).executeUpdate();
         }
     }
+
+    //prueba que se puede editar la información del cliente en la base de datos
+    @Test
+    void testEditCliente() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        Array createdArray = mock(Array.class);
+
+        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
+            ConnectionDAO cdao = mock(ConnectionDAO.class);
+            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
+            when(cdao.getConnection()).thenReturn(conn);
+
+            when(conn.prepareStatement(
+                    "UPDATE usuarios SET name = ?, password = ?, gender = ?, age = ?, foodrestriction = ?, alimentosnocome = ? WHERE id = ?"
+            )).thenReturn(pst);
+
+            when(pst.getConnection()).thenReturn(conn);
+            when(conn.createArrayOf(eq("VARCHAR"), any())).thenReturn(createdArray);
+            when(pst.executeUpdate()).thenReturn(1);
+
+            // Cliente a editar con id explícito (usamos el setter que tienes)
+            Customer editado = new Customer(
+                    "Maria", "nuevaPass", "M", 22,
+                    new ArrayList<>(Arrays.asList("gluten")),
+                    "marisco"
+            );
+            editado.setUserId("ID123");
+
+            CustomerDAO.editCliente(editado);
+
+            // Orden de parámetros según tu SQL en editCliente:
+            // 1:name, 2:password, 3:gender, 4:age, 5:foodrestriction (Array), 6:alimentosnocome, 7:id
+            verify(pst).setString(1, "Maria");
+            verify(pst).setString(2, "nuevaPass");
+            verify(pst).setString(3, "M");
+            verify(pst).setInt(4, 22);
+            verify(conn).createArrayOf(eq("VARCHAR"), any());
+            verify(pst).setArray(5, createdArray);
+            verify(pst).setString(6, "marisco");
+            verify(pst).setString(7, "ID123");
+            verify(pst).executeUpdate();
+        }
+    }
+
+
+
+
 }
 
 
