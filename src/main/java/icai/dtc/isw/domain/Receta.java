@@ -21,10 +21,7 @@ public class Receta {
     private void calcularPrecio() {
 
         //calcular el precio en función del precio unitario de los productos y la cantidad necesaria de cada uno de ellos
-        double calculo = 0;
-        for (Ingrediente p : ingredientes.values()) {
-            calculo += p.getPrecio_unitario() * ingredientes.get(p).getCantidad();
-        }
+        double calculo = 10;
         // sustituir con la lógica para calcular el precio
         precio = calculo;
     }

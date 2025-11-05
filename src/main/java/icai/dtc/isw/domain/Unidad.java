@@ -1,11 +1,10 @@
 package icai.dtc.isw.domain;
 
 public enum Unidad {
-    unidad,
-    unidades,
+    u,
     ml,
     l,
-    gramos,
+    g,
     kg,
-    cucharadas
+    cda
 }

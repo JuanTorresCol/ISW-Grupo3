@@ -23,7 +23,7 @@ public class RecetaDAO {
                 ingredient = util.toArrayList(rs.getArray(6));
                 for (int i = 0; i < ingredient.size(); i++) {
                     List<String> partes = Arrays.asList(ingredient.get(i).split(","));
-                    ingredientes.put(partes.get(0),new Ingrediente(Double.parseDouble(partes.get(1)), Unidad.valueOf(partes.get(2))));
+                    ingredientes.put(partes.get(0),new Ingrediente(partes.get(0), partes.get(1), Double.parseDouble(partes.get(2))));
                 }
                 lista.add(new Receta(rs.getString(1),rs.getString(2), Dificultad.valueOf(rs.getString(6)),rs.getInt(3), rs.getDouble(4),rs.getString(5),ingredientes));
             }
@@ -47,7 +47,7 @@ public class RecetaDAO {
                     ingredients = util.toArrayList(rs.getArray(6));
                     for (int i = 0; i < ingredients.size(); i++) {
                         List<String> partes = Arrays.asList(ingredients.get(i).split(","));
-                        ingredientes.put(partes.get(0),new Ingrediente(Double.parseDouble(partes.get(1)), Unidad.valueOf(partes.get(2))));
+                        ingredientes.put(partes.get(0),new Ingrediente(partes.get(0),partes.get(1),Double.parseDouble(partes.get(2))));
                     }
                     re = new Receta(rs.getString(1),rs.getString(2), Dificultad.valueOf(rs.getString(6)),rs.getInt(3), rs.getDouble(4),rs.getString(5),ingredientes);
                 }
@@ -70,7 +70,7 @@ public class RecetaDAO {
                     ingredients = util.toArrayList(rs.getArray(6));
                     for (int i = 0; i < ingredients.size(); i++) {
                         List<String> partes = Arrays.asList(ingredients.get(i).split(","));
-                        ingredientes.put(partes.get(0),new Ingrediente(Double.parseDouble(partes.get(1)), Unidad.valueOf(partes.get(2))));
+                        ingredientes.put(partes.get(0),new Ingrediente(partes.get(0), partes.get(1),Double.parseDouble(partes.get(2))));
                     }
                     re = new Receta(rs.getString(1),rs.getString(2), Dificultad.valueOf(rs.getString(6)),rs.getInt(3), rs.getDouble(4),rs.getString(5),ingredientes);
                 }

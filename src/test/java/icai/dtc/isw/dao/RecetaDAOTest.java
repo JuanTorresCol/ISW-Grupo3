@@ -38,8 +38,8 @@ class RecetaDAOTest {
 
     private Map<String, Ingrediente> ingredientesMapa() {
         Map<String, Ingrediente> m = new HashMap<>();
-        m.put("huevo", new Ingrediente(2.0, Unidad.unidades));
-        m.put("harina", new Ingrediente(250.0, Unidad.gramos));
+        m.put("huevo", new Ingrediente(2.0, Unidad.u));
+        m.put("harina", new Ingrediente(250.0, Unidad.g));
         return m;
     }
 

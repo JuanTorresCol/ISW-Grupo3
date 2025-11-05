@@ -2,15 +2,19 @@ package icai.dtc.isw.domain;
 
 public class Ingrediente {
 
-    private double cantidad;
+    private String nombre;
+    private String cantidad;
     private Unidad unidad;
     private double precio_unitario;
 
-    public Ingrediente(double cantidad, Unidad unidad) {
+    public Ingrediente(String nombre, String cantidad, double precio_unitario) {
+        this.nombre = nombre;
         this.cantidad = cantidad;
-        this.unidad = unidad;
+        this.precio_unitario = precio_unitario;
+
     }
-    public double getCantidad() {return cantidad;}
+
+    public String getCantidad() {return cantidad;}
     public void setPrecio_unitario(double precio_unitario) {this.precio_unitario = precio_unitario;}
     public double getPrecio_unitario() {
         return precio_unitario;
