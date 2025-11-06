@@ -1,7 +1,7 @@
 package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.ui.JVentana;
-import icai.dtc.isw.domain.Menu;
+import icai.dtc.isw.domain.MenuDiario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +33,7 @@ public class PresupuestoPanel extends JPanel {
             double presupuesto = ((Number) presupuestoSpinner.getValue()).doubleValue();
 
             // Asignar el presupuesto al menú
-            Menu menu = new Menu();
+            MenuDiario menu = new MenuDiario();
             menu.setPresupuesto(presupuesto);
 
             // Mostrar la siguiente pantalla

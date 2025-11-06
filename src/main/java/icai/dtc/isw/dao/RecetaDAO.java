@@ -10,6 +10,7 @@ public class RecetaDAO {
 
     public static final Util util = new Util();
 
+    // devuelve una lista con todas las recetas que se encuentran en la base de datos
     public static ArrayList<Receta> getRecetas() {
         Map<String, Ingrediente> ingredientes = new HashMap<>();
         Connection con=ConnectionDAO.getInstance().getConnection();
@@ -35,6 +36,7 @@ public class RecetaDAO {
         return lista;
     }
 
+    // devuelve una receta en funcion al Id que tiene
     public static Receta getRecetaId(String recetaId) {
         Map<String, Ingrediente> ingredientes = new HashMap<>();
         Connection con=ConnectionDAO.getInstance().getConnection();
@@ -58,6 +60,7 @@ public class RecetaDAO {
         return re;
     }
 
+    // devuelve una receta en funcion al nombre que esta tiene
     public static Receta getRecetaName(String recetaName) {
         Map<String, Ingrediente> ingredientes = new HashMap<>();
         Connection con=ConnectionDAO.getInstance().getConnection();
@@ -81,6 +84,7 @@ public class RecetaDAO {
         return re;
     }
 
+    // registra una nueva receta en la base de datos
     public static void registerReceta(Receta receta) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "INSERT INTO recetas (id, nombre, duracion, precio, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?,?)";
@@ -112,6 +116,7 @@ public class RecetaDAO {
         }
     }
 
+    // imprime por pantalla todas las recetas que se encuentran en la base de datos mostrando su ID
     public static void main(String[] args) {
 
         ArrayList<Receta> lista = RecetaDAO.getRecetas();

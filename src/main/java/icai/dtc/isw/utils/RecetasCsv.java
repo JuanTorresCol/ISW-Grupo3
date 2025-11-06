@@ -52,7 +52,7 @@ public final class RecetasCsv {
             // Detectar header en la primera línea
             if (!headerHandled) {
                 List<String> cols0 = splitCsvLine(line);
-                if (!cols0.isEmpty() && cols0.get(0).trim().equalsIgnoreCase("nombre")) {
+                if (!cols0.isEmpty() && cols0.getFirst().trim().equalsIgnoreCase("nombre")) {
                     headerHandled = true;
                     continue; // saltamos encabezado
                 } else {

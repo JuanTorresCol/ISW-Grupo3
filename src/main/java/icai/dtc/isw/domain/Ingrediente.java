@@ -4,7 +4,6 @@ public class Ingrediente {
 
     private String nombre;
     private String cantidad;
-    private Unidad unidad;
     private double precio_unitario;
 
     public Ingrediente(String nombre, String cantidad, double precio_unitario) {
@@ -20,12 +19,11 @@ public class Ingrediente {
     public double getPrecio_unitario() {
         return precio_unitario;
     }
-    public Unidad getUnidad() {return unidad;}
 
     @Override
     public String toString()
     {
-        return getNombre() + " --> " + getCantidad() + " " + getUnidad();
+        return getNombre() + " --> " + getCantidad();
     }
 
 }
