@@ -70,10 +70,16 @@ public class Receta {
     public String getId() {return id;}
     public String getNombre() {return nombre;}
     public double getPrecio() {return precio;}
+    public String printIngredientes() {
+        for (Ingrediente ingrediente : ingredientes.values()) {
+            return ingrediente.toString();
+        }
+        return null;
+    }
 
     @Override
     public String toString() {
-        return getNombre() + " - " + getDuracion() + " mins - " + getPrecio() + " $ \n"  + getDescripcion();
+        return getNombre() + " - " + getDuracion() + " mins - " + getPrecio() + " $ \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
     }
 
 }

@@ -20,7 +20,7 @@ public class RecetaDAO {
             while (rs.next()) {
 
                 ArrayList<String> ingredient;
-                ingredient = util.toArrayList(rs.getArray(6));
+                ingredient = util.toArrayList(rs.getArray(7));
                 for (int i = 0; i < ingredient.size(); i++) {
                     List<String> partes = Arrays.asList(ingredient.get(i).split(","));
                     ingredientes.put(partes.get(0),new Ingrediente(partes.get(0), partes.get(1), Double.parseDouble(partes.get(2))));
@@ -44,7 +44,7 @@ public class RecetaDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     ArrayList<String> ingredients;
-                    ingredients = util.toArrayList(rs.getArray(6));
+                    ingredients = util.toArrayList(rs.getArray(7));
                     for (int i = 0; i < ingredients.size(); i++) {
                         List<String> partes = Arrays.asList(ingredients.get(i).split(","));
                         ingredientes.put(partes.get(0),new Ingrediente(partes.get(0),partes.get(1),Double.parseDouble(partes.get(2))));
@@ -67,7 +67,7 @@ public class RecetaDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     ArrayList<String> ingredients;
-                    ingredients = util.toArrayList(rs.getArray(6));
+                    ingredients = util.toArrayList(rs.getArray(7));
                     for (int i = 0; i < ingredients.size(); i++) {
                         List<String> partes = Arrays.asList(ingredients.get(i).split(","));
                         ingredientes.put(partes.get(0),new Ingrediente(partes.get(0), partes.get(1),Double.parseDouble(partes.get(2))));
@@ -114,8 +114,7 @@ public class RecetaDAO {
 
     public static void main(String[] args) {
 
-        ArrayList<Receta> lista = new ArrayList<>();
-        RecetaDAO.getRecetas();
+        ArrayList<Receta> lista = RecetaDAO.getRecetas();
 
         for (Receta receta : lista) {
             System.out.println("He leído la receta: " + receta.toString());
