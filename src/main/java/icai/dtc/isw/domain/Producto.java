@@ -45,35 +45,39 @@ public class Producto {
     public void calcCantidad(Ingrediente ingrediente){
         String cantidad;
         cantidad = ingrediente.getCantidad();
-        if(cantidad.contains("u")){
+        if (this.nombre.equals("huevo")) {
             this.unidad = Unidad.u;
-            this.cantidad = Integer.parseInt(cantidad.replace("u",""));
-            this.precio_unit = ingrediente.getPrecio_unitario()/this.cantidad;
+            this.cantidad = 12;
+            this.precio_unit = ingrediente.getPrecio_unitario()*12/Integer.parseInt(cantidad.replace("u", ""));
+        } else if (cantidad.contains("u")) {
+            this.unidad = Unidad.u;
+            this.cantidad = Integer.parseInt(cantidad.replace("u", ""));
+            this.precio_unit = ingrediente.getPrecio_unitario() / this.cantidad;
         } else if (cantidad.contains("ml")) {
             this.unidad = Unidad.ml;
             this.cantidad = 1;
-            this.precio_unit=ingrediente.getPrecio_unitario()*1000/Integer.parseInt(cantidad.replace("ml",""));
+            this.precio_unit = ingrediente.getPrecio_unitario() * 1000 / Integer.parseInt(cantidad.replace("ml", ""));
         } else if (cantidad.contains("l")) {
             this.unidad = Unidad.l;
-            this.cantidad = Integer.parseInt(cantidad.replace("l",""));
-            this.precio_unit=ingrediente.getPrecio_unitario()/this.cantidad;
+            this.cantidad = Integer.parseInt(cantidad.replace("l", ""));
+            this.precio_unit = ingrediente.getPrecio_unitario() / this.cantidad;
         } else if (cantidad.contains("g")) {
             this.unidad = Unidad.g;
             this.cantidad = 1;
-            this.precio_unit=ingrediente.getPrecio_unitario()*1000/Integer.parseInt(cantidad.replace("g",""));
+            this.precio_unit = ingrediente.getPrecio_unitario() * 1000 / Integer.parseInt(cantidad.replace("g", ""));
         } else if (cantidad.contains("kg")) {
             this.unidad = Unidad.kg;
-            this.cantidad = Integer.parseInt(cantidad.replace("kg",""));
-            this.precio_unit=ingrediente.getPrecio_unitario()/this.cantidad;
+            this.cantidad = Integer.parseInt(cantidad.replace("kg", ""));
+            this.precio_unit = ingrediente.getPrecio_unitario() / this.cantidad;
         } else if (cantidad.contains("cda")) {
             this.unidad = Unidad.cda;
-            this.cantidad = Integer.parseInt(cantidad.replace("cda",""));
+            this.cantidad = Integer.parseInt(cantidad.replace("cda", ""));
             this.precio_unit = ingrediente.getPrecio_unitario();
         } else if (cantidad.contains("cdta")) {
             this.unidad = Unidad.cdta;
-            this.cantidad = Integer.parseInt(cantidad.replace("cdta",""));
+            this.cantidad = Integer.parseInt(cantidad.replace("cdta", ""));
             this.precio_unit = ingrediente.getPrecio_unitario();
-        } else{
+        } else {
             this.unidad = Unidad.u;
             this.cantidad = 1;
             this.precio_unit = 1.00;

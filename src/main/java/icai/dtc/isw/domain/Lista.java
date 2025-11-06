@@ -19,7 +19,7 @@ public class Lista {
     public void rellenarProductos() {
         productos = new ArrayList<>();
         MenuSemanal menu = new MenuSemanal();
-        ArrayList<Receta> recetas = menu.getRecetas();
+        ArrayList<Receta> recetas = menu.getRecetasMenu();
         for(Receta receta: recetas){
             Map<String, Ingrediente> ingredienteMap = receta.getIngredientes();
             for(String nombre : ingredienteMap.keySet()){
