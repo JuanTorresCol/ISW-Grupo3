@@ -52,7 +52,7 @@ public class Producto {
         } else if (cantidad.contains("ml")) {
             this.unidad = Unidad.ml;
             this.cantidad = 1;
-            this.precio_unit=ingrediente.getPrecio_unitario();
+            this.precio_unit=ingrediente.getPrecio_unitario()*1000/Integer.parseInt(cantidad.replace("ml",""));
         } else if (cantidad.contains("l")) {
             this.unidad = Unidad.l;
             this.cantidad = Integer.parseInt(cantidad.replace("l",""));
@@ -60,7 +60,7 @@ public class Producto {
         } else if (cantidad.contains("g")) {
             this.unidad = Unidad.g;
             this.cantidad = 1;
-            this.precio_unit=ingrediente.getPrecio_unitario();
+            this.precio_unit=ingrediente.getPrecio_unitario()*1000/Integer.parseInt(cantidad.replace("g",""));
         } else if (cantidad.contains("kg")) {
             this.unidad = Unidad.kg;
             this.cantidad = Integer.parseInt(cantidad.replace("kg",""));
@@ -68,11 +68,11 @@ public class Producto {
         } else if (cantidad.contains("cda")) {
             this.unidad = Unidad.cda;
             this.cantidad = Integer.parseInt(cantidad.replace("cda",""));
-            this.precio_unit = ingrediente.getPrecio_unitario()/this.cantidad;
+            this.precio_unit = ingrediente.getPrecio_unitario();
         } else if (cantidad.contains("cdta")) {
             this.unidad = Unidad.cdta;
             this.cantidad = Integer.parseInt(cantidad.replace("cdta",""));
-            this.precio_unit = ingrediente.getPrecio_unitario()/this.cantidad;
+            this.precio_unit = ingrediente.getPrecio_unitario();
         } else{
             this.unidad = Unidad.u;
             this.cantidad = 1;

@@ -24,7 +24,7 @@ public class Receta {
         for(Ingrediente ingrediente: ingredientes.values()){
             ProductoDAO productoDAO = new ProductoDAO();
             Producto producto = productoDAO.getProductoName(ingrediente.getNombre());
-            calculo = calculo + producto.getPrecio_unit()*2.5; // ajustando los precios porque son bastante baratos
+            calculo = calculo + producto.getPrecio_unit();
         }
         this.precio = calculo;
     }
