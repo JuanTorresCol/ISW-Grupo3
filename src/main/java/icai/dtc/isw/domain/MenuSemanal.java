@@ -1,43 +1,39 @@
 package icai.dtc.isw.domain;
 
+import icai.dtc.isw.dao.RecetaDAO;
+import icai.dtc.isw.utils.Knapsack;
+
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MenuSemanal {
 
     private final int size = 5;
-    private static double presupuesto;
+    private static int presupuesto;
     private Map<String, MenuDiario> menus_semana = new HashMap<>(size);
-
-    // menu semanal esta compuesto por 5 menus diarios (lunes,martes,miercoles,jueves y viernes)
-    // menu semanal es el que tiene que cumplir que el presupuesto establecido por el cliente
 
     public MenuSemanal() {
     }
 
-    public MenuSemanal(MenuDiario lunes, MenuDiario martes, MenuDiario miercoles, MenuDiario jueves, MenuDiario viernes) {
-
-        menus_semana.put("lunes", lunes);
-        menus_semana.put("martes", martes);
-        menus_semana.put("miercoles", miercoles);
-        menus_semana.put("jueves", jueves);
-        menus_semana.put("viernes", viernes);
-
-    generarMenu();
-
-    }
-
     public Map<String,MenuDiario> getMenuSemanal() {return menus_semana;}
     public double getPresupuesto() {return presupuesto;}
-    public void setPresupuesto(double presupuesto) {this.presupuesto = presupuesto;}
+    public void setPresupuesto(int presupuesto) {this.presupuesto = presupuesto;}
     public MenuDiario getLunes() {return menus_semana.get("lunes");}
     public MenuDiario getMartes() {return menus_semana.get("martes");}
     public MenuDiario getMiercoles() {return menus_semana.get("miercoles");}
     public MenuDiario getJueves() {return menus_semana.get("jueves");}
     public MenuDiario getViernes() {return menus_semana.get("viernes");}
 
-
-    public static void generarMenu() {
-
+    // rellena la semana con recetas, dos por dia
+    public void generarMenu() {
+        ArrayList<Receta> recetas = RecetaDAO.getRecetas();
+        ArrayList<Receta> s= Knapsack.selecciona10(recetas,presupuesto);
+        this.menus_semana.put("lunes",new MenuDiario(s.get(0),s.get(1)));
+        this.menus_semana.put("martes",new MenuDiario(s.get(2),s.get(3)));
+        this.menus_semana.put("miercoles", new MenuDiario(s.get(4),s.get(5)));
+        this.menus_semana.put("jueves", new MenuDiario(s.get(6),s.get(7)));
+        this.menus_semana.put("viernes",new MenuDiario(s.get(8),s.get(9)));
     }
 }

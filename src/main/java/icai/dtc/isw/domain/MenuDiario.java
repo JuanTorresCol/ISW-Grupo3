@@ -12,10 +12,6 @@ public class MenuDiario {
     private static double precio;
     private Map<String, Receta> recetas = new HashMap<>(size);
     private RecetaDAO dao = new RecetaDAO();
-    // menu diario se compone de dos recetas
-    // se usará un algorítmo de knapsack pará encontrar la combinacion de dos recetas que resulta en el mejor menu
-    // menu tendra el metodo crear un menu distinto
-    // menu tendra el metodo devolver informacion del menu
 
     public MenuDiario() {}
 
@@ -31,12 +27,6 @@ public class MenuDiario {
     public ArrayList<Receta> loadRecetas(){
         ArrayList<Receta> recetas = new ArrayList<>();
         return dao.getRecetas();
-    }
-
-    public void generateMenu(){
-        ArrayList<Receta> recetas;
-        recetas = loadRecetas();
-
     }
 
     public Map<String,Receta> getRecetas() {

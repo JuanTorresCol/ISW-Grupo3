@@ -32,7 +32,7 @@ public class PresupuestoPanel extends JPanel {
             // Obtener el valor del spinner
             double presupuesto = ((Number) presupuestoSpinner.getValue()).doubleValue();
 
-            // Asignar el presupuesto al menú
+            // Asignar el presupuesto al menú HAY QUE CAMBIAR
             MenuDiario menu = new MenuDiario();
             menu.setPresupuesto(presupuesto);
 
