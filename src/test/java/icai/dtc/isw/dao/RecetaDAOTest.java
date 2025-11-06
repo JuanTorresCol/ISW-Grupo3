@@ -3,8 +3,7 @@ package icai.dtc.isw.dao;
 import icai.dtc.isw.domain.Dificultad;
 import icai.dtc.isw.domain.Ingrediente;
 import icai.dtc.isw.domain.Receta;
-import icai.dtc.isw.domain.Unidad;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
 
@@ -19,40 +18,104 @@ import static org.mockito.Mockito.*;
 
 class RecetaDAOTest {
 
-    private Connection conn;
-    private PreparedStatement pst;
-    private ResultSet rs;
-
-    @BeforeEach
-    void setup() {
-        conn = mock(Connection.class);
-        pst = mock(PreparedStatement.class);
-        rs = mock(ResultSet.class);
-    }
-
-    private Array mockSqlArray(String... values) throws Exception {
-        Array sqlArray = mock(Array.class);
-        when(sqlArray.getArray()).thenReturn(values);
-        return sqlArray;
-    }
-
-    private Map<String, Ingrediente> ingredientesMapa() {
-        Map<String, Ingrediente> m = new HashMap<>();
-        m.put("huevo", new Ingrediente(2.0, Unidad.u));
-        m.put("harina", new Ingrediente(250.0, Unidad.g));
-        return m;
-    }
-
-    private String[] ingredientesPlano(Map<String, Ingrediente> map) {
-        return map.entrySet().stream()
-                .map(e -> e.getKey() + "," + e.getValue().getCantidad() + "," + e.getValue().getUnidad())
-                .toArray(String[]::new);
-    }
-
-
-    //prueba que se cogen correctamente las recetas de la base de datos
+    //prueba a encontrar la receta por su id
     @Test
-    void testGetRecetas() throws Exception {
+    void testGetRecetaId() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+        Array sqlArray = mock(Array.class);
+
+        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
+            ConnectionDAO cdao = mock(ConnectionDAO.class);
+            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
+            when(cdao.getConnection()).thenReturn(conn);
+
+            when(conn.prepareStatement("SELECT * FROM recetas WHERE id = ?")).thenReturn(pst);
+            when(pst.executeQuery()).thenReturn(rs);
+
+            when(rs.next()).thenReturn(true, false);
+            // índices según el DAO:
+            // 1:id  2:nombre  3:duracion  4:precio  5:descripcion  6:dificultad y getArray(6)
+            when(rs.getString(1)).thenReturn("ID123");
+            when(rs.getString(2)).thenReturn("Tortilla");
+            when(rs.getInt(3)).thenReturn(15);
+            when(rs.getDouble(4)).thenReturn(3.5);
+            when(rs.getString(5)).thenReturn("Clásica");
+            when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name());
+            when(rs.getArray(6)).thenReturn(sqlArray);
+            when(sqlArray.getArray()).thenReturn(new String[]{"huevos,2ud,0.2", "patatas,300g,1.0"});
+
+            Receta r = RecetaDAO.getRecetaId("ID123");
+
+            assertNotNull(r);
+            assertEquals("ID123", r.getId());
+            assertEquals("Tortilla", r.getNombre());
+            assertEquals(15, r.getDuracion());
+            assertEquals(3.5, r.getPrecio(), 1e-9);
+            assertEquals("Clásica", r.getDescripcion());
+            assertEquals(Dificultad.MEDIO, r.getDificultad());
+            assertEquals(2, r.getIngredientes().size());
+            assertTrue(r.getIngredientes().containsKey("huevos"));
+            assertEquals("2ud", r.getIngredientes().get("huevos").getCantidad());
+
+            verify(pst).setString(1, "ID123");
+            verify(pst).executeQuery();
+        }
+    }
+
+    //prueba cuando no encuentra el id de la receta
+    @Test
+    void testGetRecetaIdNotFound() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
+            ConnectionDAO cdao = mock(ConnectionDAO.class);
+            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
+            when(cdao.getConnection()).thenReturn(conn);
+
+            when(conn.prepareStatement("SELECT * FROM recetas WHERE id = ?")).thenReturn(pst);
+            when(pst.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(false);
+
+            assertNull(RecetaDAO.getRecetaId("NOPE"));
+            verify(pst).setString(1, "NOPE");
+        }
+    }
+
+    //prueba cuando no encuentra la receta por nombre
+    @Test
+    void testGetRecetaNameNotFound() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
+            ConnectionDAO cdao = mock(ConnectionDAO.class);
+            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
+            when(cdao.getConnection()).thenReturn(conn);
+
+            when(conn.prepareStatement("SELECT * FROM recetas WHERE nombre = ?")).thenReturn(pst);
+            when(pst.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(false);
+
+            assertNull(RecetaDAO.getRecetaName("NOPE"));
+            verify(pst).setString(1, "NOPE");
+        }
+    }
+
+    //prueba seleccionar dos recetas
+    @Test
+    void testGetDosRecetas() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        Array array1 = mock(Array.class);
+        Array array2 = mock(Array.class);
+
         try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
             ConnectionDAO cdao = mock(ConnectionDAO.class);
             mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
@@ -63,107 +126,37 @@ class RecetaDAOTest {
 
             when(rs.next()).thenReturn(true, true, false);
 
-            when(rs.getString(1)).thenReturn("id-1", "id-2");
-            when(rs.getString(2)).thenReturn("Tortilla", "Bizcocho");
-            when(rs.getInt(3)).thenReturn(10, 45);
-            when(rs.getDouble(4)).thenReturn(3.5, 6.7);
-            when(rs.getString(5)).thenReturn("Huevos con patatas", "Bizcocho de vainilla");
-            when(rs.getString(6)).thenReturn("FACIL", "MEDIO"); // <-- MEDIO
+            when(rs.getString(1)).thenReturn("R1", "R2"); // id
+            when(rs.getString(2)).thenReturn("Tortilla", "Pasta");
+            when(rs.getInt(3)).thenReturn(15, 20);
+            when(rs.getDouble(4)).thenReturn(3.5, 6.0);
+            when(rs.getString(5)).thenReturn("Huevos y patata", "Con tomate");
+            when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name(), Dificultad.FACIL.name());
 
-            // unidades y gramos en minúsculas (como tu enum Unidad)
-            Array arr1 = mockSqlArray("huevo,2.0,unidades", "harina,250.0,gramos");
-            Array arr2 = mockSqlArray("huevo,2.0,unidades");
-            when(rs.getArray(6)).thenReturn(arr1, arr2); // si cambias el DAO a col 7, pon getArray(7)
+            when(rs.getArray(6)).thenReturn(array1, array2);
+            when(array1.getArray()).thenReturn(new String[]{"huevos,2ud,0.2", "patatas,300g,1.0"});
+            when(array2.getArray()).thenReturn(new String[]{"pasta,200g,0.8", "tomate,100g,0.6"});
 
             ArrayList<Receta> lista = RecetaDAO.getRecetas();
 
             assertEquals(2, lista.size());
+            assertEquals("R1", lista.get(0).getId());
             assertEquals("Tortilla", lista.get(0).getNombre());
-            assertEquals(Dificultad.FACIL, lista.get(0).getDificultad());
+            assertEquals(Dificultad.MEDIO, lista.get(0).getDificultad());
+
+            assertEquals("R2", lista.get(1).getId());
+            assertEquals("Pasta", lista.get(1).getNombre());
+            assertEquals(Dificultad.FACIL, lista.get(1).getDificultad());
         }
     }
 
-    //prueba que se devuelve la receta correcta cuando el ID existe en la base de datos.
-    @Test
-    void testGetRecetaId() throws Exception {
-        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
-            ConnectionDAO cdao = mock(ConnectionDAO.class);
-            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
-            when(cdao.getConnection()).thenReturn(conn);
-
-            when(conn.prepareStatement("SELECT * FROM recetas WHERE id = ?")).thenReturn(pst);
-            when(pst.executeQuery()).thenReturn(rs);
-
-            when(rs.next()).thenReturn(true, false);
-            when(rs.getString(1)).thenReturn("abc123");
-            when(rs.getString(2)).thenReturn("Gazpacho");
-            when(rs.getInt(3)).thenReturn(15);
-            when(rs.getDouble(4)).thenReturn(4.2);
-            when(rs.getString(5)).thenReturn("Frío y andaluz");
-            when(rs.getString(6)).thenReturn("FACIL");
-
-            Array arr = mockSqlArray("tomate,500.0,gramos"); // <-- gramos en minúsculas
-            when(rs.getArray(6)).thenReturn(arr);
-
-            Receta r = RecetaDAO.getRecetaId("abc123");
-
-            assertNotNull(r);
-            assertEquals("abc123", r.getId());
-            assertEquals("Gazpacho", r.getNombre());
-            verify(pst).setString(1, "abc123");
-        }
-    }
-    //prueba que se encuentre la receta si esta esta en la base de datos
-    @Test
-    void testGetRecetaName() throws Exception {
-        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
-            ConnectionDAO cdao = mock(ConnectionDAO.class);
-            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
-            when(cdao.getConnection()).thenReturn(conn);
-
-            when(conn.prepareStatement("SELECT * FROM recetas WHERE nombre = ?")).thenReturn(pst);
-            when(pst.executeQuery()).thenReturn(rs);
-
-            when(rs.next()).thenReturn(true, false);
-            when(rs.getString(1)).thenReturn("id-xyz");
-            when(rs.getString(2)).thenReturn("Paella");
-            when(rs.getInt(3)).thenReturn(40);
-            when(rs.getDouble(4)).thenReturn(12.0);
-            when(rs.getString(5)).thenReturn("Arroz con cosas");
-            when(rs.getString(6)).thenReturn("DIFICIL");
-
-            Array arr = mockSqlArray("arroz,400.0,gramos"); // <-- gramos en minúsculas
-            when(rs.getArray(6)).thenReturn(arr);
-
-            Receta r = RecetaDAO.getRecetaName("Paella");
-
-            assertNotNull(r);
-            assertEquals("Paella", r.getNombre());
-            verify(pst).setString(1, "Paella");
-        }
-    }
-    //prueba que cuando no exista la receta devuelva null
-    @Test
-    void testGetRecetaNameNotFound() throws Exception {
-        try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
-            ConnectionDAO cdao = mock(ConnectionDAO.class);
-            mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
-            when(cdao.getConnection()).thenReturn(conn);
-
-            when(conn.prepareStatement("SELECT * FROM recetas WHERE nombre = ?")).thenReturn(pst);
-            when(pst.executeQuery()).thenReturn(rs);
-
-            when(rs.next()).thenReturn(false);
-
-            Receta r = RecetaDAO.getRecetaName("NoExiste");
-            assertNull(r);
-            verify(pst).setString(1, "NoExiste");
-        }
-    }
-
-    //prueba que se registra correctamente una receta
+    //prueba a insertar receta
     @Test
     void testRegisterReceta() throws Exception {
+        Connection conn = mock(Connection.class);
+        PreparedStatement pst = mock(PreparedStatement.class);
+        Array createdArray = mock(Array.class);
+
         try (MockedStatic<ConnectionDAO> mocked = mockStatic(ConnectionDAO.class)) {
             ConnectionDAO cdao = mock(ConnectionDAO.class);
             mocked.when(ConnectionDAO::getInstance).thenReturn(cdao);
@@ -172,34 +165,46 @@ class RecetaDAOTest {
             when(conn.prepareStatement(
                     "INSERT INTO recetas (id, nombre, duracion, precio, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?,?)"
             )).thenReturn(pst);
-            when(pst.getConnection()).thenReturn(conn);
 
-            ArgumentCaptor<Object[]> cap = ArgumentCaptor.forClass(Object[].class);
-            Array created = mock(Array.class);
-            when(conn.createArrayOf(eq("VARCHAR"), cap.capture())).thenReturn(created);
+            when(pst.getConnection()).thenReturn(conn);
+            when(conn.createArrayOf(eq("VARCHAR"), any())).thenReturn(createdArray);
             when(pst.executeUpdate()).thenReturn(1);
 
-            Map<String, Ingrediente> ing = ingredientesMapa();
-            Receta receta = new Receta("id-new", "Tarta Queso", Dificultad.MEDIO, 60, 8.50, "Clásica", ing);
+            Map<String, Ingrediente> ing = new LinkedHashMap<>();
+            ing.put("huevos", new Ingrediente("huevos", "2ud", 0.2));
+            ing.put("patatas", new Ingrediente("patatas", "300g", 1.0));
 
-            RecetaDAO.registerReceta(receta);
+            Receta r = new Receta(
+                    "ID123",
+                    "Tortilla",
+                    Dificultad.MEDIO, // <- aquí el cambio
+                    15,
+                    3.5,
+                    "Clásica",
+                    ing
+            );
 
-            verify(pst).setString(1, "id-new");
-            verify(pst).setString(2, "Tarta Queso");
-            verify(pst).setInt(3, 60);
-            verify(pst).setDouble(4, 8.50);
+            RecetaDAO.registerReceta(r);
+
+            verify(pst).setString(1, "ID123");
+            verify(pst).setString(2, "Tortilla");
+            verify(pst).setInt(3, 15);
+            verify(pst).setDouble(4, 3.5);
             verify(pst).setString(5, "Clásica");
-            verify(pst).setString(6, "MEDIO");
-            verify(pst).setArray(eq(7), any(Array.class));
-            verify(pst).executeUpdate();
+            verify(pst).setString(6, Dificultad.MEDIO.name()); // <- aquí el cambio
 
-            // Comprobación opcional del contenido del array
-            Object[] enviado = cap.getValue();
-            assertNotNull(enviado);
-            List<String> vals = Arrays.stream(enviado).map(Object::toString).toList();
-            assertTrue(vals.contains("huevo,2.0,unidades"));
-            assertTrue(vals.contains("harina,250.0,gramos"));
+            ArgumentCaptor<Object[]> cap = ArgumentCaptor.forClass(Object[].class);
+            verify(conn).createArrayOf(eq("VARCHAR"), cap.capture());
+            Object[] arr = cap.getValue();
+            assertTrue(Arrays.stream(arr).allMatch(o -> o.toString().split(",").length == 3));
+            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("huevos,2ud,0.2")));
+            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("patatas,300g,1.0")));
+
+            verify(pst).setArray(7, createdArray);
+            verify(pst).executeUpdate();
         }
     }
 }
+
+
 
