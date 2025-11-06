@@ -1,3 +1,4 @@
+
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.Dificultad;
@@ -36,14 +37,14 @@ class RecetaDAOTest {
 
             when(rs.next()).thenReturn(true, false);
             // índices según el DAO:
-            // 1:id  2:nombre  3:duracion  4:precio  5:descripcion  6:dificultad y getArray(6)
+            // 1:id  2:nombre  3:duracion  4:precio  5:descripcion  6:dificultad y getArray(6) de ingredientes
             when(rs.getString(1)).thenReturn("ID123");
             when(rs.getString(2)).thenReturn("Tortilla");
             when(rs.getInt(3)).thenReturn(15);
             when(rs.getDouble(4)).thenReturn(3.5);
             when(rs.getString(5)).thenReturn("Clásica");
             when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name());
-            when(rs.getArray(6)).thenReturn(sqlArray);
+            when(rs.getArray(7)).thenReturn(sqlArray);
             when(sqlArray.getArray()).thenReturn(new String[]{"huevos,2ud,0.2", "patatas,300g,1.0"});
 
             Receta r = RecetaDAO.getRecetaId("ID123");
@@ -55,7 +56,7 @@ class RecetaDAOTest {
             assertEquals(3.5, r.getPrecio(), 1e-9);
             assertEquals("Clásica", r.getDescripcion());
             assertEquals(Dificultad.MEDIO, r.getDificultad());
-            assertEquals(2, r.getIngredientes().size());
+            assertEquals(2, r.getIngredientes().size()); //mirar bien como esta hecho lo de recetas
             assertTrue(r.getIngredientes().containsKey("huevos"));
             assertEquals("2ud", r.getIngredientes().get("huevos").getCantidad());
 
@@ -205,6 +206,8 @@ class RecetaDAOTest {
         }
     }
 }
+
+
 
 
 
