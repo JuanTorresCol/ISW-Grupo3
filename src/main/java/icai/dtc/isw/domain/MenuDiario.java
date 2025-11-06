@@ -9,7 +9,7 @@ import java.util.Map;
 public class MenuDiario {
 
     private final int size = 2;
-    private static double presupuesto;
+    private static double precio;
     private Map<String, Receta> recetas = new HashMap<>(size);
     private RecetaDAO dao = new RecetaDAO();
     // menu diario se compone de dos recetas
@@ -24,8 +24,8 @@ public class MenuDiario {
         recetas.put("cena",receta2);
     }
 
-    public void setPresupuesto(double presupuesto) {
-        this.presupuesto = presupuesto;
+    public void setPresupuesto(double precio) {
+        this.precio = precio;
     }
 
     public ArrayList<Receta> loadRecetas(){

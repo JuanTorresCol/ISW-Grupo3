@@ -17,6 +17,7 @@ public class Receta {
     private int duracion;
     private Dificultad dificultad;
     private String id;
+    private int precioInt = (int) Math.round(precio * 100);
 
     // calcula el precio de una receta
     private void calcularPrecio() {
@@ -73,6 +74,7 @@ public class Receta {
     public String getId() {return id;}
     public String getNombre() {return nombre;}
     public double getPrecio() {return precio;}
+    public int getPrecioInt() {return precioInt;}
 
     // imprime en consola los ingredientes que contiene una receta
     public void printIngredientes() {

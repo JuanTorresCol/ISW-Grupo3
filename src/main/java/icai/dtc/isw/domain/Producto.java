@@ -122,6 +122,11 @@ public class Producto {
         }
     }
 
+    @Override
+    public String toString() {
+        return getNombre() + ": " + getCantidad() + getUnidadP();
+    }
+
     // rellena la base de datos de productos
     // solo ejecutar una vez o despues de hacer un truncate a la db
     public static void main(String[] args) {

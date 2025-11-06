@@ -1,13 +1,12 @@
 package icai.dtc.isw.domain;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MenuSemanal {
 
     private final int size = 5;
-    private double presupuesto;
+    private static double presupuesto;
     private Map<String, MenuDiario> menus_semana = new HashMap<>(size);
 
     // menu semanal esta compuesto por 5 menus diarios (lunes,martes,miercoles,jueves y viernes)
@@ -24,6 +23,8 @@ public class MenuSemanal {
         menus_semana.put("jueves", jueves);
         menus_semana.put("viernes", viernes);
 
+    generarMenu();
+
     }
 
     public Map<String,MenuDiario> getMenuSemanal() {return menus_semana;}
@@ -34,4 +35,9 @@ public class MenuSemanal {
     public MenuDiario getMiercoles() {return menus_semana.get("miercoles");}
     public MenuDiario getJueves() {return menus_semana.get("jueves");}
     public MenuDiario getViernes() {return menus_semana.get("viernes");}
+
+
+    public static void generarMenu() {
+
+    }
 }

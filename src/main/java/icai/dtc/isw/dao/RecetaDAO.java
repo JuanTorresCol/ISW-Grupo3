@@ -1,6 +1,7 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.*;
+import icai.dtc.isw.utils.Knapsack;
 import icai.dtc.isw.utils.Util;
 
 import java.sql.*;
@@ -120,10 +121,19 @@ public class RecetaDAO {
     public static void main(String[] args) {
 
         ArrayList<Receta> lista = RecetaDAO.getRecetas();
-
+        /*
         for (Receta receta : lista) {
             System.out.println("He leído la receta: " + receta.toString());
         }
+
+         */
+
+        ArrayList<Receta> seleccion = Knapsack.seleccionar10(lista,100);
+        for (Receta receta : seleccion) {
+            System.out.println("He escogido las recetas: " + receta.toString());
+        }
+
+
 
     }
 }

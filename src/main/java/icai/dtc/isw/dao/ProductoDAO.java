@@ -2,6 +2,7 @@ package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.Producto;
 
+import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.domain.Unidad;
 import icai.dtc.isw.utils.Util;
 
@@ -50,6 +51,34 @@ public class ProductoDAO {
             System.out.println(ex.getMessage());
         }
         return pr;
+    }
+
+    // saca los productos existentes en la base de datos
+    public static ArrayList<Producto> getProductos() {
+        Connection con=ConnectionDAO.getInstance().getConnection();
+        ArrayList<Producto> lista = new ArrayList<>();
+        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM producto")) {
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new Producto(rs.getString(1),rs.getString(2),rs.getInt(3), Unidad.valueOf(rs.getString(4)), rs.getDouble(5)));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return lista;
+    }
+
+
+    // imprime por pantalla todos los productos que se encuentran en la base de datos mostrando su ID
+    public static void main(String[] args) {
+
+        ArrayList<Producto> lista = ProductoDAO.getProductos();
+
+        for (Producto producto : lista) {
+            System.out.println("He leído el producto: " + producto.toString());
+        }
+
     }
 
 }
