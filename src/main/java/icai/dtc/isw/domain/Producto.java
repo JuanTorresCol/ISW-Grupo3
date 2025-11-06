@@ -96,6 +96,10 @@ public class Producto {
         return precio_unit;
     }
 
+    // En el caso de que un producto aparezca más de una vez en la lista se incrementa su precio
+    public void repiteProd(){
+        this.precio_unit = this.precio_unit + this.precio_unit;}
+
     // metodo para registrar todos los productos que no aparecen ya en la base de datos
     public static void registerAllProductos(){
         ProductoDAO productoDAO = new ProductoDAO();

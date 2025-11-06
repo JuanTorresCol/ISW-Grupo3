@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class MenuSemanal {
 
-
     private final int size = 5;
     private double presupuesto;
     private Map<String, MenuDiario> menus_semana = new HashMap<>(size);
@@ -15,7 +14,6 @@ public class MenuSemanal {
     // menu semanal es el que tiene que cumplir que el presupuesto establecido por el cliente
 
     public MenuSemanal() {
-
     }
 
     public MenuSemanal(MenuDiario lunes, MenuDiario martes, MenuDiario miercoles, MenuDiario jueves, MenuDiario viernes) {
