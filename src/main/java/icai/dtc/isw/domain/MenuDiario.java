@@ -6,20 +6,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Menu {
+public class MenuDiario {
 
     private final int size = 2;
     private static double presupuesto;
-    private Map<String, Receta> recetas = new HashMap<>(size);;
+    private Map<String, Receta> recetas = new HashMap<>(size);
     private RecetaDAO dao = new RecetaDAO();
-    // menu se compone de dos recetas
+    // menu diario se compone de dos recetas
     // se usará un algorítmo de knapsack pará encontrar la combinacion de dos recetas que resulta en el mejor menu
     // menu tendra el metodo crear un menu distinto
     // menu tendra el metodo devolver informacion del menu
 
-    public Menu() {}
+    public MenuDiario() {}
 
-    public Menu(Receta receta, Receta receta2) {
+    public MenuDiario(Receta receta, Receta receta2) {
         recetas.put("comida",receta);
         recetas.put("cena",receta2);
     }
