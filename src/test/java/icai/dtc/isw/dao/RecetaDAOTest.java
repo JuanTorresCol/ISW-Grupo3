@@ -63,7 +63,7 @@ class RecetaDAOTest {
             verify(pst).executeQuery();
         }
     }
-    //iiii
+
     //prueba cuando no encuentra el id de la receta
     @Test
     void testGetRecetaIdNotFound() throws Exception {
