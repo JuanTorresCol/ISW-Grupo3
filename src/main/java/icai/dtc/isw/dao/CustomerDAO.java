@@ -15,6 +15,7 @@ public class CustomerDAO {
 
     private static final Util util = new Util();
 
+    // registra un nuevo cliente en la base de datos
     public static void registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome) VALUES (?,?,?,?,?,?,?)";
@@ -36,6 +37,7 @@ public class CustomerDAO {
         }
     }
 
+    // devuelve una lista con todos los usuarios
     public static void getClientes(ArrayList<Customer> lista) {
         Connection con=ConnectionDAO.getInstance().getConnection();
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios");
@@ -51,6 +53,7 @@ public class CustomerDAO {
         }
     }
 
+    // devuelve un cliente en funcion al ID insertado
     public static Customer getClienteId(String inputId) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         Customer cu = null;
@@ -69,6 +72,7 @@ public class CustomerDAO {
         return cu;
     }
 
+    // devuelve un cliente en funcion a su nombre, indiferentemente del nombre del parámetro
     public static Customer getCliente(String inputId) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         Customer cu = null;
@@ -87,6 +91,7 @@ public class CustomerDAO {
         return cu;
     }
 
+    // edita una la informacion de un cliente en la base de datos
     public static void editCliente(Customer customerEdit){
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "UPDATE usuarios SET name = ?, password = ?, gender = ?, age = ?, foodrestriction = ?, alimentosnocome = ? WHERE id = ?";
@@ -107,6 +112,7 @@ public class CustomerDAO {
         }
     }
 
+    // muestra todos los usuarios que se encuentran en la base de datos
     public static void main(String[] args) {
 
         ArrayList<Customer> lista= new ArrayList<>();

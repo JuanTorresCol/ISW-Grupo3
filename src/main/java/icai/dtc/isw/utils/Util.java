@@ -10,6 +10,7 @@ public class Util {
     public Util() {
     }
 
+    // devuelve un ID unico en base a la cadena que recibe
     public static String createUserId(String username) {
         char firstLetter = Character.toUpperCase(username.charAt(0));
         int hash = 0;
@@ -21,6 +22,7 @@ public class Util {
         return firstLetter + formattedDigits;
     }
 
+    // convierte en ArrayList una lista de tipo Array
     public static ArrayList<String> toArrayList(Array sqlArray) {
         if (sqlArray == null) {
             return new ArrayList<>();
@@ -33,5 +35,4 @@ public class Util {
             throw new RuntimeException("Error converting SQL Array to ArrayList", e);
         }
     }
-
 }

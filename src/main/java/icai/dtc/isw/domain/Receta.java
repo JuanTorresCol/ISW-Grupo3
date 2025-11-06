@@ -17,20 +17,16 @@ public class Receta {
     private Dificultad dificultad;
     private String id;
 
-
+    // calcula el precio de una receta
     private void calcularPrecio() {
-
-        //calcular el precio en función del precio unitario de los productos y la cantidad necesaria de cada uno de ellos
-        double calculo = 10;
-        // sustituir con la lógica para calcular el precio
-        precio = calculo;
+        double calculo = 0;
+        for(Ingrediente ingrediente: ingredientes.values()){
+            calculo = calculo + ingrediente.getPrecio_unitario();
+        }
+        this.precio = calculo;
     }
 
-    // una receta debe de tener un precio que sera la suma de los alimentos
-    // se compone de alimentos
-    // tiene un tiempo de preparacion
-    // tiene una dificultad
-
+    // contructor de receta sin saber su precio
     public Receta(String nombre, Dificultad dificultad, int duracion, String descripcion, Map<String,Ingrediente> ingredientes) {
 
         this.nombre = nombre;
@@ -41,6 +37,8 @@ public class Receta {
         calcularPrecio();
         this.id = util.createUserId(nombre);
     }
+
+    // constructor de receta sin conocer el ID
     public Receta(String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<String,Ingrediente> ingredientes) {
         this.nombre = nombre;
         this.dificultad = dificultad;
@@ -50,6 +48,8 @@ public class Receta {
         this.ingredientes = new HashMap<>(ingredientes);
         this.id = util.createUserId(nombre);
     }
+
+    // constructor de receta en funcion a todos sus atributos
     public Receta(String id, String nombre, Dificultad  dificultad, int duracion, double precio, String descripcion, Map<String,Ingrediente> ingredientes) {
         this.nombre = nombre;
         this.dificultad = dificultad;
@@ -70,11 +70,12 @@ public class Receta {
     public String getId() {return id;}
     public String getNombre() {return nombre;}
     public double getPrecio() {return precio;}
-    public String printIngredientes() {
+
+    // imprime en consola los ingredientes que contiene una receta
+    public void printIngredientes() {
         for (Ingrediente ingrediente : ingredientes.values()) {
-            return ingrediente.toString();
+            System.out.println(ingrediente.toString());
         }
-        return null;
     }
 
     @Override

@@ -29,6 +29,7 @@ public class JVentana extends JFrame {
     private final Map<String, JComponent> createdCards = new HashMap<>();
     private boolean postAuthPanelsCreated = false;
 
+    // ventana principal
     public JVentana() {
         setTitle("MENUMASTER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,6 +40,7 @@ public class JVentana extends JFrame {
         configurarInterfaz();
     }
 
+    // instanciado de paneles
     private void configurarInterfaz() {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
@@ -62,11 +64,12 @@ public class JVentana extends JFrame {
         showCard("inicio");
     }
 
-    // ---------- API usada por los paneles ----------
+    // API usada por los paneles
     public void showCard(String key) {
         cardLayout.show(mainPanel, key);
     }
 
+    // mantiene los paneles de creación diferida
     public void ensurePostAuthPanels() {
         if (postAuthPanelsCreated) return;
 
@@ -83,6 +86,7 @@ public class JVentana extends JFrame {
         mainPanel.repaint();
     }
 
+    // repinta el panel que se especifica
     public void refreshCard(String key) {
         Supplier<JComponent> f = postAuthFactories.get(key);
         if (f == null) return;
@@ -95,6 +99,7 @@ public class JVentana extends JFrame {
         mainPanel.repaint();
     }
 
+    // metodo logica de cuando se aprueba el login
     public void onLoginSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
         this.customerId = c.getUserId();
@@ -103,6 +108,7 @@ public class JVentana extends JFrame {
         showCard("presupuesto");
     }
 
+    // lógica de cuando se aprueba el registro
     public void onRegisterSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Registro completado");
         this.customerId = c.getUserId();
@@ -111,20 +117,25 @@ public class JVentana extends JFrame {
         showCard("presupuesto");
     }
 
+    // lógica de cuando la edición ha sido aprobada
     public void onEditSuccess() {
         JOptionPane.showMessageDialog(this, "Edición completada");
         showCard("menuDia");
     }
 
+    // lógica de cuando no se aprueba el login
     public void onAuthFailed(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("inicio");
     }
+
+    // lógica de cuando no se aprueba el registro
     public void onAuthFailed2(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("perfil");
     }
 
+    // carga los datos del usuario que esta actualmente conectado
     public Customer cargarPerfilUsuario() {
         if (customerId == null) return new Customer();
         return CustomerControler.getClienteId(customerId);
@@ -135,7 +146,7 @@ public class JVentana extends JFrame {
     public Customer getUsuario() { return usuario; }
     public void setUsuario(Customer u) { this.usuario = u; }
 
-    // ---------- Main ----------
+    // ---------- GUI Main ----------
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new JVentana().setVisible(true));
     }

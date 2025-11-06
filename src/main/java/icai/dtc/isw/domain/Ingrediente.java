@@ -6,6 +6,7 @@ public class Ingrediente {
     private String cantidad;
     private double precio_unitario;
 
+    // constructor del ingrediente un funcion a sus atributos
     public Ingrediente(String nombre, String cantidad, double precio_unitario) {
         this.nombre = nombre;
         this.cantidad = cantidad;

@@ -9,21 +9,20 @@ import java.awt.event.ActionListener;
 public final class UiUtils {
     private UiUtils() {}
 
-    // --- Paleta ---
+    // Paleta
     public static final Color BG = new Color(207, 224, 234);
     public static final Color ACCENT = new Color(186, 151, 154);
     public static final Color TITLE = new Color(35, 78, 69);
     public static final Color CARD_BG = new Color(235, 241, 246);
     public static final Color TEXT = new Color(40, 40, 40);
 
-    // --- Fuentes ---
+    // Fuentes
     public static final Font H1 = new Font("Arial", Font.BOLD, 32);
     public static final Font H2 = new Font("Arial", Font.BOLD, 24);
     public static final Font H3 = new Font("Arial", Font.BOLD, 18);
     public static final Font BODY = new Font("Arial", Font.PLAIN, 14);
     public static final Font SMALL = new Font("Arial", Font.PLAIN, 12);
 
-    // ---------- Helpers de layout ----------
     public static JPanel basePanel(LayoutManager lm) {
         JPanel p = new JPanel(lm);
         p.setBackground(BG);
@@ -31,6 +30,7 @@ public final class UiUtils {
         return p;
     }
 
+    // utiles: botones, cajas de texto y colocación de elementos
     public static JLabel title(String s) {
         JLabel l = new JLabel(s, SwingConstants.CENTER);
         l.setFont(H1);
@@ -124,7 +124,7 @@ public final class UiUtils {
         return p;
     }
 
-    // ---------- Controles ----------
+    // Controles
     public static JButton pillButton(String text) {
         JButton b = new JButton(text);
         b.setFont(new Font("Arial", Font.BOLD, 16));
@@ -244,7 +244,7 @@ public final class UiUtils {
         return cont;
     }
 
-    // --- Barra inferior MENÚ / LISTA / PERFIL ---
+    // Barra inferior MENÚ / LISTA / PERFIL
     public static JPanel bottomNav(ActionListener onMenu, ActionListener onLista, ActionListener onPerfil) {
         JPanel nav = new JPanel(new GridLayout(1,3,12,0));
         nav.setOpaque(true);
@@ -256,6 +256,7 @@ public final class UiUtils {
         return nav;
     }
 
+    // Botones de navegacion
     private static JButton navItem(String text, ActionListener al) {
         JButton b = new JButton(text);
         b.setFont(H3);
@@ -267,7 +268,8 @@ public final class UiUtils {
         return b;
     }
 
-    // --- Recursos ---
+    // Recursos
+    // Carga una imagen desde resources
     public static ImageIcon cargarIcono(Class<?> clazz, String nombreImagen, int ancho, int alto){
         String ruta = '/'+nombreImagen+".png";
         java.net.URL url = clazz.getResource(ruta);

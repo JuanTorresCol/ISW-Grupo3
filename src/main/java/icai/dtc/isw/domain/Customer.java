@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import icai.dtc.isw.utils.Util;
 
 public class Customer implements Serializable{
-    /**
-     *
-     */
+
     Util util = new Util();
 
     @Serial
@@ -22,6 +20,7 @@ public class Customer implements Serializable{
     private ArrayList<String> illegalFood = new ArrayList<>();
     private String alimentosNoCome = "e";
 
+    // constructor del customer una vez que no se sabe su ID
     public Customer( String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
         this.userId = util.createUserId(userName);
         this.userName = userName;
@@ -32,8 +31,11 @@ public class Customer implements Serializable{
         this.alimentosNoCome = alimentosNoCome;
     }
 
+    // constructor predeterminado del customer
     public Customer(){
     }
+
+    // constructor del customer en funcion a todos sus atributos
     public Customer(String userId, String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
         this.userId = userId;
         this.userName = userName;
@@ -63,7 +65,7 @@ public class Customer implements Serializable{
         return userName;
     }
 
-
+    // devuelve los alimentos a los cuales el usuario es alérgico en formato string
     public String illegalFoodToString() {
         StringBuilder nS = new StringBuilder();
         if (illegalFood != null) {
