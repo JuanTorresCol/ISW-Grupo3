@@ -6,48 +6,61 @@ import java.util.ArrayList;
 
 import icai.dtc.isw.utils.Util;
 
-public class Customer implements Serializable{
-
-    Util util = new Util();
+public class Customer implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private String userId = util.createUserId("e");
-    private String userName = "e";
-    private String userPass = "e";
-    private String userGender = "e";
-    private int userAge = 1;
-    private ArrayList<String> illegalFood = new ArrayList<>();
-    private String alimentosNoCome = "e";
 
-    // constructor del customer una vez que no se sabe su ID
-    public Customer( String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
+    private static final Util util = new Util();
+
+    private String userId;
+    private String userName;
+    private String userPass;
+    private String userGender;
+    private int userAge;
+    // Alérgenos / restricciones por salud
+    private ArrayList<String> illegalFood;
+    // Alimentos que el usuario no quiere comer por preferencia
+    private ArrayList<String> alimentosNoCome;
+
+    public Customer() {
+        this.userId = util.createUserId("default");
+        this.userName = "e";
+        this.userPass = "e";
+        this.userGender = "e";
+        this.userAge = 1;
+        this.illegalFood = new ArrayList<>();
+        this.alimentosNoCome = new ArrayList<>();
+    }
+
+    // Constructor sin ID conocido (se genera a partir del nombre)
+    public Customer(String userName, String userPass, String userGender, int userAge,
+                    ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome) {
         this.userId = util.createUserId(userName);
         this.userName = userName;
         this.userPass = userPass;
         this.userGender = userGender;
         this.userAge = userAge;
-        this.illegalFood = illegalFood;
-        this.alimentosNoCome = alimentosNoCome;
+        this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();
+        this.alimentosNoCome = (alimentosNoCome != null) ? alimentosNoCome : new ArrayList<>();
     }
 
-    // constructor predeterminado del customer
-    public Customer(){
-    }
-
-    // constructor del customer en funcion a todos sus atributos
-    public Customer(String userId, String userName, String userPass, String userGender, int userAge, ArrayList<String> illegalFood, String alimentosNoCome) {
+    // Constructor con todos los atributos
+    public Customer(String userId, String userName, String userPass, String userGender, int userAge,
+                    ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome) {
         this.userId = userId;
         this.userName = userName;
         this.userPass = userPass;
         this.userGender = userGender;
         this.userAge = userAge;
-        this.illegalFood = illegalFood;
-        this.alimentosNoCome = alimentosNoCome;
+        this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();
+        this.alimentosNoCome = (alimentosNoCome != null) ? alimentosNoCome : new ArrayList<>();
     }
 
+    //getters y setters
     public String getUserId() {return userId;}
     public void setUserId(String userId) {this.userId = userId;}
+    public String getUserName() {return userName;}
     public String getUserPass() {return userPass;}
     public void setUserPass(String userPass) {this.userPass = userPass;}
     public String getUserGender() {return userGender;}
@@ -55,27 +68,49 @@ public class Customer implements Serializable{
     public int getUserAge() {return userAge;}
     public void setUserAge(int userAge) {this.userAge = userAge;}
     public ArrayList<String> getIllegalFood() {return illegalFood;}
-    public void setIllegalFood(ArrayList<String> illegalFood) {
-        this.illegalFood = illegalFood;
-    }
-    public String getAlimentosNoCome() {
-        return alimentosNoCome;
-    }
-    public String getUserName() {
-        return userName;
-    }
+    public void setIllegalFood(ArrayList<String> illegalFood) {this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();}
+    public ArrayList<String> getAlimentosNoCome() {return alimentosNoCome;}
+    public void setAlimentosNoCome(ArrayList<String> alimentosNoCome) {this.alimentosNoCome = (alimentosNoCome != null) ? alimentosNoCome : new ArrayList<>();}
 
-    // devuelve los alimentos a los cuales el usuario es alérgico en formato string
+    // Devuelve los alimentos a los cuales el usuario es alérgico en formato String
     public String illegalFoodToString() {
-        StringBuilder nS = new StringBuilder();
-        if (illegalFood != null) {
-
-            for (String s : illegalFood) {
-                nS.append(s);
-            }
-            return nS.toString();
-        } else {
-            return "e";
+        if (illegalFood == null || illegalFood.isEmpty()) {
+            return "";
         }
+        return String.join(",", illegalFood);
+    }
+
+    // indica si el cliente no puede comerlo por alergia o preferencia
+    public boolean noPuedeConsumirNombre(String nombre) {
+        if (nombre == null) return false;
+
+        String n = nombre.toLowerCase();
+
+        if (illegalFood != null) {
+            for (String s : illegalFood) {
+                if (s != null && !s.isEmpty() && n.contains(s.toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+
+        if (alimentosNoCome != null) {
+            for (String s : alimentosNoCome) {
+                if (s != null && !s.isEmpty() && n.contains(s.toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean noPuedeConsumir(Ingrediente ingrediente) {
+        return ingrediente != null && noPuedeConsumirNombre(ingrediente.getNombre());
+    }
+
+    public boolean noPuedeConsumir(Producto producto) {
+        return producto != null && noPuedeConsumirNombre(producto.getNombre());
     }
 }
+
