@@ -16,7 +16,7 @@ public class PerfilPanel extends JPanel {
         setBackground(BG);
 
         JLabel t = pillTitle("PERFIL");
-
+        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
         JPanel content = new JPanel();
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -38,7 +38,7 @@ public class PerfilPanel extends JPanel {
         cab.add(center(editar));
 
         // Datos básicos
-        content.add(t);
+        content.add(center(t));
         content.add(Box.createVerticalStrut(10));
         content.add(cab);
         content.add(Box.createVerticalStrut(14));
@@ -73,7 +73,7 @@ public class PerfilPanel extends JPanel {
         JLabel prev = labelBold("VER MENÚS ANTERIORES");
         JButton s1 = flatLink("Hace 1 semana >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
         JButton s2 = flatLink("Hace 2 semanas >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
-        content.add(prev);
+        content.add(center(prev));
         content.add(center(s1));
         content.add(center(s2));
 

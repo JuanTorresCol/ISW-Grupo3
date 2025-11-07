@@ -2,68 +2,28 @@ package icai.dtc.isw.utils;
 
 import icai.dtc.isw.domain.Receta;
 
-import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Knapsack {
 
-    public static ArrayList<Receta> seleccionar10(ArrayList<Receta> recetas, int presupuesto_cliente) {
+    public static ArrayList<Receta> selecciona10(ArrayList<Receta> lista,int presupuesto){
 
-        int presupuesto = presupuesto_cliente * 100;
-        int n = recetas.size();
-        int K = 10;  // NUMERO EXACTO DE RECETAS
-
-        // dp[j][c] = índice de la receta usada para lograr j recetas y costo c
-        int[][] dp = new int[K + 1][presupuesto + 1];
-        for (int[] fila : dp) Arrays.fill(fila, -1);
-        dp[0][0] = -2; // estado inicial válido
-
-        // para reconstruir
-        int[][] parentCost = new int[K + 1][presupuesto + 1];
-
-        // procesar recetas
-        for (int i = 0; i < n; i++) {
-            Receta r = recetas.get(i);
-
-            // recorrer hacia atrás para no sobreescribir
-            for (int j = K; j >= 1; j--) {
-                for (int c = presupuesto; c >= r.getPrecio(); c--) {
-                    if (dp[j - 1][c - r.getPrecioInt()] != -1 && dp[j][c] == -1) {
-                        dp[j][c] = i;                        // usar receta i
-                        parentCost[j][c] = c - r.getPrecioInt();      // de dónde venimos
-                    }
-                }
+        while(true) {
+            if (lista == null || lista.size() < 10)
+                throw new IllegalArgumentException("Se necesitan al menos 10 elementos.");
+            ArrayList<Receta> copia = new ArrayList<>(lista);
+            Collections.shuffle(copia, ThreadLocalRandom.current());
+            copia = new ArrayList<>(copia.subList(0, 10));
+            double suma = 0.00;
+            for(Receta receta: copia){
+                suma += receta.getPrecio();
             }
-        }
-
-        // buscar el costo válido
-        int costoFinal = -1;
-        for (int c = presupuesto; c >= 0; c--) {
-            if (dp[10][c] != -1) {
-                costoFinal = c;
+            if(suma <= presupuesto){
                 break;
             }
-        }
-
-        if (costoFinal == -1) {
-            throw new RuntimeException("No existen 10 recetas dentro del presupuesto.");
-        }
-
-        // reconstrucción
-        ArrayList<Receta> seleccion = new ArrayList<>();
-        int j = K;
-        int c = costoFinal;
-
-        while (j > 0) {
-            int idx = dp[j][c];
-            Receta r = recetas.get(idx);
-            seleccion.add(r);
-            int prevCost = parentCost[j][c];
-            c = prevCost;
-            j--;
-        }
-
-        return seleccion;
+        } return lista;
     }
+
 }
 

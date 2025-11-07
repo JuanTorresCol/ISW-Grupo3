@@ -1,9 +1,11 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.domain.Lista;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
@@ -16,15 +18,21 @@ public class ListaCompraPanel extends JPanel {
         JLabel t = pillTitle("LISTA DE LA COMPRA");
 
         DefaultListModel<String> model = new DefaultListModel<>();
-        model.addElement("Pasta (200 g)");
-        model.addElement("Pechuga de pollo (2 uds)");
-        model.addElement("Ajo (2 dientes)");
-        model.addElement("Cebolla (1/2)");
-        model.addElement("Verduras variadas");
+        Lista lisa = new Lista(0,app.getMenuSemanal());
+
+        ArrayList<String> excep = lisa.visualizarProductos();
+        if(excep!=null){
+            for(String prod : excep) {
+                model.addElement(prod);
+            }
+        } else{model.addElement("Primero inserte un presupuesto");}
         JList<String> lista = new JList<>(model);
         lista.setFont(BODY);
 
+        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+
         add(t, BorderLayout.NORTH);
+
         add(new JScrollPane(lista), BorderLayout.CENTER);
         add(bottomNav(
                 _ -> app.showCard("menuDia"),

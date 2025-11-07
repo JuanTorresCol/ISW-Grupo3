@@ -3,6 +3,7 @@ package icai.dtc.isw.ui;
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
 
+import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.ui.panels.*;
 
 import javax.swing.*;
@@ -19,6 +20,8 @@ public class JVentana extends JFrame {
     private final CustomerControler controler = new CustomerControler();
     private String customerId;
     private Customer usuario = new Customer();
+    private MenuSemanal menuSemanal = new MenuSemanal();
+
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -145,6 +148,9 @@ public class JVentana extends JFrame {
     public void setCustomerId(String id) { this.customerId = id; }
     public Customer getUsuario() { return usuario; }
     public void setUsuario(Customer u) { this.usuario = u; }
+    public MenuSemanal getMenuSemanal(){
+        return menuSemanal;
+    }
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {
