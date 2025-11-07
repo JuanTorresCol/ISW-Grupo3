@@ -3,10 +3,13 @@ package icai.dtc.isw.ui.panels;
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.ui.JVentana;
+import icai.dtc.isw.ui.UiUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -34,6 +37,12 @@ public class RegistroPanel extends JPanel {
 
     public RegistroPanel(JVentana app, CustomerControler controler) {
         this.controler = controler;
+
+        this.addComponentListener(new ComponentAdapter() {
+            @Override public void componentShown(ComponentEvent e) {
+                resetFields();
+            }
+        });
 
         setLayout(new BorderLayout());
         setBackground(BG);
@@ -85,7 +94,11 @@ public class RegistroPanel extends JPanel {
         add(form, BorderLayout.CENTER);
         add(stack(actions, btnBack), BorderLayout.SOUTH);
     }
-
+    private void resetFields() {
+        UiUtils.clearTextBoxes(this);
+        revalidate();
+        repaint();
+    }
     private void onRegistrar(JVentana app) {
         String userName = usuarioField.getText();
         String pass = new String(contrasenaField.getPassword());
