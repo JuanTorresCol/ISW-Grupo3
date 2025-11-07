@@ -13,8 +13,8 @@ public class InicioPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(UiUtils.BG);
 
-        JLabel labelLogo = new JLabel(UiUtils.cargarIcono(InicioPanel.class, "logotipo", 500, 300), SwingConstants.CENTER);
-        labelLogo.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+        JLabel labelLogo = new JLabel(UiUtils.cargarIcono(InicioPanel.class, "logotipo", 600, 400), SwingConstants.CENTER);
+        labelLogo.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
 
         JPanel botones = new JPanel(new GridLayout(2,1,0,30));
         botones.setOpaque(false);
