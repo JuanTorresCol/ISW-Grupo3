@@ -12,6 +12,7 @@ public class RecetasSimilaresPanel extends JPanel {
     public RecetasSimilaresPanel(JVentana app) {
         setLayout(new BorderLayout());
         setBackground(BG);
+        setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
 
         JLabel t = pillTitle("RECETAS SIMILARES");
 

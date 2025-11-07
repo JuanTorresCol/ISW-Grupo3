@@ -17,10 +17,8 @@ public class RecetaDetallePanel extends JPanel {
         JButton back = flatLink("< ATRÁS", _ -> app.showCard("menuDia"));
         header.add(back);
 
-        JLabel t = pillTitle("RECETA");
-        JPanel hero = roundedCard();
-        hero.setLayout(new BorderLayout());
-        hero.add(pillTitle("PASTA CON POLLO"), BorderLayout.CENTER);
+        JLabel t = pillTitle("RECETA: PASTA CON POLLO");
+
 
         JPanel ing = section("INGREDIENTES",
                 "- 80-100 g de pasta\n- 1 pechuga de pollo pequeña\n- 1 diente de ajo\n- 1/4 de cebolla\n- 100 ml de nata (opcional)\n- Aceite de oliva, sal, pimienta\n- Queso rallado (opcional)\n- Verduras al gusto");
@@ -29,12 +27,11 @@ public class RecetaDetallePanel extends JPanel {
                 "1. Cocer la pasta.\n2. Saltear el pollo.\n3. Añadir verduras.\n4. Unir todo con la pasta y servir.");
 
         JPanel center = new JPanel();
+        setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
-        center.add(t);
-        center.add(Box.createVerticalStrut(10));
-        center.add(hero);
-        center.add(Box.createVerticalStrut(10));
+        center.add(center(t));
+        center.add(Box.createVerticalStrut(15));
         center.add(ing);
         center.add(Box.createVerticalStrut(10));
         center.add(steps);
