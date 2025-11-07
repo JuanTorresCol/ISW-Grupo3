@@ -38,15 +38,12 @@ public class Lista {
         }
     }
 
-    public ArrayList<Producto> getProductos() {
-        return this.productos;
-    }
     public ArrayList<String> visualizarProductos(){
         DecimalFormat df = new DecimalFormat("#,##0.00");
         ArrayList cadena = new ArrayList<>();
         cadena.add("Lista de la compra:");
         for(Producto prod : this.productos){
-            cadena.add(String.valueOf(df.format(prod.getCantidad()))+prod.getUnidadP()+" "+prod.getNombre() + " a un precio de "+String.valueOf(df.format(prod.getPrecio_unit()))+"$");
+            cadena.add(String.valueOf(df.format(prod.getCantidad()))+prod.getUnidadP()+" "+prod.getNombre() + " a un precio de "+ df.format(prod.getPrecio_unit()) +"$");
         }
         return cadena;
     }
@@ -55,6 +52,7 @@ public class Lista {
         for(Producto productoCheck : productos){
             if(productoCheck.getNombre().equals(producto.getNombre())){
                 f = false;
+                break;
             }
         }
         return f;

@@ -1,7 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.domain.Lista;
-import icai.dtc.isw.domain.Producto;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
@@ -30,7 +29,10 @@ public class ListaCompraPanel extends JPanel {
         JList<String> lista = new JList<>(model);
         lista.setFont(BODY);
 
+        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+
         add(t, BorderLayout.NORTH);
+
         add(new JScrollPane(lista), BorderLayout.CENTER);
         add(bottomNav(
                 _ -> app.showCard("menuDia"),

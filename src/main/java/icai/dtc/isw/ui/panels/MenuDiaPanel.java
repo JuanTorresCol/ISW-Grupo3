@@ -77,7 +77,7 @@ public class MenuDiaPanel extends JPanel {
         img.add(new JLabel("Imagen"));
         card.add(img);
         card.add(Box.createVerticalStrut(6));
-
+        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
         JLabel name = new JLabel(titulo);
         name.setFont(H3);
         card.add(name);

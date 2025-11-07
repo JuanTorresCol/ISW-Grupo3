@@ -40,7 +40,7 @@ public class PresupuestoPanel extends JPanel {
             // Mostrar la siguiente pantalla
             app.showCard("menuDia");
         });
-
+        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
         center.add(Box.createVerticalStrut(10));
         center.add(dinero);
         center.add(Box.createVerticalStrut(20));
