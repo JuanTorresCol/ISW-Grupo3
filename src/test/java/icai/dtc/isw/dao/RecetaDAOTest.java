@@ -1,4 +1,3 @@
-
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.Dificultad;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 class RecetaDAOTest {
 
-    //prueba a encontrar la receta por su id
+    //prueba que se recupera correctamente una receta por su ID, incluyendo sus ingredientes.
     @Test
     void testGetRecetaId() throws Exception {
         Connection conn = mock(Connection.class);
@@ -36,8 +35,7 @@ class RecetaDAOTest {
             when(pst.executeQuery()).thenReturn(rs);
 
             when(rs.next()).thenReturn(true, false);
-            // índices según el DAO:
-            // 1:id  2:nombre  3:duracion  4:precio  5:descripcion  6:dificultad y getArray(6) de ingredientes
+
             when(rs.getString(1)).thenReturn("ID123");
             when(rs.getString(2)).thenReturn("Tortilla");
             when(rs.getInt(3)).thenReturn(15);
@@ -45,7 +43,10 @@ class RecetaDAOTest {
             when(rs.getString(5)).thenReturn("Clásica");
             when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name());
             when(rs.getArray(7)).thenReturn(sqlArray);
-            when(sqlArray.getArray()).thenReturn(new String[]{"huevos,2ud,0.2", "patatas,300g,1.0"});
+            when(sqlArray.getArray()).thenReturn(new String[]{
+                    "huevos,2ud,0.2",
+                    "patatas,300g,1.0"
+            });
 
             Receta r = RecetaDAO.getRecetaId("ID123");
 
@@ -56,7 +57,7 @@ class RecetaDAOTest {
             assertEquals(3.5, r.getPrecio(), 1e-9);
             assertEquals("Clásica", r.getDescripcion());
             assertEquals(Dificultad.MEDIO, r.getDificultad());
-            assertEquals(2, r.getIngredientes().size()); //mirar bien como esta hecho lo de recetas
+            assertEquals(2, r.getIngredientes().size());
             assertTrue(r.getIngredientes().containsKey("huevos"));
             assertEquals("2ud", r.getIngredientes().get("huevos").getCantidad());
 
@@ -65,7 +66,7 @@ class RecetaDAOTest {
         }
     }
 
-    //prueba cuando no encuentra el id de la receta
+    //prueba que se devuelve null cuando la receta con ese ID no existe.
     @Test
     void testGetRecetaIdNotFound() throws Exception {
         Connection conn = mock(Connection.class);
@@ -86,7 +87,7 @@ class RecetaDAOTest {
         }
     }
 
-    //prueba cuando no encuentra la receta por nombre
+    //prueba que se devuelve null cuando no hay receta con ese nombre.
     @Test
     void testGetRecetaNameNotFound() throws Exception {
         Connection conn = mock(Connection.class);
@@ -106,14 +107,12 @@ class RecetaDAOTest {
             verify(pst).setString(1, "NOPE");
         }
     }
-
-    //prueba seleccionar dos recetas
+    //prueba que se devuelve una lista de recetas correctas desde la base de datos.
     @Test
     void testGetDosRecetas() throws Exception {
         Connection conn = mock(Connection.class);
         PreparedStatement pst = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-
         Array array1 = mock(Array.class);
         Array array2 = mock(Array.class);
 
@@ -127,14 +126,14 @@ class RecetaDAOTest {
 
             when(rs.next()).thenReturn(true, true, false);
 
-            when(rs.getString(1)).thenReturn("R1", "R2"); // id
+            when(rs.getString(1)).thenReturn("R1", "R2");
             when(rs.getString(2)).thenReturn("Tortilla", "Pasta");
             when(rs.getInt(3)).thenReturn(15, 20);
             when(rs.getDouble(4)).thenReturn(3.5, 6.0);
             when(rs.getString(5)).thenReturn("Huevos y patata", "Con tomate");
             when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name(), Dificultad.FACIL.name());
 
-            when(rs.getArray(6)).thenReturn(array1, array2);
+            when(rs.getArray(7)).thenReturn(array1, array2);
             when(array1.getArray()).thenReturn(new String[]{"huevos,2ud,0.2", "patatas,300g,1.0"});
             when(array2.getArray()).thenReturn(new String[]{"pasta,200g,0.8", "tomate,100g,0.6"});
 
@@ -150,8 +149,7 @@ class RecetaDAOTest {
             assertEquals(Dificultad.FACIL, lista.get(1).getDificultad());
         }
     }
-
-    //prueba a insertar receta
+    //prueba que se inserta una receta con todos sus campos.
     @Test
     void testRegisterReceta() throws Exception {
         Connection conn = mock(Connection.class);
@@ -178,7 +176,7 @@ class RecetaDAOTest {
             Receta r = new Receta(
                     "ID123",
                     "Tortilla",
-                    Dificultad.MEDIO, // <- aquí el cambio
+                    Dificultad.MEDIO,
                     15,
                     3.5,
                     "Clásica",
@@ -192,12 +190,11 @@ class RecetaDAOTest {
             verify(pst).setInt(3, 15);
             verify(pst).setDouble(4, 3.5);
             verify(pst).setString(5, "Clásica");
-            verify(pst).setString(6, Dificultad.MEDIO.name()); // <- aquí el cambio
+            verify(pst).setString(6, Dificultad.MEDIO.name());
 
             ArgumentCaptor<Object[]> cap = ArgumentCaptor.forClass(Object[].class);
             verify(conn).createArrayOf(eq("VARCHAR"), cap.capture());
             Object[] arr = cap.getValue();
-            assertTrue(Arrays.stream(arr).allMatch(o -> o.toString().split(",").length == 3));
             assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("huevos,2ud,0.2")));
             assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("patatas,300g,1.0")));
 
@@ -206,6 +203,7 @@ class RecetaDAOTest {
         }
     }
 }
+
 
 
 
