@@ -87,5 +87,17 @@ public class Receta {
     public String toString() {
         return getNombre() + " - " + getDuracion() + " mins - " + getPrecio() + " $ \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
     }
+    //receta valida para el usuario??
+    public boolean esAptaPara(Customer customer) {
+        if (customer == null) return true;
+
+        for (Ingrediente ingrediente : ingredientes.values()) {
+            if (customer.noPuedeConsumir(ingrediente)) {
+                return false; // tiene algo que no puede o no quiere comer
+            }
+        }
+        return true;
+    }
+
 
 }

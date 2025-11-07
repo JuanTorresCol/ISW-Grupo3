@@ -37,7 +37,7 @@ public class PerfilPanel extends JPanel {
         cab.add(Box.createVerticalStrut(6));
         cab.add(center(editar));
 
-        // Datos
+        // Datos básicos
         content.add(t);
         content.add(Box.createVerticalStrut(10));
         content.add(cab);
@@ -45,14 +45,31 @@ public class PerfilPanel extends JPanel {
 
         content.add(keyValue("SEXO:", usuario.getUserGender()));
         content.add(keyValue("EDAD:", String.valueOf(usuario.getUserAge())));
+
+        // Alergias / intolerancias
         String illegal = usuario.illegalFoodToString();
-        if(illegal.equals("")){illegal = "NINGUNO";}else{illegal = illegal.toUpperCase();}
+        if (illegal == null || illegal.isBlank()) {
+            illegal = "NINGUNO";
+        } else {
+            illegal = illegal.toUpperCase();
+        }
         content.add(keyValue("ALERGIAS/INTOLERANCIAS:", illegal));
-        String noCome = usuario.getAlimentosNoCome();
-        if(noCome.equals("")){noCome = "NINGUNO";}else{noCome = noCome.toUpperCase();}
+
+        // Alimentos que no come (ArrayList<String> -> String)
+        String noCome;
+        if (usuario.getAlimentosNoCome() == null || usuario.getAlimentosNoCome().isEmpty()) {
+            noCome = "NINGUNO";
+        } else {
+            noCome = String.join(", ", usuario.getAlimentosNoCome())
+                    .replace("{", "")
+                    .replace("}", "")
+                    .toUpperCase();
+        }
         content.add(keyValue("ALIMENTOS QUE NO COMES:", noCome));
 
         content.add(Box.createVerticalStrut(12));
+
+        // Histórico (placeholder)
         JLabel prev = labelBold("VER MENÚS ANTERIORES");
         JButton s1 = flatLink("Hace 1 semana >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
         JButton s2 = flatLink("Hace 2 semanas >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
@@ -64,7 +81,12 @@ public class PerfilPanel extends JPanel {
         add(bottomNav(
                 _ -> app.showCard("menuDia"),
                 _ -> app.showCard("listaCompra"),
-                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
+                _ -> {
+                    app.setUsuario(app.cargarPerfilUsuario());
+                    app.refreshCard("perfil");
+                    app.showCard("perfil");
+                }
         ), BorderLayout.SOUTH);
     }
 }
+
