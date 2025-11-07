@@ -9,10 +9,11 @@ public class Knapsack {
 
     public static ArrayList<Receta> selecciona10(ArrayList<Receta> lista,int presupuesto){
 
+        ArrayList<Receta> copia;
         while(true) {
             if (lista == null || lista.size() < 10)
                 throw new IllegalArgumentException("Se necesitan al menos 10 elementos.");
-            ArrayList<Receta> copia = new ArrayList<>(lista);
+            copia = new ArrayList<>(lista);
             Collections.shuffle(copia, ThreadLocalRandom.current());
             copia = new ArrayList<>(copia.subList(0, 10));
             double suma = 0.00;
@@ -22,7 +23,7 @@ public class Knapsack {
             if(suma <= presupuesto){
                 break;
             }
-        } return lista;
+        } return copia;
     }
 
 }
