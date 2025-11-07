@@ -1,10 +1,16 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.domain.MenuSemanal;
+import icai.dtc.isw.domain.MenuDiario;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
@@ -13,34 +19,60 @@ public class MenuDiaPanel extends JPanel {
     private final String[] diasSemana = {"LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES"};
     private int idxDia = 0;
     private final JLabel tituloDiaLabel;
+    private MenuDiario menuDia;
+    private final MenuSemanal menuSemanal;
+
+    private final JVentana app;
+    private final JPanel cards;
+
+    private final JPanel tiraDias;
+    private final List<JComponent> dayChips = new ArrayList<>();
 
     public MenuDiaPanel(JVentana app) {
+        this.app = app;
+        this.menuSemanal = app.getMenuSemanal();
+        this.menuDia = menuSemanal.getLunes();
+
         setLayout(new BorderLayout());
         setBackground(BG);
-
+        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+        // Header con flechas
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         JButton prev = navArrow("<", _ -> cambiarDia(-1));
         JButton next = navArrow(">", _ -> cambiarDia(1));
+
         tituloDiaLabel = new JLabel(dayTitle(), SwingConstants.CENTER);
         tituloDiaLabel.setFont(H2);
         tituloDiaLabel.setForeground(TITLE);
+
         header.add(prev, BorderLayout.WEST);
         header.add(tituloDiaLabel, BorderLayout.CENTER);
         header.add(next, BorderLayout.EAST);
 
-        JPanel tiraDias = flowCenter();
-        for (String c : new String[]{"L","M","X","J","V"}) {
-            tiraDias.add(chip(c));
+
+        tiraDias = flowCenter();
+        String[] labels = {"L","M","X","J","V"};
+        for (int i = 0; i < labels.length; i++) {
+            final int dayIndex = i;
+            JComponent chip = pillButton(labels[i]);
+            chip.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            chip.addMouseListener(new MouseAdapter() {
+                @Override public void mouseClicked(MouseEvent e) {
+                    goToDay(dayIndex);
+                }
+            });
+            dayChips.add(chip);
+            tiraDias.add(chip);
         }
 
-        JPanel cards = new JPanel();
+        // Cards de recetas
+        cards = new JPanel();
         cards.setOpaque(false);
         cards.setBorder(new EmptyBorder(10,20,10,20));
         cards.setLayout(new BoxLayout(cards, BoxLayout.Y_AXIS));
-        cards.add(menuCard(app, "Comida", "PASTA CON POLLO", "30 mins", "FÁCIL"));
-        cards.add(Box.createVerticalStrut(16));
-        cards.add(menuCard(app, "Cena", "PASTA CON POLLO", "30 mins", "FÁCIL"));
+        renderCards();          // pinta estado inicial
+        updateChipSelection();  // marca Lunes activo
 
         add(header, BorderLayout.NORTH);
         add(stack(tiraDias, cards), BorderLayout.CENTER);
@@ -52,13 +84,74 @@ public class MenuDiaPanel extends JPanel {
     }
 
     private void cambiarDia(int delta) {
-        idxDia = (idxDia + delta + diasSemana.length) % diasSemana.length;
+        int newIndex = (idxDia + delta + diasSemana.length) % diasSemana.length;
+        goToDay(newIndex);
+    }
+
+    private void goToDay(int newIndex) {
+        idxDia = newIndex;
         tituloDiaLabel.setText(dayTitle());
-        // TODO: recargar recetas asociadas a idxDia si procede
+
+        switch (idxDia) {
+            case 0 -> menuDia = menuSemanal.getLunes();
+            case 1 -> menuDia = menuSemanal.getMartes();
+            case 2 -> menuDia = menuSemanal.getMiercoles();
+            case 3 -> menuDia = menuSemanal.getJueves();
+            case 4 -> menuDia = menuSemanal.getViernes();
+            default -> menuDia = null;
+        }
+
+        renderCards();
+        updateChipSelection();
+    }
+
+    private void updateChipSelection() {
+        for (int i = 0; i < dayChips.size(); i++) {
+            JComponent c = dayChips.get(i);
+            boolean selected = (i == idxDia);
+            // subrayado inferior en el seleccionado
+            c.setBorder(selected
+                    ? BorderFactory.createMatteBorder(0, 0, 2, 0, TITLE)
+                    : BorderFactory.createEmptyBorder(0, 0, 2, 0));
+        }
+        tiraDias.revalidate();
+        tiraDias.repaint();
     }
 
     private String dayTitle() {
-        return "< " + diasSemana[idxDia] + " >";
+        return diasSemana[idxDia];
+    }
+
+    private void renderCards() {
+        cards.removeAll();
+
+        if (menuDia != null) {
+            if (menuDia.getComida() != null) {
+                cards.add(menuCard(
+                        app,
+                        "Comida",
+                        menuDia.getComida().getNombre(),
+                        menuDia.getComida().getDuracion() + " mins",
+                        String.valueOf(menuDia.getComida().getDificultad())
+                ));
+                cards.add(Box.createVerticalStrut(16));
+            }
+
+            if (menuDia.getCena() != null) {
+                cards.add(menuCard(
+                        app,
+                        "Cena",
+                        menuDia.getCena().getNombre(),
+                        menuDia.getCena().getDuracion() + " mins",
+                        String.valueOf(menuDia.getCena().getDificultad())
+                ));
+            }
+        } else {
+            cards.add(new JLabel("No hay menú para este día."));
+        }
+
+        cards.revalidate();
+        cards.repaint();
     }
 
     private JPanel menuCard(JVentana app, String bloque, String titulo, String tiempo, String dificultad) {
@@ -68,7 +161,7 @@ public class MenuDiaPanel extends JPanel {
         JLabel cab = new JLabel(bloque);
         cab.setFont(H2);
         cab.setForeground(TITLE);
-        card.add(cab);
+        card.add(center(cab));
         card.add(Box.createVerticalStrut(6));
 
         JPanel img = new JPanel();
@@ -77,14 +170,17 @@ public class MenuDiaPanel extends JPanel {
         img.add(new JLabel("Imagen"));
         card.add(img);
         card.add(Box.createVerticalStrut(6));
-        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+
+        // borde aplicado a la card
+        card.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 150));
+
         JLabel name = new JLabel(titulo);
         name.setFont(H3);
-        card.add(name);
+        card.add(center(name));
 
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
-        card.add(meta);
+        card.add(center(meta));
         card.add(Box.createVerticalStrut(6));
 
         JPanel acciones = flowLeft();
@@ -92,7 +188,7 @@ public class MenuDiaPanel extends JPanel {
         JButton cambiar = outlineButton("CAMBIAR", _ -> app.showCard("recetasSimilares"));
         acciones.add(ver);
         acciones.add(cambiar);
-        card.add(acciones);
+        card.add(center(acciones));
 
         return card;
     }

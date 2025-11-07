@@ -17,7 +17,7 @@ public class PresupuestoPanel extends JPanel {
         setBackground(BG);
 
         JLabel t = title("Introducir presupuesto semanal");
-
+        t.setBorder(BorderFactory.createEmptyBorder(0,0,100,0));
         JPanel center = new JPanel();
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -36,11 +36,12 @@ public class PresupuestoPanel extends JPanel {
             menu.setPresupuesto(presupuesto);
             menu.generarMenu();
             app.refreshCard("listaCompra");
+            app.refreshCard("menuDia");
 
             // Mostrar la siguiente pantalla
             app.showCard("menuDia");
         });
-        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+        setBorder(BorderFactory.createEmptyBorder(100, 250, 0, 250));
         center.add(Box.createVerticalStrut(10));
         center.add(dinero);
         center.add(Box.createVerticalStrut(20));
@@ -49,8 +50,8 @@ public class PresupuestoPanel extends JPanel {
         add(t, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);
         add(bottomNav(
-                _ -> app.showCard("menuDia"),
-                _ -> app.showCard("listaCompra"),
+                _ -> {app.showCard("menuDia");app.refreshCard("menuDia");},
+                _ -> {app.showCard("listaCompra");app.refreshCard("listaCompra");},
                 _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
     }
