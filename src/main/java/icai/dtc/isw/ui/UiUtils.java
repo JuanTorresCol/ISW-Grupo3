@@ -3,6 +3,7 @@ package icai.dtc.isw.ui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -28,6 +29,19 @@ public final class UiUtils {
         p.setBackground(BG);
         p.setBorder(new EmptyBorder(20, 20, 20, 20));
         return p;
+    }
+
+    public static void clearTextBoxes(Container root) {
+        for (Component c : root.getComponents()) {
+            if (c instanceof JFormattedTextField f) {
+                f.setValue(null);      // mejor para formateados
+                f.setText("");
+            } else if (c instanceof JTextComponent t) {
+                t.setText("");
+            } else if (c instanceof Container child) {
+                clearTextBoxes(child); // recursivo para limpiar todo el árbol
+            }
+        }
     }
 
     // utiles: botones, cajas de texto y colocación de elementos

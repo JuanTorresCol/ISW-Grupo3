@@ -3,9 +3,12 @@ package icai.dtc.isw.ui.panels;
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.ui.JVentana;
+import icai.dtc.isw.ui.UiUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
@@ -14,6 +17,11 @@ public class LoginPanel extends JPanel {
     CustomerControler controler = new CustomerControler();
 
     public LoginPanel(JVentana app) {
+        this.addComponentListener(new ComponentAdapter() {
+            @Override public void componentShown(ComponentEvent e) {
+                resetFields();
+            }
+        });
         setLayout(new BorderLayout());
         setBackground(BG);
 
@@ -52,5 +60,10 @@ public class LoginPanel extends JPanel {
         add(t, BorderLayout.NORTH);
         add(form, BorderLayout.CENTER);
         add(stack(center(btnEntrar), btnBack), BorderLayout.SOUTH);
+    }
+    private void resetFields() {
+        UiUtils.clearTextBoxes(this);
+        revalidate();
+        repaint();
     }
 }

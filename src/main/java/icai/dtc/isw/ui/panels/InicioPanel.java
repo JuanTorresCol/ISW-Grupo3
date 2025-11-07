@@ -5,11 +5,19 @@ import icai.dtc.isw.ui.UiUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 
 public class InicioPanel extends JPanel {
 
     public InicioPanel(JVentana app) {
+
+        this.addComponentListener(new ComponentAdapter() {
+            @Override public void componentShown(ComponentEvent e) {
+                resetFields();
+            }
+        });
         setLayout(new BorderLayout());
         setBackground(UiUtils.BG);
 
@@ -28,5 +36,11 @@ public class InicioPanel extends JPanel {
 
         add(labelLogo, BorderLayout.NORTH);
         add(UiUtils.wrapCentered(botones), BorderLayout.CENTER);
+    }
+
+    private void resetFields() {
+        UiUtils.clearTextBoxes(this);
+        revalidate();
+        repaint();
     }
 }
