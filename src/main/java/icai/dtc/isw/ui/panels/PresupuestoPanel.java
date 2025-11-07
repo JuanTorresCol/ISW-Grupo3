@@ -1,7 +1,7 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.ui.JVentana;
-import icai.dtc.isw.domain.MenuDiario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +11,8 @@ import static icai.dtc.isw.ui.UiUtils.*;
 public class PresupuestoPanel extends JPanel {
 
     private final JSpinner presupuestoSpinner = new JSpinner(new SpinnerNumberModel(50, 0, 5000, 5));
-
     public PresupuestoPanel(JVentana app) {
+
         setLayout(new BorderLayout());
         setBackground(BG);
 
@@ -30,11 +30,12 @@ public class PresupuestoPanel extends JPanel {
         JButton generar = pillButton("Generar menú");
         generar.addActionListener(_ -> {
             // Obtener el valor del spinner
-            double presupuesto = ((Number) presupuestoSpinner.getValue()).doubleValue();
+            int presupuesto = ((Number) presupuestoSpinner.getValue()).intValue();
 
-            // Asignar el presupuesto al menú HAY QUE CAMBIAR
-            MenuDiario menu = new MenuDiario();
+            MenuSemanal menu = app.getMenuSemanal();
             menu.setPresupuesto(presupuesto);
+            menu.generarMenu();
+            app.refreshCard("listaCompra");
 
             // Mostrar la siguiente pantalla
             app.showCard("menuDia");
