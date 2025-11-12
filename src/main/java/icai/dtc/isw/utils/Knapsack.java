@@ -26,5 +26,10 @@ public class Knapsack {
         } return copia;
     }
 
+    public static ArrayList<Receta> prueba(ArrayList<Receta> lista){
+        return new ArrayList<>(lista.subList(0,10));
+
+    }
+
 }
 

@@ -35,10 +35,11 @@ public class MenuDiaPanel extends JPanel {
 
         setLayout(new BorderLayout());
         setBackground(BG);
-        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+        //setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         // Header con flechas
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
+        header.setBorder(new EmptyBorder(0, 5, 0, 5));
         JButton prev = navArrow("<", _ -> cambiarDia(-1));
         JButton next = navArrow(">", _ -> cambiarDia(1));
 
@@ -69,7 +70,7 @@ public class MenuDiaPanel extends JPanel {
         // Cards de recetas
         cards = new JPanel();
         cards.setOpaque(false);
-        cards.setBorder(new EmptyBorder(10,20,10,20));
+        cards.setBorder(new EmptyBorder(10,10,10,10));
         cards.setLayout(new BoxLayout(cards, BoxLayout.Y_AXIS));
         renderCards();          // pinta estado inicial
         updateChipSelection();  // marca Lunes activo
@@ -81,6 +82,8 @@ public class MenuDiaPanel extends JPanel {
                 _ -> app.showCard("listaCompra"),
                 _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
+
+
     }
 
     private void cambiarDia(int delta) {
@@ -134,7 +137,7 @@ public class MenuDiaPanel extends JPanel {
                         menuDia.getComida().getDuracion() + " mins",
                         String.valueOf(menuDia.getComida().getDificultad())
                 ));
-                cards.add(Box.createVerticalStrut(16));
+                cards.add(Box.createVerticalStrut(10));
             }
 
             if (menuDia.getCena() != null) {
@@ -157,31 +160,36 @@ public class MenuDiaPanel extends JPanel {
     private JPanel menuCard(JVentana app, String bloque, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBackground(BG_OSCURO);
 
-        JLabel cab = new JLabel(bloque);
+        JLabel cab = label(bloque);
         cab.setFont(H2);
         cab.setForeground(TITLE);
         card.add(center(cab));
-        card.add(Box.createVerticalStrut(6));
+        card.add(Box.createVerticalStrut(3));
 
         JPanel img = new JPanel();
-        img.setPreferredSize(new Dimension(240, 120));
+        Dimension d = new Dimension(240,85);
+        img.setPreferredSize(d);
+        img.setMinimumSize(d);
+        //img.setMaximumSize(d);
         img.setBackground(new Color(170, 187, 197));
         img.add(new JLabel("Imagen"));
         card.add(img);
         card.add(Box.createVerticalStrut(6));
 
         // borde aplicado a la card
-        card.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 150));
+        card.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
         JLabel name = new JLabel(titulo);
         name.setFont(H3);
         card.add(center(name));
 
+        //card.add(Box.createVerticalStrut(3));
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         card.add(center(meta));
-        card.add(Box.createVerticalStrut(6));
+        //card.add(Box.createVerticalStrut(1));
 
         JPanel acciones = flowLeft();
         JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));

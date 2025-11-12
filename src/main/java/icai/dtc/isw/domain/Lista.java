@@ -57,4 +57,7 @@ public class Lista {
         }
         return f;
     }
+
+    public ArrayList<Producto> getProductos() { return productos; }
+
 }

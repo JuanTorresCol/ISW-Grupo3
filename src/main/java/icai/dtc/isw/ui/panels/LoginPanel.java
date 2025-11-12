@@ -31,15 +31,16 @@ public class LoginPanel extends JPanel {
         JPanel form = new JPanel();
         form.setOpaque(false);
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
-        form.setBorder(new javax.swing.border.EmptyBorder(40, 330, 10, 200));
+        form.setBorder(new javax.swing.border.EmptyBorder(40, 25, 10, 25));
 
-        JTextField usuarioLoginField = new JTextField(20);
+        JTextField usuarioLoginField = textField(20);
         JPasswordField contrasenaLoginField = new JPasswordField(20);
+        contrasenaLoginField.setBorder(new javax.swing.border.LineBorder(TITLE));
 
         form.add(labels("USUARIO"));
-        form.add(fieldWrap(usuarioLoginField,new Dimension(600,50)));
+        form.add(fieldWrap(usuarioLoginField,new Dimension(400,30)));
         form.add(labels("CONTRASEÑA"));
-        form.add(fieldWrap(contrasenaLoginField,new Dimension(600,50)));
+        form.add(fieldWrap(contrasenaLoginField,new Dimension(400,30)));
 
         JButton btnEntrar = pillButton("Entrar");
         btnEntrar.addActionListener(_ -> {

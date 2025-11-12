@@ -36,11 +36,14 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("MENUMASTER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(450, 680);
+        //setResizable(false);
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(BG);
 
         configurarInterfaz();
+        menuSemanal.generarMenu();
     }
 
     // instanciado de paneles
@@ -53,18 +56,19 @@ public class JVentana extends JFrame {
         mainPanel.add(new InicioPanel(this), "inicio");
         mainPanel.add(new RegistroPanel(this, controler), "registro");
         mainPanel.add(new LoginPanel(this), "login");
+        mainPanel.add(new PresupuestoPanel(this), "lista");
 
         // POST-AUTH (lazy)
         postAuthFactories.put("presupuesto", () -> new PresupuestoPanel(this));
         postAuthFactories.put("menuDia", () -> new MenuDiaPanel(this));
         postAuthFactories.put("recetaDetalle", () -> new JScrollPane(new RecetaDetallePanel(this)));
         postAuthFactories.put("recetasSimilares", () -> new JScrollPane(new RecetasSimilaresPanel(this)));
-        postAuthFactories.put("listaCompra", () -> new JScrollPane(new ListaCompraPanel(this)));
+        postAuthFactories.put("listaCompra", () -> new ListaCompraPanel(this));
         postAuthFactories.put("perfil", () -> new JScrollPane(new PerfilPanel(this)));
         postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
 
         add(mainPanel);
-        showCard("inicio");
+        showCard("lista");
     }
 
     // API usada por los paneles
@@ -149,7 +153,9 @@ public class JVentana extends JFrame {
     public Customer getUsuario() { return usuario; }
     public void setUsuario(Customer u) { this.usuario = u; }
     public MenuSemanal getMenuSemanal(){
+        System.out.println(menuSemanal);
         return menuSemanal;
+
     }
 
     // ---------- GUI Main ----------

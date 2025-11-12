@@ -57,4 +57,12 @@ public class MenuDiario {
         return precio_menu;
     }
 
+    @Override
+    public String toString() {
+        for (Receta r: recetas.values()){
+            return r.toString();
+        }
+        return "";
+    }
+
 }

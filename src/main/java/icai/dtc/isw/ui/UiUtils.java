@@ -12,12 +12,14 @@ public final class UiUtils {
 
     // Paleta
     public static final Color BG = new Color(207, 224, 234);
+    public static final Color BG_OSCURO = new Color(187, 204, 214);
     public static final Color ACCENT = new Color(186, 151, 154);
     public static final Color TITLE = new Color(35, 78, 69);
     public static final Color CARD_BG = new Color(235, 241, 246);
     public static final Color TEXT = new Color(40, 40, 40);
 
     // Fuentes
+    public static final Font H = new Font("Arial", Font.BOLD, 40);
     public static final Font H1 = new Font("Arial", Font.BOLD, 32);
     public static final Font H2 = new Font("Arial", Font.BOLD, 24);
     public static final Font H3 = new Font("Arial", Font.BOLD, 18);
@@ -27,12 +29,23 @@ public final class UiUtils {
     public static JPanel basePanel(LayoutManager lm) {
         JPanel p = new JPanel(lm);
         p.setBackground(BG);
-        p.setBorder(new EmptyBorder(20, 20, 20, 20));
+        p.setBorder(new EmptyBorder(20, 10, 20, 10));
+        return p;
+    }
+    public static JPanel margen(){
+        JPanel p = new JPanel();
+        p.setBackground(BG);
+        p.setBorder(new EmptyBorder(0, 5, 0, 5));
         return p;
     }
 
     public static void clearTextBoxes(Container root) {
         for (Component c : root.getComponents()) {
+            if (c instanceof JSpinner spinner) {
+
+                spinner.setValue(18);
+                continue;
+            }
             if (c instanceof JFormattedTextField f) {
                 f.setValue(null);      // mejor para formateados
                 f.setText("");
@@ -57,16 +70,18 @@ public final class UiUtils {
         JLabel l = new JLabel(s);
         l.setFont(H3);
         l.setForeground(TITLE);
-        l.setBorder(new EmptyBorder(8,2,4,2));
-        l.setAlignmentX(Component.CENTER_ALIGNMENT);
+        l.setBorder(new EmptyBorder(5,2,0,2));
+        l.setAlignmentX(Component.LEFT_ALIGNMENT);
         return l;
     }
+
+
 
     public static JLabel labels(String s) {
         JLabel l = new JLabel(s);
         l.setFont(H3);
         l.setForeground(TITLE);
-        l.setBorder(new EmptyBorder(8,2,4,2));
+        l.setBorder(new EmptyBorder(30,2,8,2));
         return l;
     }
 
@@ -77,12 +92,28 @@ public final class UiUtils {
         return l;
     }
 
+    public static JLabel labelBig(String s) {
+        JLabel l = new JLabel(s);
+        l.setFont(H);
+        l.setForeground(Color.DARK_GRAY);
+        return l;
+    }
+
     public static Component fieldWrap(Component c) {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
         c.setFont(BODY);
         p.add(c, BorderLayout.CENTER);
-        p.setAlignmentX(Component.CENTER_ALIGNMENT);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return p;
+    }
+
+    public static Component fieldWrapWest(Component c) {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setOpaque(false);
+        c.setFont(BODY);
+        p.add(c, BorderLayout.WEST);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
         return p;
     }
 
@@ -98,6 +129,14 @@ public final class UiUtils {
             p.setMinimumSize(size);
         }
         return p;
+    }
+
+    public static JPanel gridLayout(){
+        JPanel p = new JPanel(new GridLayout(0,3,3,3));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return p;
+
     }
 
     public static JPanel flowLeft() {
@@ -263,12 +302,55 @@ public final class UiUtils {
         JPanel nav = new JPanel(new GridLayout(1,3,12,0));
         nav.setOpaque(true);
         nav.setBackground(ACCENT);
-        nav.setBorder(new EmptyBorder(10, 20, 10, 20));
+        nav.setBorder(new EmptyBorder(10, 0, 10, 0));
         nav.add(navItem("MENÚ", onMenu));
         nav.add(navItem("LISTA", onLista));
         nav.add(navItem("PERFIL", onPerfil));
         return nav;
     }
+
+    //creacion JTextField
+    public static JTextField textField(int colums){
+        JTextField textField = new JTextField(colums);
+        textField.setBorder(new javax.swing.border.LineBorder(TITLE));
+        //textField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        return textField;
+    }
+
+    //creacion passwordField
+    public static JPasswordField passwordField(int colums){
+        JPasswordField passwordField = new JPasswordField(colums);
+        passwordField.setBorder(new javax.swing.border.LineBorder(TITLE));
+        return passwordField;
+    }
+
+    //creacion comboBox
+    public static JComboBox<String> comboBox(String[] string){
+        JComboBox<String> comboBox = new JComboBox<>(string);
+        comboBox.setBorder(new javax.swing.border.LineBorder(TITLE));
+        return comboBox;
+    }
+
+    //creacion spinner
+    public static JSpinner spinner(int inicial, int minimo, int maximo, int salto){
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(inicial, minimo, maximo, salto));
+        spinner.setBorder(new javax.swing.border.LineBorder(TITLE));
+        return spinner;
+    }
+
+    public static void fuenteSpinner(JSpinner spinner, Font fuente){
+
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) spinner.getEditor();
+        editor.getTextField().setFont(fuente);
+        editor.getTextField().setForeground(Color.DARK_GRAY);
+    }
+
+    public static void fondoSpinner(JSpinner spinner, Color color){
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) spinner.getEditor();
+        editor.getTextField().setBackground(color);
+    }
+
+
 
     // Botones de navegacion
     private static JButton navItem(String text, ActionListener al) {
@@ -276,19 +358,22 @@ public final class UiUtils {
         b.setFont(H3);
         b.setForeground(Color.DARK_GRAY);
         b.setBackground(ACCENT);
-        b.setBorder(BorderFactory.createEmptyBorder(8,10,8,10));
+        b.setBorder(BorderFactory.createEmptyBorder(8,0,8,0));
         b.setFocusPainted(false);
         b.addActionListener(al);
         return b;
     }
 
+
+
     // Recursos
     // Carga una imagen desde resources
     public static ImageIcon cargarIcono(Class<?> clazz, String nombreImagen, int ancho, int alto){
-        String ruta = '/'+nombreImagen+".png";
+        String ruta = "/imageResources/"+nombreImagen+".png";
         java.net.URL url = clazz.getResource(ruta);
         ImageIcon icono = url != null ? new ImageIcon(url) : null;
         Image iconoEscalado = icono != null ? icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH) : null;
+        System.out.println("IconoEscalado: "+iconoEscalado);
         return iconoEscalado != null ? new ImageIcon(iconoEscalado): null;
     }
 }

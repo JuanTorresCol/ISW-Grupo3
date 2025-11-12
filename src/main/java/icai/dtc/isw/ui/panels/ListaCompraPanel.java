@@ -16,6 +16,11 @@ public class ListaCompraPanel extends JPanel {
         setBackground(BG);
 
         JLabel t = pillTitle("LISTA DE LA COMPRA");
+        JPanel titulo = basePanel(new BorderLayout());
+        titulo.add(t,BorderLayout.NORTH);
+
+
+
 
         DefaultListModel<String> model = new DefaultListModel<>();
         Lista lisa = new Lista(0,app.getMenuSemanal());
@@ -28,12 +33,15 @@ public class ListaCompraPanel extends JPanel {
         } else{model.addElement("Primero inserte un presupuesto");}
         JList<String> lista = new JList<>(model);
         lista.setFont(BODY);
+        lista.setBackground(BG);
 
-        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+        //setBorder(BorderFactory.createEmptyBorder(0, , 0, 5));
 
-        add(t, BorderLayout.NORTH);
-
-        add(new JScrollPane(lista), BorderLayout.CENTER);
+        add(titulo, BorderLayout.NORTH);
+        JScrollPane scroll_lista = new JScrollPane(lista);
+        scroll_lista.setBorder(BorderFactory.createEmptyBorder(0,15,0,5));
+        scroll_lista.setBackground(BG);
+        add(scroll_lista, BorderLayout.CENTER);
         add(bottomNav(
                 _ -> app.showCard("menuDia"),
                 _ -> app.showCard("listaCompra"),
