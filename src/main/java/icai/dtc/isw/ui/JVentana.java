@@ -96,7 +96,7 @@ public class JVentana extends JFrame {
         mainPanel.add(comp, key); createdCards.put(key, comp);
         mainPanel.revalidate(); mainPanel.repaint(); }
 
-    // ---------- LOGIN / REGISTRO ----------
+
     public void onLoginSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
         this.customerId = c.getUserId();
@@ -130,7 +130,7 @@ public class JVentana extends JFrame {
         showCard("perfil");
     }
 
-    // --- Datos del usuario ---
+
     public Customer cargarPerfilUsuario() {
         if (customerId == null) return new Customer();
         return CustomerControler.getClienteId(customerId);
