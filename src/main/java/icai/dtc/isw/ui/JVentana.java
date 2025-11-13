@@ -2,8 +2,8 @@ package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
-
 import icai.dtc.isw.domain.MenuSemanal;
+
 import icai.dtc.isw.ui.panels.*;
 
 import javax.swing.*;
@@ -22,28 +22,23 @@ public class JVentana extends JFrame {
     private Customer usuario = new Customer();
     private MenuSemanal menuSemanal = new MenuSemanal();
 
-
     // --- Layout raíz ---
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
-    // Paneles post-auth (creación diferida)
+    // Paneles post-auth (lazy loading)
     private final Map<String, Supplier<JComponent>> postAuthFactories = new HashMap<>();
     private final Map<String, JComponent> createdCards = new HashMap<>();
-    private boolean postAuthPanelsCreated = false;
 
     // ventana principal
     public JVentana() {
         setTitle("MENUMASTER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450, 680);
-        //setResizable(false);
         setLocationRelativeTo(null);
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(BG);
 
         configurarInterfaz();
-        menuSemanal.generarMenu();
     }
 
     // instanciado de paneles
@@ -56,7 +51,7 @@ public class JVentana extends JFrame {
         mainPanel.add(new InicioPanel(this), "inicio");
         mainPanel.add(new RegistroPanel(this, controler), "registro");
         mainPanel.add(new LoginPanel(this), "login");
-        mainPanel.add(new PresupuestoPanel(this), "lista");
+        mainPanel.add(new PresupuestoPanel(this), "lista");   // si lo necesitas antes
 
         // POST-AUTH (lazy)
         postAuthFactories.put("presupuesto", () -> new PresupuestoPanel(this));
@@ -68,81 +63,88 @@ public class JVentana extends JFrame {
         postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
 
         add(mainPanel);
-        showCard("lista");
+
+        // Pantalla inicial
+        showCard("inicio");
     }
 
-    // API usada por los paneles
+    // --- LAZY LOADING REAL ---
+    public void ensurePanel(String key) {
+        if (!createdCards.containsKey(key)) {
+
+            Supplier<JComponent> f = postAuthFactories.get(key);
+            if (f != null) {
+                JComponent comp = f.get();
+                createdCards.put(key, comp);
+                mainPanel.add(comp, key);
+            }
+        }
+    }
+
+    // Navegación entre pantallas
     public void showCard(String key) {
+        ensurePanel(key);  // carga el panel solo cuando se necesita
         cardLayout.show(mainPanel, key);
     }
 
-    // mantiene los paneles de creación diferida
-    public void ensurePostAuthPanels() {
-        if (postAuthPanelsCreated) return;
-
-        if (customerId != null) {
-            usuario = cargarPerfilUsuario();
-        }
-        for (Map.Entry<String, Supplier<JComponent>> e : postAuthFactories.entrySet()) {
-            JComponent comp = e.getValue().get();
-            mainPanel.add(comp, e.getKey());
-            createdCards.put(e.getKey(), comp);
-        }
-        postAuthPanelsCreated = true;
-        mainPanel.revalidate();
-        mainPanel.repaint();
-    }
-
-    // repinta el panel que se especifica
     public void refreshCard(String key) {
+
+        // Si no existe el panel, no hacemos nada
         Supplier<JComponent> f = postAuthFactories.get(key);
         if (f == null) return;
+
+        // Si el panel ya existía, lo quitamos
         JComponent old = createdCards.get(key);
-        if (old != null) mainPanel.remove(old);
+        if (old != null) {
+            mainPanel.remove(old);
+            createdCards.remove(key);
+        }
+
+        // Crear un panel nuevo y reemplazarlo
         JComponent comp = f.get();
-        mainPanel.add(comp, key);
         createdCards.put(key, comp);
+        mainPanel.add(comp, key);
+
+        // Refrescar el layout
         mainPanel.revalidate();
         mainPanel.repaint();
     }
 
-    // metodo logica de cuando se aprueba el login
+    // ---------- LOGIN / REGISTRO ----------
     public void onLoginSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
         this.customerId = c.getUserId();
         this.usuario = cargarPerfilUsuario();
-        ensurePostAuthPanels();
+
+        ensurePanel("presupuesto");
         showCard("presupuesto");
     }
 
-    // lógica de cuando se aprueba el registro
     public void onRegisterSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Registro completado");
         this.customerId = c.getUserId();
         this.usuario = cargarPerfilUsuario();
-        ensurePostAuthPanels();
+
+        ensurePanel("presupuesto");
         showCard("presupuesto");
     }
 
-    // lógica de cuando la edición ha sido aprobada
     public void onEditSuccess() {
         JOptionPane.showMessageDialog(this, "Edición completada");
         showCard("menuDia");
     }
 
-    // lógica de cuando no se aprueba el login
     public void onAuthFailed(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("inicio");
     }
 
-    // lógica de cuando no se aprueba el registro
     public void onAuthFailed2(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("perfil");
     }
 
-    // carga los datos del usuario que esta actualmente conectado
+    // --- Datos del usuario ---
     public Customer cargarPerfilUsuario() {
         if (customerId == null) return new Customer();
         return CustomerControler.getClienteId(customerId);
@@ -152,10 +154,8 @@ public class JVentana extends JFrame {
     public void setCustomerId(String id) { this.customerId = id; }
     public Customer getUsuario() { return usuario; }
     public void setUsuario(Customer u) { this.usuario = u; }
-    public MenuSemanal getMenuSemanal(){
-        System.out.println(menuSemanal);
+    public MenuSemanal getMenuSemanal() {
         return menuSemanal;
-
     }
 
     // ---------- GUI Main ----------
