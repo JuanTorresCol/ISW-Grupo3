@@ -87,28 +87,14 @@ public class JVentana extends JFrame {
         cardLayout.show(mainPanel, key);
     }
 
+    // repinta el panel que se especifica
     public void refreshCard(String key) {
-
-        // Si no existe el panel, no hacemos nada
         Supplier<JComponent> f = postAuthFactories.get(key);
-        if (f == null) return;
-
-        // Si el panel ya existía, lo quitamos
-        JComponent old = createdCards.get(key);
-        if (old != null) {
-            mainPanel.remove(old);
-            createdCards.remove(key);
-        }
-
-        // Crear un panel nuevo y reemplazarlo
+        if (f == null) return; JComponent old = createdCards.get(key);
+        if (old != null) mainPanel.remove(old);
         JComponent comp = f.get();
-        createdCards.put(key, comp);
-        mainPanel.add(comp, key);
-
-        // Refrescar el layout
-        mainPanel.revalidate();
-        mainPanel.repaint();
-    }
+        mainPanel.add(comp, key); createdCards.put(key, comp);
+        mainPanel.revalidate(); mainPanel.repaint(); }
 
     // ---------- LOGIN / REGISTRO ----------
     public void onLoginSuccess(Customer c) {
