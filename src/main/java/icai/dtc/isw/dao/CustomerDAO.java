@@ -13,15 +13,15 @@ public class CustomerDAO {
 
     private static final Util util = new Util();
 
-    // ----------------- helpers internos -----------------
 
-    // Convierte lista -> "a,b,c"
+
+
     private static String listToString(ArrayList<String> lista) {
         if (lista == null || lista.isEmpty()) return "";
         return String.join(",", lista);
     }
 
-    // Convierte "a,b,c" -> lista
+
     private static ArrayList<String> stringToList(String data) {
         ArrayList<String> res = new ArrayList<>();
         if (data == null || data.isBlank()) return res;
@@ -36,7 +36,6 @@ public class CustomerDAO {
         return res;
     }
 
-    // Construye un Customer desde un ResultSet de `usuarios`
     private static Customer mapToCustomer(ResultSet rs) throws SQLException {
         String id = rs.getString("id");
         String name = rs.getString("name");
@@ -44,18 +43,18 @@ public class CustomerDAO {
         String gender = rs.getString("gender");
         int age = rs.getInt("age");
 
-        // foodrestriction: ARRAY en BD
+        // foodrestriction
         var foodRestrictionArray = rs.getArray("foodrestriction");
         ArrayList<String> illegalFood = util.toArrayList(foodRestrictionArray);
 
-        // alimentosnocome: VARCHAR/TEXT en BD
+        // alimentosnocome
         String noComeStr = rs.getString("alimentosnocome");
         ArrayList<String> alimentosNoCome = stringToList(noComeStr);
 
         return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome);
     }
 
-    // ----------------- métodos públicos -----------------
+
 
     // registra un nuevo cliente en la base de datos
     public static void registerCliente(Customer customer) {
