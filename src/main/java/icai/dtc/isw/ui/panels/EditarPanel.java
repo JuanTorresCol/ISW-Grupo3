@@ -43,32 +43,32 @@ public class EditarPanel extends JPanel {
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(new EmptyBorder(10, 10, 20, 10));
 
-        form.add(label("USUARIO"));
-        form.add(usuarioField);
+        form.add(center(label("USUARIO")));
+        form.add(center(usuarioField));
 
-        form.add(label("CONTRASEÑA"));
-        form.add(fieldWrap(contrasenaField));
+        form.add(center(label("CONTRASEÑA")));
+        form.add(center(fieldWrap(contrasenaField)));
 
-        form.add(label("CONFIRMAR CONTRASEÑA"));
-        form.add(fieldWrap(confirmarContrasenaField));
+        form.add(center(label("CONFIRMAR CONTRASEÑA")));
+        form.add(center(fieldWrap(confirmarContrasenaField)));
 
-        form.add(label("SEXO"));
-        form.add(fieldWrap(sexoComboBox));
+        form.add(center(label("SEXO")));
+        form.add(center(fieldWrap(sexoComboBox)));
 
-        form.add(label("EDAD"));
-        form.add(fieldWrap(edadSpinner));
+        form.add(center(label("EDAD")));
+        form.add(center(fieldWrap(edadSpinner)));
 
-        form.add(label("ALERGIAS/INTOLERANCIAS"));
+        form.add(center(label("ALERGIAS/INTOLERANCIAS")));
         JPanel alergias = flowLeft();
         for (JCheckBox cb : Arrays.asList(glutenCheckBox,lactosaCheckBox,huevoCheckBox,frutosSecosCheckBox,pescadoCheckBox,mariscoCheckBox,otroCheckBox)) {
             estilizarCheck(cb);
             alergias.add(cb);
         }
         alergias.add(otroAlergiaField);
-        form.add(alergias);
+        form.add(center(alergias));
 
-        form.add(label("ALIMENTOS QUE NO COMES"));
-        form.add(fieldWrap(alimentosNoComeField));
+        form.add(center(label("ALIMENTOS QUE NO COMES")));
+        form.add(center(fieldWrap(alimentosNoComeField)));
 
         JButton btnRegistrar = pillButton("GUARDAR");
         btnRegistrar.addActionListener(_ -> onEditar(app));
@@ -79,7 +79,6 @@ public class EditarPanel extends JPanel {
         JPanel actions = flowCenter();
         actions.add(btnRegistrar);
 
-        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
         add(t, BorderLayout.NORTH);
         add(form, BorderLayout.CENTER);
         add(stack(actions, btnBack), BorderLayout.SOUTH);

@@ -2,6 +2,7 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.utils.CreaMenus;
+import icai.dtc.isw.ui.JVentana;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,11 +28,12 @@ public class MenuSemanal {
     public MenuDiario getViernes() {return menus_semana.get("viernes");}
 
     // rellena la semana con recetas, dos por dia
-    public void generarMenu() {
+    public void generarMenu(JVentana app) {
         ArrayList<Receta> recetas = RecetaControler.getRecetas();
 
         // genera el menu semanal, null si no se puede
-        ArrayList<Receta> s = CreaMenus.creaMenuOptimo(recetas, presupuesto);
+
+        ArrayList<Receta> s = CreaMenus.creaMenuRes(recetas, presupuesto, app);
         if(s!= null) {
             this.menus_semana.put("lunes", new MenuDiario(s.get(0), s.get(1)));
             this.menus_semana.put("martes", new MenuDiario(s.get(2), s.get(3)));

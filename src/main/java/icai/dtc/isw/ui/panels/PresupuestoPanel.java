@@ -45,7 +45,7 @@ public class PresupuestoPanel extends JPanel {
 
             MenuSemanal menu = app.getMenuSemanal();
             menu.setPresupuesto(presupuesto);
-            menu.generarMenu();
+            menu.generarMenu(app);
             app.refreshCard("listaCompra");
             app.refreshCard("menuDia");
             if(menu.getLunes()!= null) {
