@@ -1,26 +1,34 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.RecetaControler;
+import icai.dtc.isw.domain.MenuSemanal;
+import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
 public class RecetasSimilaresPanel extends JPanel {
 
+    private JVentana app;
+
     public RecetasSimilaresPanel(JVentana app) {
+        this.app = app;
         setLayout(new BorderLayout());
         setBackground(BG);
         setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
 
-        JLabel t = pillTitle("RECETAS SIMILARES");
+        JLabel t = pillTitle("CAMBIAR RECETA");
 
         JPanel lista = new JPanel();
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        ArrayList<Receta> recetasCambio = obtenerRecetasCambio();
         for (int i=0;i<4;i++) {
-            lista.add(similarCard(app,"POLLO AL AJILLO CON VERDURAS", "30 mins", "FÁCIL"));
+            lista.add(similarCard("POLLO AL AJILLO CON VERDURAS", "30 mins", "FÁCIL"));
             lista.add(Box.createVerticalStrut(12));
         }
 
@@ -33,7 +41,7 @@ public class RecetasSimilaresPanel extends JPanel {
         ), BorderLayout.SOUTH);
     }
 
-    private JPanel similarCard(JVentana app, String titulo, String tiempo, String dificultad) {
+    private JPanel similarCard(String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10,0));
 
@@ -50,7 +58,7 @@ public class RecetasSimilaresPanel extends JPanel {
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         JButton sel = outlineButton("SELECCIONAR", _ -> {
-            JOptionPane.showMessageDialog(this, "Seleccionada receta similar");
+            JOptionPane.showMessageDialog(this, "Seleccionada receta similar (fakke)");
             app.showCard("menuDia");
         });
 
@@ -62,5 +70,18 @@ public class RecetasSimilaresPanel extends JPanel {
         card.add(img, BorderLayout.WEST);
         card.add(info, BorderLayout.CENTER);
         return card;
+    }
+    private ArrayList<Receta> obtenerRecetasCambio(){
+        ArrayList<Receta> recetasCambio = new ArrayList<>();
+        ArrayList<Receta> recetasOpcion = RecetaControler.getRecetas();
+        MenuSemanal menuS = app.getMenuSemanal();
+        ArrayList<Receta> recetasSemana = menuS.getRecetasMenu();
+
+        boolean flag = true;
+//        while(flag){
+//
+//        }
+
+        return recetasCambio;
     }
 }
