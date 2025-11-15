@@ -19,7 +19,7 @@ public class MenuSemanal {
     }
 
     public Map<String,MenuDiario> getMenuSemanal() {return menus_semana;}
-    public double getPresupuesto() {return presupuesto;}
+    // public double getPresupuesto() {return presupuesto;}
     public void setPresupuesto(int presupuesto) {this.presupuesto = presupuesto;}
     public MenuDiario getLunes() {return menus_semana.get("lunes");}
     public MenuDiario getMartes() {return menus_semana.get("martes");}
@@ -30,9 +30,7 @@ public class MenuSemanal {
     // rellena la semana con recetas, dos por dia
     public void generarMenu(JVentana app) {
         ArrayList<Receta> recetas = RecetaControler.getRecetas();
-
         // genera el menu semanal, null si no se puede
-
         ArrayList<Receta> s = CreaMenus.creaMenuRes(recetas, presupuesto, app);
         if(s!= null) {
             this.menus_semana.put("lunes", new MenuDiario(s.get(0), s.get(1)));
@@ -43,6 +41,15 @@ public class MenuSemanal {
         } else{
             this.menus_semana.put("lunes", null);
         }
+    }
+
+    public ArrayList<Receta> getRecetasMenu() {
+        ArrayList<Receta> recetas = new ArrayList<>();
+        for(MenuDiario dia :menus_semana.values()){
+            recetas.add(dia.getComida());
+            recetas.add(dia.getCena());
+        }
+        return recetas;
     }
 
     @Override

@@ -194,8 +194,10 @@ public class MenuDiaPanel extends JPanel {
         JPanel acciones = flowLeft();
         JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));
         JButton cambiar = outlineButton("CAMBIAR", _ -> app.showCard("recetasSimilares"));
+        JButton guardar = outlineButton("GUARDAR", _ -> System.out.println("Proximamente..."));
         acciones.add(ver);
         acciones.add(cambiar);
+        acciones.add(guardar);
         card.add(center(acciones));
 
         return card;

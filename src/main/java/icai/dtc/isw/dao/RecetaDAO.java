@@ -12,21 +12,33 @@ public class RecetaDAO {
 
     // devuelve una lista con todas las recetas que se encuentran en la base de datos
     public static ArrayList<Receta> getRecetas() {
-        Map<String, Ingrediente> ingredientes = new HashMap<>();
-        Connection con=ConnectionDAO.getInstance().getConnection();
+        Connection con = ConnectionDAO.getInstance().getConnection();
         ArrayList<Receta> lista = new ArrayList<>();
+
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM recetas");
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
+                Map<String, Ingrediente> ingredientes = new HashMap<>();
 
-                ArrayList<String> ingredient;
-                ingredient = util.toArrayList(rs.getArray(7));
-                for (int i = 0; i < ingredient.size(); i++) {
-                    List<String> partes = Arrays.asList(ingredient.get(i).split(","));
-                    ingredientes.put(partes.get(0),new Ingrediente(partes.get(0), partes.get(1), Double.parseDouble(partes.get(2))));
+                ArrayList<String> ingredient = util.toArrayList(rs.getArray(7));
+                for (String item : ingredient) {
+                    String[] partes = item.split(",");
+                    ingredientes.put(
+                            partes[0],
+                            new Ingrediente(partes[0], partes[1], Double.parseDouble(partes[2]))
+                    );
                 }
-                lista.add(new Receta(rs.getString(1),rs.getString(2), Dificultad.valueOf(rs.getString(6)),rs.getInt(3), rs.getDouble(4),rs.getString(5),ingredientes));
+
+                lista.add(new Receta(
+                        rs.getString(1),
+                        rs.getString(2),
+                        Dificultad.valueOf(rs.getString(6)),
+                        rs.getInt(3),
+                        rs.getDouble(4),
+                        rs.getString(5),
+                        ingredientes
+                ));
             }
 
         } catch (SQLException ex) {
@@ -38,20 +50,21 @@ public class RecetaDAO {
 
     // devuelve una receta en funcion al Id que tiene
     public static Receta getRecetaId(String recetaId) {
-        Map<String, Ingrediente> ingredientes = new HashMap<>();
-        Connection con=ConnectionDAO.getInstance().getConnection();
+        Connection con = ConnectionDAO.getInstance().getConnection();
         Receta re = null;
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM recetas WHERE id = ?")) {
             pst.setString(1, recetaId);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    ArrayList<String> ingredients;
-                    ingredients = util.toArrayList(rs.getArray(7));
-                    for (int i = 0; i < ingredients.size(); i++) {
-                        List<String> partes = Arrays.asList(ingredients.get(i).split(","));
-                        ingredientes.put(partes.get(0),new Ingrediente(partes.get(0),partes.get(1),Double.parseDouble(partes.get(2))));
+                    Map<String, Ingrediente> ingredientes = new HashMap<>();
+                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(7));
+                    for (String item : ingredients) {
+                        String[] partes = item.split(",");
+                        ingredientes.put(partes[0],
+                                new Ingrediente(partes[0], partes[1], Double.parseDouble(partes[2])));
                     }
-                    re = new Receta(rs.getString(1),rs.getString(2), Dificultad.valueOf(rs.getString(6)),rs.getInt(3), rs.getDouble(4),rs.getString(5),ingredientes);
+                    re = new Receta(rs.getString(1), rs.getString(2), Dificultad.valueOf(rs.getString(6)),
+                            rs.getInt(3), rs.getDouble(4), rs.getString(5), ingredientes);
                 }
             }
         } catch (SQLException ex) {
@@ -62,20 +75,20 @@ public class RecetaDAO {
 
     // devuelve una receta en funcion al nombre que esta tiene
     public static Receta getRecetaName(String recetaName) {
-        Map<String, Ingrediente> ingredientes = new HashMap<>();
-        Connection con=ConnectionDAO.getInstance().getConnection();
+        Connection con = ConnectionDAO.getInstance().getConnection();
         Receta re = null;
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM recetas WHERE nombre = ?")) {
             pst.setString(1, recetaName);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    ArrayList<String> ingredients;
-                    ingredients = util.toArrayList(rs.getArray(7));
-                    for (int i = 0; i < ingredients.size(); i++) {
-                        List<String> partes = Arrays.asList(ingredients.get(i).split(","));
-                        ingredientes.put(partes.get(0),new Ingrediente(partes.get(0), partes.get(1),Double.parseDouble(partes.get(2))));
+                    Map<String, Ingrediente> ingredientes = new HashMap<>();
+                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(7));
+                    for (String item : ingredients) {
+                        String[] partes = item.split(",");
+                        ingredientes.put(partes[0], new Ingrediente(partes[0], partes[1], Double.parseDouble(partes[2])));
                     }
-                    re = new Receta(rs.getString(1),rs.getString(2), Dificultad.valueOf(rs.getString(6)),rs.getInt(3), rs.getDouble(4),rs.getString(5),ingredientes);
+                    re = new Receta(rs.getString(1), rs.getString(2), Dificultad.valueOf(rs.getString(6)),
+                            rs.getInt(3), rs.getDouble(4), rs.getString(5), ingredientes);
                 }
             }
         } catch (SQLException ex) {

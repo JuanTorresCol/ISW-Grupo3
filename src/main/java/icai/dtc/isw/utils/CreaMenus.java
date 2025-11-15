@@ -13,24 +13,29 @@ public class CreaMenus {
     private static boolean contieneAlguno(Collection<String> ingredientes, Collection<String> lista) {
         if (ingredientes == null || ingredientes.isEmpty() || lista == null || lista.isEmpty()) return false;
         Set<String> set = lista.stream().map(String::toLowerCase).collect(Collectors.toSet());
+        System.out.println(ingredientes);
         for (String ing : ingredientes) {
-            if (ing != null && set.contains(ing.toLowerCase())) return true;
+            if (ing != null && set.contains(ing.toLowerCase())){
+                return true;
+            }
         }
         return false;
     }
 
     // devuelve las diez recetas que mas se ajustan a un presupuesto / alergias / preferencias, en el caso de que no se pueda devuelve null
     public static ArrayList<Receta> creaMenuRes(ArrayList<Receta> recetas, int presupuestoEuros, JVentana app) {
-        List<String> illegalFood = app.getUsuario().getIllegalFood();
-        List<String> noCome = app.getUsuario().getAlimentosNoCome();
+        List<String> illegalFood = app.getUsuario() != null && app.getUsuario().getIllegalFood() != null
+                ? app.getUsuario().getIllegalFood() : java.util.Collections.emptyList();
+        List<String> noCome = app.getUsuario() != null && app.getUsuario().getAlimentosNoCome() != null
+                ? app.getUsuario().getAlimentosNoCome() : java.util.Collections.emptyList();
 
         final int K = 10;
-        final int B = presupuestoEuros * 100;
+        final int B = Math.max(0, presupuestoEuros * 100);
         final int INF = 1_000_000;
 
-        List<Receta> legales = new ArrayList<>();
+        java.util.List<Receta> legales = new java.util.ArrayList<>();
         for (Receta r : recetas) {
-            Collection<String> ings = r.getIngredientes().keySet();
+            java.util.Collection<String> ings = r.getIngredientes().keySet();
             if (!contieneAlguno(ings, illegalFood)) {
                 legales.add(r);
             }
@@ -39,77 +44,65 @@ public class CreaMenus {
 
         int n = legales.size();
         int[] precio = new int[n];
-        boolean[] esNoCome = new boolean[n];
-
+        int[] bad = new int[n];
         for (int i = 0; i < n; i++) {
             Receta r = legales.get(i);
-            precio[i] = (int) Math.round(r.getPrecio() * 100.0);
-            esNoCome[i] = contieneAlguno(r.getIngredientes().keySet(), noCome);
+            precio[i] = (int) Math.round(r.getPrecio() * 100.0); // a céntimos
+            bad[i] = contieneAlguno(r.getIngredientes().keySet(), noCome) ? 1 : 0;
         }
 
-        List<Integer> preciosOrdenados = Arrays.stream(precio).boxed().sorted().collect(Collectors.toList());
-        long suma10 = 0;
-        for (int i = 0; i < Math.min(K, preciosOrdenados.size()); i++) suma10 += preciosOrdenados.get(i);
-        if (suma10 > B) return null;
+        java.util.List<Integer> preciosOrdenados =
+                java.util.Arrays.stream(precio).boxed().sorted().collect(java.util.stream.Collectors.toList());
+        long sumaK = 0;
+        for (int i = 0; i < K; i++) sumaK += preciosOrdenados.get(i);
+        if (sumaK > B) return null;
 
         int[][] dp = new int[K + 1][B + 1];
-        for (int k = 0; k <= K; k++) Arrays.fill(dp[k], INF);
+        for (int k = 0; k <= K; k++) java.util.Arrays.fill(dp[k], INF);
         dp[0][0] = 0;
 
-        int[][] prevS = new int[K + 1][B + 1];
-        int[][] prevIdx = new int[K + 1][B + 1];
-        for (int k = 0; k <= K; k++) {
-            Arrays.fill(prevS[k], -1);
-            Arrays.fill(prevIdx[k], -1);
-        }
+        Node[][] path = new Node[K + 1][B + 1];
 
         for (int i = 0; i < n; i++) {
             int w = precio[i];
-            int bad = esNoCome[i] ? 1 : 0;
-
+            int b = bad[i];
             for (int k = K; k >= 1; k--) {
                 for (int s = B; s >= w; s--) {
                     if (dp[k - 1][s - w] != INF) {
-                        int candBad = dp[k - 1][s - w] + bad;
-                        if (candBad < dp[k][s]) {
-                            dp[k][s] = candBad;
-                            prevS[k][s] = s - w;
-                            prevIdx[k][s] = i;
+                        int cand = dp[k - 1][s - w] + b;
+                        if (cand < dp[k][s]) {
+                            dp[k][s] = cand;
+                            path[k][s] = new Node(i, path[k - 1][s - w]);
                         }
                     }
                 }
             }
         }
+
         int minBad = INF;
-        for (int s = 0; s <= B; s++) {
-            if (dp[K][s] < minBad) minBad = dp[K][s];
-        }
+        for (int s = 0; s <= B; s++) if (dp[K][s] < minBad) minBad = dp[K][s];
         if (minBad == INF) return null;
 
         int bestS = -1;
         for (int s = B; s >= 0; s--) {
             if (dp[K][s] == minBad) { bestS = s; break; }
         }
-        if (bestS < 0) return null;
+        if (bestS < 0 || path[K][bestS] == null) return null;
 
-        ArrayList<Receta> resultado = new ArrayList<>(K);
-        int k = K, s = bestS;
-        boolean[] usado = new boolean[n];
-        while (k > 0 && s >= 0) {
-            int idx = prevIdx[k][s];
-            if (idx < 0) break; // seguridad
-            if (!usado[idx]) {
-                resultado.add(legales.get(idx));
-                usado[idx] = true;
-            }
-            int ps = prevS[k][s];
-            s = ps;
-            k--;
+        java.util.ArrayList<Receta> res = new java.util.ArrayList<>(K);
+        for (Node p = path[K][bestS]; p != null; p = p.prev) {
+            res.add(legales.get(p.idx));
         }
-        if (resultado.size() != K) return null;
-
-        return resultado;
+        java.util.Collections.reverse(res);
+        return res;
     }
+
+    private static final class Node {
+        final int idx;
+        final Node prev;
+        Node(int idx, Node prev) { this.idx = idx; this.prev = prev; }
+    }
+
 
     // metodo de prueba de interfaz
     public static ArrayList<Receta> prueba(ArrayList<Receta> lista){

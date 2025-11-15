@@ -79,29 +79,26 @@ public class Receta {
     public int getPrecioInt() {return precioInt;}
 
     // imprime en consola los ingredientes que contiene una receta
-    public void printIngredientes() {
-        for (Ingrediente ingrediente : ingredientes.values()) {
-            System.out.println(ingrediente.toString());
-        }
-    }
+//     public void printIngredientes() {
+//        for (Ingrediente ingrediente : ingredientes.values()) {
+//            System.out.println(ingrediente.toString());
+//        }
+//    }
 
     @Override
     public String toString() {
         return getNombre() + " - " + getDuracion() + " mins - " + getPrecio() + " $ \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
     }
-    //receta valida para el usuario??
+
     public boolean esAptaPara(Customer customer) {
         if (customer == null) return true;
 
         for (Ingrediente ingrediente : ingredientes.values()) {
             if (customer.noPuedeConsumir(ingrediente)) {
-                return false; // tiene algo que no puede o no quiere comer
+                return false;
             }
         }
         return true;
     }
-
-
-
 
 }
