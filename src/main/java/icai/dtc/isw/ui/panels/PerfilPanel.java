@@ -16,7 +16,9 @@ public class PerfilPanel extends JPanel {
         setBackground(BG);
 
         JLabel t = pillTitle("PERFIL");
-        setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 250));
+        JPanel titulo = basePanel(new BorderLayout());
+        titulo.add(t,BorderLayout.NORTH);
+
         JPanel content = new JPanel();
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));

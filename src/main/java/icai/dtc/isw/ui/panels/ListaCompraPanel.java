@@ -19,9 +19,6 @@ public class ListaCompraPanel extends JPanel {
         JPanel titulo = basePanel(new BorderLayout());
         titulo.add(t,BorderLayout.NORTH);
 
-
-
-
         DefaultListModel<String> model = new DefaultListModel<>();
         Lista lisa = new Lista(0,app.getMenuSemanal());
 
