@@ -47,9 +47,13 @@ public class PresupuestoPanel extends JPanel {
             menu.generarMenu();
             app.refreshCard("listaCompra");
             app.refreshCard("menuDia");
+            if(menu.getMenuSemanal()!= null) {
+                // Mostrar la siguiente pantalla
+                app.showCard("menuDia");
+            }else{
+                // Mostrar que ha ocurrido un error
 
-            // Mostrar la siguiente pantalla
-            app.showCard("menuDia");
+            }
         });
         //setBorder(BorderFactory.createEmptyBorder(100, 250, 0, 250));
 

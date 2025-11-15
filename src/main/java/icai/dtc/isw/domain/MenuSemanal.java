@@ -1,7 +1,7 @@
 package icai.dtc.isw.domain;
 
 import icai.dtc.isw.controler.RecetaControler;
-import icai.dtc.isw.utils.Knapsack;
+import icai.dtc.isw.utils.CreaMenus;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,13 +29,16 @@ public class MenuSemanal {
     // rellena la semana con recetas, dos por dia
     public void generarMenu() {
         ArrayList<Receta> recetas = RecetaControler.getRecetas();
-        //ArrayList<Receta> s= Knapsack.selecciona10(recetas,presupuesto);
-        ArrayList<Receta> s = Knapsack.prueba(recetas);
-        this.menus_semana.put("lunes",new MenuDiario(s.get(0),s.get(1)));
-        this.menus_semana.put("martes",new MenuDiario(s.get(2),s.get(3)));
-        this.menus_semana.put("miercoles", new MenuDiario(s.get(4),s.get(5)));
-        this.menus_semana.put("jueves", new MenuDiario(s.get(6),s.get(7)));
-        this.menus_semana.put("viernes",new MenuDiario(s.get(8),s.get(9)));
+
+        // genera el menu semanal, null si no se puede
+        ArrayList<Receta> s = CreaMenus.creaMenuOptimo(recetas, presupuesto);
+        if(s!= null) {
+            this.menus_semana.put("lunes", new MenuDiario(s.get(0), s.get(1)));
+            this.menus_semana.put("martes", new MenuDiario(s.get(2), s.get(3)));
+            this.menus_semana.put("miercoles", new MenuDiario(s.get(4), s.get(5)));
+            this.menus_semana.put("jueves", new MenuDiario(s.get(6), s.get(7)));
+            this.menus_semana.put("viernes", new MenuDiario(s.get(8), s.get(9)));
+        }
     }
 
     @Override

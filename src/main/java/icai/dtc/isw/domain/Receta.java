@@ -6,6 +6,8 @@ import icai.dtc.isw.utils.Util;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Math.round;
+
 
 public class Receta {
     Util util = new Util();
@@ -17,7 +19,7 @@ public class Receta {
     private int duracion;
     private Dificultad dificultad;
     private String id;
-    private int precioInt = (int) Math.round(precio * 100);
+    private int precioInt = (int) round(precio * 100);
 
     // calcula el precio de una receta
     private void calcularPrecio() {
@@ -27,7 +29,7 @@ public class Receta {
             Producto producto = productoCon.getProductoName(ingrediente.getNombre());
             calculo = calculo + producto.getPrecio_unit();
         }
-        this.precio = calculo;
+        this.precio = Math.round(calculo * 100.0) / 100.0;
     }
 
     // contructor de receta sin saber su precio
