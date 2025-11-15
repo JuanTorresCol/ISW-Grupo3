@@ -6,7 +6,6 @@ import icai.dtc.isw.ui.JVentana;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.HashMap;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
@@ -42,12 +41,12 @@ public class PresupuestoPanel extends JPanel {
         generar.addActionListener(_ -> {
             // Obtener el valor del spinner
             int presupuesto = ((Number) presupuestoSpinner.getValue()).intValue();
-
             MenuSemanal menu = app.getMenuSemanal();
             menu.setPresupuesto(presupuesto);
             menu.generarMenu(app);
             app.refreshCard("listaCompra");
             app.refreshCard("menuDia");
+
             if(menu.getLunes()!= null) {
                 // Mostrar la siguiente pantalla
                 app.showCard("menuDia");
@@ -74,7 +73,7 @@ public class PresupuestoPanel extends JPanel {
 
     }
 
-    public int getPresupuesto() {
-        return (int) presupuestoSpinner.getValue();
-    }
+//    public int getPresupuesto() {
+//        return (int) presupuestoSpinner.getValue();
+//    }
 }
