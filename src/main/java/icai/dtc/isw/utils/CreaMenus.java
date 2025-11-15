@@ -12,7 +12,6 @@ public class CreaMenus {
     private static boolean contieneAlguno(Collection<String> ingredientes, Collection<String> lista) {
         if (ingredientes == null || ingredientes.isEmpty() || lista == null || lista.isEmpty()) return false;
         Set<String> set = lista.stream().map(String::toLowerCase).collect(Collectors.toSet());
-        System.out.println(ingredientes);
         for (String ing : ingredientes) {
             if (ing != null && set.contains(ing.toLowerCase())){
                 return true;
@@ -101,7 +100,6 @@ public class CreaMenus {
         final Node prev;
         Node(int idx, Node prev) { this.idx = idx; this.prev = prev; }
     }
-
 
     // metodo de prueba de interfaz
 //    public static ArrayList<Receta> prueba(ArrayList<Receta> lista){

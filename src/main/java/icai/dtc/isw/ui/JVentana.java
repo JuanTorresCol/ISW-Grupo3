@@ -87,14 +87,14 @@ public class JVentana extends JFrame {
         cardLayout.show(mainPanel, key);
     }
 
-    // repinta el panel que se especifica
+    // Repinta el panel que se especifica
     public void refreshCard(String key) {
-        if (!javax.swing.SwingUtilities.isEventDispatchThread()) {
-            javax.swing.SwingUtilities.invokeLater(() -> refreshCard(key));
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(() -> refreshCard(key));
             return;
         }
 
-        java.util.function.Supplier<JComponent> f = postAuthFactories.get(key);
+        Supplier<JComponent> f = postAuthFactories.get(key);
         if (f == null) return;
 
         JComponent comp = createdCards.get(key);
@@ -102,10 +102,15 @@ public class JVentana extends JFrame {
             comp = f.get();
             createdCards.put(key, comp);
             mainPanel.add(comp, key);
-        }
-
-        if (comp instanceof icai.dtc.isw.ui.Refreshable) {
-            ((icai.dtc.isw.ui.Refreshable) comp).refreshAsync();
+        } else {
+            if (comp instanceof icai.dtc.isw.ui.Refreshable) {
+                ((icai.dtc.isw.ui.Refreshable) comp).refreshAsync();
+            } else {
+                mainPanel.remove(comp);
+                comp = f.get();
+                createdCards.put(key, comp);
+                mainPanel.add(comp, key);
+            }
         }
 
         mainPanel.revalidate();
@@ -152,10 +157,34 @@ public class JVentana extends JFrame {
 
 //    public String getCustomerId() { return customerId; }
 //    public void setCustomerId(String id) { this.customerId = id; }
+
     public Customer getUsuario() { return usuario; }
+
     public void setUsuario(Customer u) { this.usuario = u; }
+
     public MenuSemanal getMenuSemanal() {
         return menuSemanal;
+    }
+
+    public void logout() {
+        Runnable r = () -> {
+
+            this.customerId = null;
+            this.usuario = new Customer();
+            this.menuSemanal = new MenuSemanal();
+
+            for (JComponent comp : createdCards.values()) {
+                mainPanel.remove(comp);
+            }
+            createdCards.clear();
+
+            showCard("inicio");
+
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        };
+        if (SwingUtilities.isEventDispatchThread()) r.run();
+        else SwingUtilities.invokeLater(r);
     }
 
     // ---------- GUI Main ----------
