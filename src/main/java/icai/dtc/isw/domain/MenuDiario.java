@@ -1,6 +1,6 @@
 package icai.dtc.isw.domain;
 
-import icai.dtc.isw.dao.RecetaDAO;
+import icai.dtc.isw.controler.RecetaControler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class MenuDiario {
     private final int size = 2;
     private static double precio;
     private Map<String, Receta> recetas = new HashMap<>(size);
-    private RecetaDAO dao = new RecetaDAO();
+    private RecetaControler controler = new RecetaControler();
 
     public MenuDiario() {}
 
@@ -26,7 +26,7 @@ public class MenuDiario {
 
     public ArrayList<Receta> loadRecetas(){
         ArrayList<Receta> recetas = new ArrayList<>();
-        return dao.getRecetas();
+        return controler.getRecetas();
     }
 
     public Map<String,Receta> getRecetas() {

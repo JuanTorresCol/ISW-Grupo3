@@ -1,6 +1,6 @@
 package icai.dtc.isw.domain;
 
-import icai.dtc.isw.dao.ProductoDAO;
+import icai.dtc.isw.controler.ProductoControler;
 
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -28,7 +28,7 @@ public class Lista {
                 for (Receta receta : recetas) {
                     Map<String, Ingrediente> ingredienteMap = receta.getIngredientes();
                     for (String nombre : ingredienteMap.keySet()) {
-                        Producto producto = ProductoDAO.getProductoName(nombre);
+                        Producto producto = ProductoControler.getProductoName(nombre);
                         if (comprobarSiExiste(producto, productos)) {
                             productos.add(producto);
                         }

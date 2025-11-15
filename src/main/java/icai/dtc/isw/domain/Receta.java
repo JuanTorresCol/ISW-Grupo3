@@ -1,6 +1,6 @@
 package icai.dtc.isw.domain;
 
-import icai.dtc.isw.dao.ProductoDAO;
+import icai.dtc.isw.controler.ProductoControler;
 import icai.dtc.isw.utils.Util;
 
 import java.util.HashMap;
@@ -23,8 +23,8 @@ public class Receta {
     private void calcularPrecio() {
         double calculo = 0;
         for(Ingrediente ingrediente: ingredientes.values()){
-            ProductoDAO productoDAO = new ProductoDAO();
-            Producto producto = productoDAO.getProductoName(ingrediente.getNombre());
+            ProductoControler productoCon = new ProductoControler();
+            Producto producto = productoCon.getProductoName(ingrediente.getNombre());
             calculo = calculo + producto.getPrecio_unit();
         }
         this.precio = calculo;

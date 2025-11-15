@@ -1,7 +1,7 @@
 package icai.dtc.isw.domain;
 
-import icai.dtc.isw.dao.ProductoDAO;
-import icai.dtc.isw.dao.RecetaDAO;
+import icai.dtc.isw.controler.ProductoControler;
+import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.utils.Util;
 
 import java.util.ArrayList;
@@ -106,17 +106,17 @@ public class Producto {
 
     // metodo para registrar todos los productos que no aparecen ya en la base de datos
     public static void registerAllProductos(){
-        ProductoDAO productoDAO = new ProductoDAO();
-        RecetaDAO recetaDAO = new RecetaDAO();
+        ProductoControler productoCon = new ProductoControler();
+        RecetaControler recetaCon = new RecetaControler();
 
         ArrayList<Receta> recetas;
-        recetas = recetaDAO.getRecetas();
+        recetas = recetaCon.getRecetas();
         for (Receta receta : recetas) {
             Map<String,Ingrediente> ingredientes = receta.getIngredientes();;
             for (Ingrediente ingrediente : ingredientes.values()) {
-                Producto test = productoDAO.getProductoName(ingrediente.getNombre());
+                Producto test = productoCon.getProductoName(ingrediente.getNombre());
                 if (test==(null)) {
-                    productoDAO.registerProducto(new Producto(ingrediente));
+                    productoCon.registerProducto(new Producto(ingrediente));
                 }
             }
         }

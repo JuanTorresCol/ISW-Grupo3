@@ -1,6 +1,6 @@
 package icai.dtc.isw.domain;
 
-import icai.dtc.isw.dao.RecetaDAO;
+import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.utils.Knapsack;
 
 import java.awt.*;
@@ -28,7 +28,7 @@ public class MenuSemanal {
 
     // rellena la semana con recetas, dos por dia
     public void generarMenu() {
-        ArrayList<Receta> recetas = RecetaDAO.getRecetas();
+        ArrayList<Receta> recetas = RecetaControler.getRecetas();
         //ArrayList<Receta> s= Knapsack.selecciona10(recetas,presupuesto);
         ArrayList<Receta> s = Knapsack.prueba(recetas);
         this.menus_semana.put("lunes",new MenuDiario(s.get(0),s.get(1)));
