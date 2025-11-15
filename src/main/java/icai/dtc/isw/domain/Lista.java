@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Lista {
 
-    private int semana;
+    private final int semana;
     private ArrayList<Producto> productos;
 
     public Lista(int semana, MenuSemanal menu) {
@@ -61,6 +61,6 @@ public class Lista {
         return f;
     }
 
-    public ArrayList<Producto> getProductos() { return productos; }
+    // public ArrayList<Producto> getProductos() { return productos; }
 
 }

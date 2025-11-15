@@ -1,7 +1,6 @@
 package icai.dtc.isw.utils;
 
 import icai.dtc.isw.domain.Receta;
-import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.ui.JVentana;
 
 import java.util.*;
@@ -52,7 +51,7 @@ public class CreaMenus {
         }
 
         java.util.List<Integer> preciosOrdenados =
-                java.util.Arrays.stream(precio).boxed().sorted().collect(java.util.stream.Collectors.toList());
+                java.util.Arrays.stream(precio).boxed().sorted().toList();
         long sumaK = 0;
         for (int i = 0; i < K; i++) sumaK += preciosOrdenados.get(i);
         if (sumaK > B) return null;
@@ -105,10 +104,10 @@ public class CreaMenus {
 
 
     // metodo de prueba de interfaz
-    public static ArrayList<Receta> prueba(ArrayList<Receta> lista){
-        return new ArrayList<>(lista.subList(0,10));
-
-    }
+//    public static ArrayList<Receta> prueba(ArrayList<Receta> lista){
+//        return new ArrayList<>(lista.subList(0,10));
+//
+//    }
 
 }
 
