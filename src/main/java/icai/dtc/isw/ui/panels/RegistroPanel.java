@@ -158,7 +158,14 @@ public class RegistroPanel extends JPanel {
         if ("b".equals(resultado.getValue())) {
             app.onRegisterSuccess(resultado.getKey());
         } else {
-            app.onAuthFailed("El registro no se pudo completar");
+            if(userName==null){app.onAuthFailed("Introduzca un nombre de usuario");
+            } else if(pass==null){
+                app.onAuthFailed("Introduzca una constraseña");
+            } else if(!pass.equals(passCheck)){
+                app.onAuthFailed("Ambas contraseñas no coinciden");
+            } else{
+                app.onAuthFailed("El registro no se pudo completar");
+            }
         }
     }
 }

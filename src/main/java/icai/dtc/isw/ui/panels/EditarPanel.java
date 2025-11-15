@@ -144,7 +144,11 @@ public class EditarPanel extends JPanel {
             app.refreshCard("perfil");
             app.onEditSuccess();
         } else {
-            app.onAuthFailed2("La edición de perfil no se pudo completar");
+            if(!pass.equals(passCheck)){
+                app.onAuthFailed2("Las nuevas contraseñas no coinciden");
+            } else {
+                app.onAuthFailed2("La edición de perfil no se pudo completar");
+            }
         }
     }
 }

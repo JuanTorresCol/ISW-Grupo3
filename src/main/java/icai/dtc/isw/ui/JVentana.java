@@ -89,13 +89,28 @@ public class JVentana extends JFrame {
 
     // repinta el panel que se especifica
     public void refreshCard(String key) {
-        Supplier<JComponent> f = postAuthFactories.get(key);
-        if (f == null) return; JComponent old = createdCards.get(key);
-        if (old != null) mainPanel.remove(old);
-        JComponent comp = f.get();
-        mainPanel.add(comp, key); createdCards.put(key, comp);
-        mainPanel.revalidate(); mainPanel.repaint(); }
+        if (!javax.swing.SwingUtilities.isEventDispatchThread()) {
+            javax.swing.SwingUtilities.invokeLater(() -> refreshCard(key));
+            return;
+        }
 
+        java.util.function.Supplier<JComponent> f = postAuthFactories.get(key);
+        if (f == null) return;
+
+        JComponent comp = createdCards.get(key);
+        if (comp == null) {
+            comp = f.get();
+            createdCards.put(key, comp);
+            mainPanel.add(comp, key);
+        }
+
+        if (comp instanceof icai.dtc.isw.ui.Refreshable) {
+            ((icai.dtc.isw.ui.Refreshable) comp).refreshAsync();
+        }
+
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
 
     public void onLoginSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
@@ -130,14 +145,13 @@ public class JVentana extends JFrame {
         showCard("perfil");
     }
 
-
     public Customer cargarPerfilUsuario() {
         if (customerId == null) return new Customer();
         return CustomerControler.getClienteId(customerId);
     }
 
-    public String getCustomerId() { return customerId; }
-    public void setCustomerId(String id) { this.customerId = id; }
+//    public String getCustomerId() { return customerId; }
+//    public void setCustomerId(String id) { this.customerId = id; }
     public Customer getUsuario() { return usuario; }
     public void setUsuario(Customer u) { this.usuario = u; }
     public MenuSemanal getMenuSemanal() {
