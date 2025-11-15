@@ -6,6 +6,7 @@ import icai.dtc.isw.ui.JVentana;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.HashMap;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
@@ -47,12 +48,12 @@ public class PresupuestoPanel extends JPanel {
             menu.generarMenu();
             app.refreshCard("listaCompra");
             app.refreshCard("menuDia");
-            if(menu.getMenuSemanal()!= null) {
+            if(menu.getLunes()!= null) {
                 // Mostrar la siguiente pantalla
                 app.showCard("menuDia");
             }else{
                 // Mostrar que ha ocurrido un error
-
+                JOptionPane.showMessageDialog(this, "No se ha podido crear un menu con el presupuesto proporcionado");
             }
         });
         //setBorder(BorderFactory.createEmptyBorder(100, 250, 0, 250));

@@ -38,6 +38,8 @@ public class MenuSemanal {
             this.menus_semana.put("miercoles", new MenuDiario(s.get(4), s.get(5)));
             this.menus_semana.put("jueves", new MenuDiario(s.get(6), s.get(7)));
             this.menus_semana.put("viernes", new MenuDiario(s.get(8), s.get(9)));
+        } else{
+            this.menus_semana.put("lunes", null);
         }
     }
 

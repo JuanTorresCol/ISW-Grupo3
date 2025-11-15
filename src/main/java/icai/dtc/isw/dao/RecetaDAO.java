@@ -1,7 +1,6 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.*;
-import icai.dtc.isw.utils.Knapsack;
 import icai.dtc.isw.utils.Util;
 
 import java.sql.*;

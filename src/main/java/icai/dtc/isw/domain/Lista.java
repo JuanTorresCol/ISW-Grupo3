@@ -24,13 +24,16 @@ public class Lista {
         if (menu != null){
             Map<String, MenuDiario> menus = menu.getMenuSemanal();
             for (MenuDiario menuD : menus.values()) {
-                Collection<Receta> recetas =  menuD.getRecetas().values();
-                for (Receta receta : recetas) {
-                    Map<String, Ingrediente> ingredienteMap = receta.getIngredientes();
-                    for (String nombre : ingredienteMap.keySet()) {
-                        Producto producto = ProductoControler.getProductoName(nombre);
-                        if (comprobarSiExiste(producto, productos)) {
-                            productos.add(producto);
+                if(menuD != null) {
+                    Collection<Receta> recetas = menuD.getRecetas().values();
+
+                    for (Receta receta : recetas) {
+                        Map<String, Ingrediente> ingredienteMap = receta.getIngredientes();
+                        for (String nombre : ingredienteMap.keySet()) {
+                            Producto producto = ProductoControler.getProductoName(nombre);
+                            if (comprobarSiExiste(producto, productos)) {
+                                productos.add(producto);
+                            }
                         }
                     }
                 }
