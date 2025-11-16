@@ -93,6 +93,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         meta.setFont(SMALL);
         JButton sel = outlineButton("SELECCIONAR", _ -> {
             app.getMenuSemanal().cambioReceta(receta, app.getBloque(),app.getDia());
+            app.refreshCard("menuDia");
             app.showCard("menuDia");
         });
 
