@@ -101,7 +101,8 @@ public class CustomerControler {
                     sexo,
                     edad,
                     alergias,
-                    noComeList
+                    noComeList,
+                    usuario.getRecetasFav()
             );
 
             CustomerDAO.editCliente(customerEdit);
@@ -109,6 +110,10 @@ public class CustomerControler {
         }
 
         return flag;
+    }
+
+    public static void refreshFavoritos(Customer usuario){
+        CustomerDAO.editCliente(usuario);
     }
 
     // Convierte un String tipo "cerdo, marisco, alcohol" en ArrayList<String>

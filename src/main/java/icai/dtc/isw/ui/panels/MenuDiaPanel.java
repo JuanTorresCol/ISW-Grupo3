@@ -1,7 +1,9 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.domain.MenuDiario;
+import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
@@ -131,6 +133,7 @@ public class MenuDiaPanel extends JPanel {
             if (menuDia.getComida() != null) {
                 cards.add(menuCard(
                         app,
+                        menuDia.getComida(),
                         "Comida",
                         menuDia.getComida().getNombre(),
                         menuDia.getComida().getDuracion() + " mins",
@@ -142,6 +145,7 @@ public class MenuDiaPanel extends JPanel {
             if (menuDia.getCena() != null) {
                 cards.add(menuCard(
                         app,
+                        menuDia.getCena(),
                         "Cena",
                         menuDia.getCena().getNombre(),
                         menuDia.getCena().getDuracion() + " mins",
@@ -156,7 +160,7 @@ public class MenuDiaPanel extends JPanel {
         cards.repaint();
     }
 
-    private JPanel menuCard(JVentana app, String bloque, String titulo, String tiempo, String dificultad) {
+    private JPanel menuCard(JVentana app, Receta receta, String bloque, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(BG_OSCURO);
@@ -198,7 +202,11 @@ public class MenuDiaPanel extends JPanel {
             app.refreshCard("recetasSimilares");
             app.showCard("recetasSimilares");
         });
-        JButton guardar = outlineButton("GUARDAR", _ -> System.out.println("Proximamente..."));
+        JButton guardar = outlineButton("GUARDAR", _ -> {
+            app.getUsuario().anadirRecetaFav(receta);
+            CustomerControler.refreshFavoritos(app.getUsuario());
+            JOptionPane.showMessageDialog(this, "Receta guardada con éxito");
+        });
         acciones.add(ver);
         acciones.add(cambiar);
         acciones.add(guardar);
