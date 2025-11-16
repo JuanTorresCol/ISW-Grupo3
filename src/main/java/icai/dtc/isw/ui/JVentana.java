@@ -68,7 +68,6 @@ public class JVentana extends JFrame {
         showCard("inicio");
     }
 
-
     public void ensurePanel(String key) {
         if (!createdCards.containsKey(key)) {
 

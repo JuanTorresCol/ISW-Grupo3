@@ -59,4 +59,22 @@ public class MenuSemanal {
         }
         return "";
     }
+
+    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas){
+        ArrayList<Receta> recetasSimilares = new ArrayList<>();
+        for(Receta recetaTry : recetas){
+            if(recetasSimilares.size()>=4){break;}
+            boolean flag = true;
+            for(MenuDiario menuDia :menus_semana.values()){
+                if(menuDia.getRecetas().values().contains(recetaTry)){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                recetasSimilares.add(recetaTry);
+            }
+        }
+        return recetasSimilares;
+    }
 }
