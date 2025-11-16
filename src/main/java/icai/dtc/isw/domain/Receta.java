@@ -12,14 +12,14 @@ import static java.lang.Math.round;
 public class Receta {
     Util util = new Util();
 
-    private String nombre;
+    private final String nombre;
     private double precio;
-    private Map<String,Ingrediente> ingredientes;
+    private final Map<String,Ingrediente> ingredientes;
     private String descripcion;
     private int duracion;
     private Dificultad dificultad;
-    private String id;
-    private int precioInt = (int) round(precio * 100);
+    private final String id;
+    private final int precioInt = (int) round(precio * 100);
 
     // calcula el precio de una receta
     private void calcularPrecio() {
@@ -67,16 +67,16 @@ public class Receta {
     }
 
     public String getDescripcion() {return descripcion;}
-    public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
+    //public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
     public int getDuracion() {return duracion;}
-    public void setDuracion(int duracion) {this.duracion = duracion;}
+    //public void setDuracion(int duracion) {this.duracion = duracion;}
     public Dificultad getDificultad() {return dificultad;}
-    public void setDificultad(Dificultad dificultad) {this.dificultad = dificultad;}
+    //public void setDificultad(Dificultad dificultad) {this.dificultad = dificultad;}
     public Map<String,Ingrediente> getIngredientes() {return ingredientes;}
     public String getId() {return id;}
     public String getNombre() {return nombre;}
     public double getPrecio() {return precio;}
-    public int getPrecioInt() {return precioInt;}
+    //public int getPrecioInt() {return precioInt;}
 
     // imprime en consola los ingredientes que contiene una receta
 //     public void printIngredientes() {
@@ -90,15 +90,14 @@ public class Receta {
         return getNombre() + " - " + getDuracion() + " mins - " + getPrecio() + " $ \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
     }
 
-    public boolean esAptaPara(Customer customer) {
-        if (customer == null) return true;
-
-        for (Ingrediente ingrediente : ingredientes.values()) {
-            if (customer.noPuedeConsumir(ingrediente)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+//    public boolean esAptaPara(Customer customer) {
+//        if (customer == null) return true;
+//
+//        for (Ingrediente ingrediente : ingredientes.values()) {
+//            if (customer.noPuedeConsumir(ingrediente)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 }

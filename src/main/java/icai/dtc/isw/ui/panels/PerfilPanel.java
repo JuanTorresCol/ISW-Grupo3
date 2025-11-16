@@ -75,7 +75,7 @@ public class PerfilPanel extends JPanel {
         JLabel prev = labelBold("VER MENÚS ANTERIORES");
         JButton s1 = flatLink("Hace 1 semana >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
         JButton s2 = flatLink("Hace 2 semanas >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
-        JButton exit = flatLink("Cerrar Sesión >", _ -> app.showCard("inicio"));
+        JButton exit = flatLink("Cerrar Sesión >", _ -> app.logout());
         content.add(center(prev));
         content.add(center(s1));
         content.add(center(s2));

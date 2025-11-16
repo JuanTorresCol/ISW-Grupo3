@@ -1,7 +1,6 @@
 package icai.dtc.isw.utils;
 
 import icai.dtc.isw.domain.Receta;
-import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.ui.JVentana;
 
 import java.util.*;
@@ -13,7 +12,6 @@ public class CreaMenus {
     private static boolean contieneAlguno(Collection<String> ingredientes, Collection<String> lista) {
         if (ingredientes == null || ingredientes.isEmpty() || lista == null || lista.isEmpty()) return false;
         Set<String> set = lista.stream().map(String::toLowerCase).collect(Collectors.toSet());
-        System.out.println(ingredientes);
         for (String ing : ingredientes) {
             if (ing != null && set.contains(ing.toLowerCase())){
                 return true;
@@ -52,7 +50,7 @@ public class CreaMenus {
         }
 
         java.util.List<Integer> preciosOrdenados =
-                java.util.Arrays.stream(precio).boxed().sorted().collect(java.util.stream.Collectors.toList());
+                java.util.Arrays.stream(precio).boxed().sorted().toList();
         long sumaK = 0;
         for (int i = 0; i < K; i++) sumaK += preciosOrdenados.get(i);
         if (sumaK > B) return null;
@@ -103,12 +101,11 @@ public class CreaMenus {
         Node(int idx, Node prev) { this.idx = idx; this.prev = prev; }
     }
 
-
     // metodo de prueba de interfaz
-    public static ArrayList<Receta> prueba(ArrayList<Receta> lista){
-        return new ArrayList<>(lista.subList(0,10));
-
-    }
+//    public static ArrayList<Receta> prueba(ArrayList<Receta> lista){
+//        return new ArrayList<>(lista.subList(0,10));
+//
+//    }
 
 }
 

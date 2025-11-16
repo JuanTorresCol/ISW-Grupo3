@@ -101,7 +101,7 @@ public class RecetaDAO {
     public static void registerReceta(Receta receta) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "INSERT INTO recetas (id, nombre, duracion, precio, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?,?)";
-        Map<String, Ingrediente> ing =  new HashMap<>();
+        Map<String, Ingrediente> ing;
         ing = receta.getIngredientes();
         ArrayList<String> lista;
         lista = new ArrayList<>();
@@ -130,7 +130,7 @@ public class RecetaDAO {
     }
 
     // imprime por pantalla todas las recetas que se encuentran en la base de datos mostrando su ID
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         ArrayList<Receta> lista = RecetaDAO.getRecetas();
 
