@@ -1,7 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.controler.RecetaControler;
-import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
@@ -11,9 +10,13 @@ import java.util.ArrayList;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
-public class RecetasSimilaresPanel extends JPanel {
+import javax.swing.SwingWorker;
+import icai.dtc.isw.ui.Refreshable;
 
-    private JVentana app;
+public class RecetasSimilaresPanel extends JPanel implements Refreshable {
+
+    private final JVentana app;
+    private final JPanel lista;
 
     public RecetasSimilaresPanel(JVentana app) {
         this.app = app;
@@ -23,14 +26,10 @@ public class RecetasSimilaresPanel extends JPanel {
 
         JLabel t = pillTitle("CAMBIAR RECETA");
 
-        JPanel lista = new JPanel();
+        lista = new JPanel();
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
-        ArrayList<Receta> recetasCambio = app.getMenuSemanal().getRecetasSimilares(RecetaControler.getRecetas(), app.getUsuario());
-        for (Receta recetaCambio : recetasCambio) {
-            lista.add(similarCard(recetaCambio.getNombre(), recetaCambio.getDuracion()+" mins", recetaCambio.getDificultad().toString()));
-            lista.add(Box.createVerticalStrut(12));
-        }
+        lista.add(center(new JLabel("Cargando recetas similares...")));
 
         add(t, BorderLayout.NORTH);
         add(wrapCentered(lista), BorderLayout.CENTER);
@@ -39,6 +38,41 @@ public class RecetasSimilaresPanel extends JPanel {
                 _ -> app.showCard("listaCompra"),
                 _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
+
+        refreshAsync();
+    }
+
+    @Override
+    public void refreshAsync() {
+        lista.removeAll();
+        lista.add(center(new JLabel("Cargando recetas similares...")));
+        lista.revalidate();
+        lista.repaint();
+
+        new SwingWorker<ArrayList<Receta>, Void>() {
+            @Override
+            protected ArrayList<Receta> doInBackground() {
+                return app.getMenuSemanal()
+                        .getRecetasSimilares(RecetaControler.getRecetas(), app.getUsuario());
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    ArrayList<Receta> recetasCambio = get();
+                    lista.removeAll();
+                    for (Receta r : recetasCambio) {
+                        lista.add(similarCard(r.getNombre(), r.getDuracion()+" mins", r.getDificultad().toString()));
+                        lista.add(Box.createVerticalStrut(12));
+                    }
+                } catch (Exception ex) {
+                    lista.removeAll();
+                    lista.add(center(new JLabel("No se pudieron cargar las recetas.")));
+                }
+                lista.revalidate();
+                lista.repaint();
+            }
+        }.execute();
     }
 
     private JPanel similarCard(String titulo, String tiempo, String dificultad) {
@@ -58,7 +92,7 @@ public class RecetasSimilaresPanel extends JPanel {
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         JButton sel = outlineButton("SELECCIONAR", _ -> {
-            JOptionPane.showMessageDialog(this, "Seleccionada receta similar (fakke)");
+            JOptionPane.showMessageDialog(this, "Seleccionada receta similar (fake)");
             app.showCard("menuDia");
         });
 

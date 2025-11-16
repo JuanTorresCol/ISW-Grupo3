@@ -83,7 +83,6 @@ public class MenuDiaPanel extends JPanel {
                 _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
 
-
     }
 
     private void cambiarDia(int delta) {
@@ -193,7 +192,10 @@ public class MenuDiaPanel extends JPanel {
 
         JPanel acciones = flowLeft();
         JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));
-        JButton cambiar = outlineButton("CAMBIAR", _ -> app.showCard("recetasSimilares"));
+        JButton cambiar = outlineButton("CAMBIAR", _ -> {
+            app.refreshCard("recetasSimilares");
+            app.showCard("recetasSimilares");
+        });
         JButton guardar = outlineButton("GUARDAR", _ -> System.out.println("Proximamente..."));
         acciones.add(ver);
         acciones.add(cambiar);

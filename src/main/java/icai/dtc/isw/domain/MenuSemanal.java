@@ -6,6 +6,7 @@ import icai.dtc.isw.ui.JVentana;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,7 @@ public class MenuSemanal {
 
     public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer){
         ArrayList<Receta> recetasSimilares = new ArrayList<>();
+        Collections.shuffle(recetas);
         for(Receta recetaTry : recetas){
             if(recetasSimilares.size()>=4){break;}
             boolean flag = true;
