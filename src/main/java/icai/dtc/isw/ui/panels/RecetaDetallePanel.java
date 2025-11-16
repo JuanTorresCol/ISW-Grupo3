@@ -27,11 +27,11 @@ public class RecetaDetallePanel extends JPanel {
                 "1. Cocer la pasta.\n2. Saltear el pollo.\n3. Añadir verduras.\n4. Unir todo con la pasta y servir.");
 
         JPanel center = new JPanel();
-        setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
+        center.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(center(t));
-        center.add(Box.createVerticalStrut(15));
+        center.add(Box.createVerticalStrut(10));
         center.add(ing);
         center.add(Box.createVerticalStrut(10));
         center.add(steps);
