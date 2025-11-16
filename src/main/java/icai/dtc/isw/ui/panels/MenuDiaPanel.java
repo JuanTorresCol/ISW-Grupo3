@@ -72,8 +72,8 @@ public class MenuDiaPanel extends JPanel {
         cards.setOpaque(false);
         cards.setBorder(new EmptyBorder(10,10,10,10));
         cards.setLayout(new BoxLayout(cards, BoxLayout.Y_AXIS));
-        renderCards();          // pinta estado inicial
-        updateChipSelection();  // marca Lunes activo
+        renderCards();
+        updateChipSelection();
 
         add(header, BorderLayout.NORTH);
         add(stack(tiraDias, cards), BorderLayout.CENTER);
@@ -193,6 +193,8 @@ public class MenuDiaPanel extends JPanel {
         JPanel acciones = flowLeft();
         JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));
         JButton cambiar = outlineButton("CAMBIAR", _ -> {
+            app.setBloque(bloque);
+            app.setDia(idxDia);
             app.refreshCard("recetasSimilares");
             app.showCard("recetasSimilares");
         });

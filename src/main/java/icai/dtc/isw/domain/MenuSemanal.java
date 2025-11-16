@@ -90,4 +90,33 @@ public class MenuSemanal {
         }
         return recetasSimilares;
     }
+    public void cambioReceta(Receta receta, String bloque, int dia){
+        if(receta!=null) {
+            if (bloque.equals("Comida")) {
+                if (dia == 0) {
+                    getLunes().setComida(receta);
+                } else if (dia == 1) {
+                    getMartes().setComida(receta);
+                } else if (dia == 2) {
+                    getMiercoles().setComida(receta);
+                } else if (dia == 3) {
+                    getJueves().setComida(receta);
+                } else {
+                    getViernes().setComida(receta);
+                }
+            } else if (bloque.equals("Cena")) {
+                if (dia == 0) {
+                    getLunes().setCena(receta);
+                } else if (dia == 1) {
+                    getMartes().setCena(receta);
+                } else if (dia == 2) {
+                    getMiercoles().setCena(receta);
+                } else if (dia == 3) {
+                    getJueves().setCena(receta);
+                } else {
+                    getViernes().setCena(receta);
+                }
+            }
+        }
+    }
 }

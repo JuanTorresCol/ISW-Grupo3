@@ -62,7 +62,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
                     ArrayList<Receta> recetasCambio = get();
                     lista.removeAll();
                     for (Receta r : recetasCambio) {
-                        lista.add(similarCard(r.getNombre(), r.getDuracion()+" mins", r.getDificultad().toString()));
+                        lista.add(similarCard(r, r.getNombre(), r.getDuracion()+" mins", r.getDificultad().toString()));
                         lista.add(Box.createVerticalStrut(12));
                     }
                 } catch (Exception ex) {
@@ -75,7 +75,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         }.execute();
     }
 
-    private JPanel similarCard(String titulo, String tiempo, String dificultad) {
+    private JPanel similarCard(Receta receta, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10,0));
 
@@ -92,7 +92,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         JButton sel = outlineButton("SELECCIONAR", _ -> {
-            JOptionPane.showMessageDialog(this, "Seleccionada receta similar (fake)");
+            app.getMenuSemanal().cambioReceta(receta, app.getBloque(),app.getDia());
             app.showCard("menuDia");
         });
 

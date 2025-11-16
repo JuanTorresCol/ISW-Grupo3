@@ -27,12 +27,12 @@ public class MenuDiario {
         return recetas.get("cena");
     }
 
-    public void setComida(Map<String, Receta> recetas,  Receta receta) {
-        recetas.put("comida",receta);
+    public void setComida(Receta receta) {
+        this.recetas.put("comida",receta);
     }
 
     public void setCena(Receta receta) {
-        recetas.put("cena",receta);
+        this.recetas.put("cena",receta);
     }
 
     public double getprecio(){

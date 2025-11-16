@@ -21,6 +21,8 @@ public class JVentana extends JFrame {
     private String customerId;
     private Customer usuario = new Customer();
     private MenuSemanal menuSemanal = new MenuSemanal();
+    private String bloque;
+    private int dia;
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -185,6 +187,18 @@ public class JVentana extends JFrame {
         if (SwingUtilities.isEventDispatchThread()) r.run();
         else SwingUtilities.invokeLater(r);
     }
+    public void setBloque(String bloque) {
+        this.bloque = bloque;
+    }
+
+    public String getBloque() { return bloque; }
+
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    public int getDia() { return dia; }
+
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {
