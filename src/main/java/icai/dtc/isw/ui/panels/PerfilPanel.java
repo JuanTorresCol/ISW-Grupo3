@@ -72,13 +72,14 @@ public class PerfilPanel extends JPanel {
         content.add(Box.createVerticalStrut(12));
 
         // Histórico (placeholder)
-        JLabel prev = labelBold("VER MENÚS ANTERIORES");
-        JButton s1 = flatLink("Hace 1 semana >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
-        JButton s2 = flatLink("Hace 2 semanas >", _ -> JOptionPane.showMessageDialog(this, "Histórico en desarrollo"));
+        JLabel prev = labelBold("OTROS");
+        JButton s1 = flatLink("Recetas Guardadas", _ -> {
+            app.refreshCard("recetasGuardadas");
+            app.showCard("recetasGuardadas");
+        });
         JButton exit = flatLink("Cerrar Sesión >", _ -> app.logout());
         content.add(center(prev));
         content.add(center(s1));
-        content.add(center(s2));
         content.add(center(exit));
 
         add(content, BorderLayout.CENTER);
