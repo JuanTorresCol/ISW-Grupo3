@@ -60,7 +60,7 @@ public class MenuSemanal {
         return "";
     }
 
-    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas){
+    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer){
         ArrayList<Receta> recetasSimilares = new ArrayList<>();
         for(Receta recetaTry : recetas){
             if(recetasSimilares.size()>=4){break;}
@@ -68,6 +68,12 @@ public class MenuSemanal {
             for(MenuDiario menuDia :menus_semana.values()){
                 if(menuDia.getRecetas().values().contains(recetaTry)){
                     flag = false;
+                    break;
+                }
+            }
+            for(Ingrediente ingTry :recetaTry.getIngredientes().values()){
+                if(customer.getIllegalFood().contains(ingTry.getNombre())){
+                    flag=false;
                     break;
                 }
             }

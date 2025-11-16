@@ -26,9 +26,9 @@ public class RecetasSimilaresPanel extends JPanel {
         JPanel lista = new JPanel();
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
-        ArrayList<Receta> recetasCambio = obtenerRecetasCambio();
-        for (int i=0;i<4;i++) {
-            lista.add(similarCard("POLLO AL AJILLO CON VERDURAS", "30 mins", "FÁCIL"));
+        ArrayList<Receta> recetasCambio = app.getMenuSemanal().getRecetasSimilares(RecetaControler.getRecetas(), app.getUsuario());
+        for (Receta recetaCambio : recetasCambio) {
+            lista.add(similarCard(recetaCambio.getNombre(), recetaCambio.getDuracion()+" mins", recetaCambio.getDificultad().toString()));
             lista.add(Box.createVerticalStrut(12));
         }
 
@@ -70,18 +70,5 @@ public class RecetasSimilaresPanel extends JPanel {
         card.add(img, BorderLayout.WEST);
         card.add(info, BorderLayout.CENTER);
         return card;
-    }
-    private ArrayList<Receta> obtenerRecetasCambio(){
-        ArrayList<Receta> recetasCambio = new ArrayList<>();
-        ArrayList<Receta> recetasOpcion = RecetaControler.getRecetas();
-        MenuSemanal menuS = app.getMenuSemanal();
-        ArrayList<Receta> recetasSemana = menuS.getRecetasMenu();
-
-        boolean flag = true;
-//        while(flag){
-//
-//        }
-
-        return recetasCambio;
     }
 }
