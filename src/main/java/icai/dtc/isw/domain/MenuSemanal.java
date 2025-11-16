@@ -72,6 +72,10 @@ public class MenuSemanal {
                     flag = false;
                     break;
                 }
+                if(menuDia.getComida().getPrecio()< recetaTry.getPrecio()|menuDia.getCena().getPrecio()<recetaTry.getPrecio()){
+                    flag = false;
+                    break;
+                }
             }
             for(Ingrediente ingTry :recetaTry.getIngredientes().values()){
                 if(customer.getIllegalFood().contains(ingTry.getNombre())){
@@ -79,6 +83,7 @@ public class MenuSemanal {
                     break;
                 }
             }
+
             if(flag){
                 recetasSimilares.add(recetaTry);
             }
