@@ -129,5 +129,9 @@ public class Customer implements Serializable {
         }
         return recetasId;
     }
+
+    public void eliminarRecetaFav(Receta recetaElim){
+        this.recetas.remove(recetaElim);
+    }
 }
 

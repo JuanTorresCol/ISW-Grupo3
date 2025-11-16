@@ -5,6 +5,7 @@ import java.util.Map;
 
 import icai.dtc.isw.dao.CustomerDAO;
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.Receta;
 
 // clase que conecta el DAO de customer con la GUI
 public class CustomerControler {
@@ -130,6 +131,11 @@ public class CustomerControler {
             }
         }
         return lista;
+    }
+
+    public static void eliminarReceta(Customer usuario, Receta receta){
+        usuario.eliminarRecetaFav(receta);
+        CustomerDAO.editCliente(usuario);
     }
 }
 

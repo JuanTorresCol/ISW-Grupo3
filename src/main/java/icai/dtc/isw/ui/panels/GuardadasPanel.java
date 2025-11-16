@@ -1,5 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
@@ -94,7 +95,9 @@ public class GuardadasPanel extends JPanel implements Refreshable {
             JOptionPane.showMessageDialog(this, "Histórico en desarrollo");
         });
         JButton del = outlineButton("ELIMINAR", _ -> {
-            JOptionPane.showMessageDialog(this, "Histórico en desarrollo");
+            CustomerControler.eliminarReceta(app.getUsuario(),receta);
+            app.showCard("perfil");
+            JOptionPane.showMessageDialog(this, "Receta eliminada con éxito");
         });
 
         info.add(name);
