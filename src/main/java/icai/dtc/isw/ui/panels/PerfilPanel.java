@@ -55,7 +55,7 @@ public class PerfilPanel extends JPanel {
         } else {
             illegal = illegal.toUpperCase();
         }
-        content.add(keyValue("ALERGIAS/INTOLERANCIAS:", illegal));
+        content.add(keyValue("ALERGIAS:", illegal));
 
         // Alimentos que no come (ArrayList<String> -> String)
         String noCome;

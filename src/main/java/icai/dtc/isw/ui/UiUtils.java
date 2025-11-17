@@ -289,11 +289,13 @@ public final class UiUtils {
         JTextArea area = new JTextArea(cuerpo);
         area.setEditable(false);
         area.setFont(BODY);
-        area.setBackground(Color.WHITE);
-        area.setBorder(new EmptyBorder(10,10,10,10));
+        area.setBackground(BG);
+        area.setBorder(new EmptyBorder(10,20,10,20));
         cont.add(t);
         cont.add(Box.createVerticalStrut(4));
-        cont.add(new JScrollPane(area));
+        JScrollPane sp = new JScrollPane(area);
+        sp.setBorder(BorderFactory.createEmptyBorder());
+        cont.add(sp);
         return cont;
     }
 
