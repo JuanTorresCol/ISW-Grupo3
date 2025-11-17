@@ -226,7 +226,7 @@ public final class UiUtils {
     public static JPanel roundedCard() {
         JPanel p = new JPanel();
         p.setBackground(CARD_BG);
-        p.setBorder(new EmptyBorder(12, 14, 12, 14));
+        p.setBorder(new EmptyBorder(12, 10, 12, 10));
         p.setLayout(new BorderLayout());
         return p;
     }
