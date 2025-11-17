@@ -1,6 +1,8 @@
 package icai.dtc.isw.dao;
 
+import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.utils.Util;
 
 import java.sql.Connection;
@@ -12,9 +14,6 @@ import java.util.ArrayList;
 public class CustomerDAO {
 
     private static final Util util = new Util();
-
-
-
 
     private static String listToString(ArrayList<String> lista) {
         if (lista == null || lista.isEmpty()) return "";
@@ -51,15 +50,20 @@ public class CustomerDAO {
         String noComeStr = rs.getString("alimentosnocome");
         ArrayList<String> alimentosNoCome = stringToList(noComeStr);
 
-        return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome);
+        var favRecetasV = rs.getArray("favrecetas");
+        ArrayList<String> favRecetasId = util.toArrayList(favRecetasV);
+        ArrayList<Receta> favRecetas = new ArrayList<>();
+        for(String idReceta: favRecetasId){
+            favRecetas.add(RecetaControler.getRecetaId(idReceta));
+        }
+
+        return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome, favRecetas);
     }
-
-
 
     // registra un nuevo cliente en la base de datos
     public static void registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome) " +
+        String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome, favrecetas) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "VALUES (?,?,?,?,?,?,?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
@@ -77,6 +81,10 @@ public class CustomerDAO {
 
             // alimentosNoCome como CSV en un VARCHAR/TEXT
             pst.setString(7, listToString(customer.getAlimentosNoCome()));
+
+            pst.setArray(8, pst.getConnection().createArrayOf(
+                    "varchar",
+                    customer.getRecetasFavId().toArray(new String[0])));
 
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
@@ -149,7 +157,7 @@ public class CustomerDAO {
     public static void editCliente(Customer customerEdit) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "UPDATE usuarios SET name = ?, password = ?, gender = ?, age = ?, " +
-                "foodrestriction = ?, alimentosnocome = ? WHERE id = ?";
+                "foodrestriction = ?, alimentosnocome = ?, favrecetas = ? WHERE id = ?";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
 
@@ -165,7 +173,12 @@ public class CustomerDAO {
 
             pst.setString(6, listToString(customerEdit.getAlimentosNoCome()));
 
-            pst.setString(7, customerEdit.getUserId());
+            pst.setArray(7, pst.getConnection().createArrayOf(
+                    "varchar",
+                    customerEdit.getRecetasFavId().toArray(new String[0])
+            ));
+
+            pst.setString(8, customerEdit.getUserId());
 
             int rowsUpdated = pst.executeUpdate();
             if (rowsUpdated > 0) {

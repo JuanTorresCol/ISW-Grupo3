@@ -21,6 +21,8 @@ public class JVentana extends JFrame {
     private String customerId;
     private Customer usuario = new Customer();
     private MenuSemanal menuSemanal = new MenuSemanal();
+    private String bloque;
+    private int dia;
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -59,15 +61,15 @@ public class JVentana extends JFrame {
         postAuthFactories.put("recetaDetalle", () -> new JScrollPane(new RecetaDetallePanel(this)));
         postAuthFactories.put("recetasSimilares", () -> new JScrollPane(new RecetasSimilaresPanel(this)));
         postAuthFactories.put("listaCompra", () -> new ListaCompraPanel(this));
-        postAuthFactories.put("perfil", () -> new JScrollPane(new PerfilPanel(this)));
+        postAuthFactories.put("perfil", () -> new PerfilPanel(this));
         postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
+        postAuthFactories.put("recetasGuardadas", () -> new JScrollPane(new GuardadasPanel(this)));
 
         add(mainPanel);
 
         // Pantalla inicial
         showCard("inicio");
     }
-
 
     public void ensurePanel(String key) {
         if (!createdCards.containsKey(key)) {
@@ -186,6 +188,18 @@ public class JVentana extends JFrame {
         if (SwingUtilities.isEventDispatchThread()) r.run();
         else SwingUtilities.invokeLater(r);
     }
+    public void setBloque(String bloque) {
+        this.bloque = bloque;
+    }
+
+    public String getBloque() { return bloque; }
+
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    public int getDia() { return dia; }
+
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {

@@ -6,6 +6,7 @@ import icai.dtc.isw.ui.JVentana;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,5 +59,64 @@ public class MenuSemanal {
              return menu.toString();
         }
         return "";
+    }
+
+    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer){
+        ArrayList<Receta> recetasSimilares = new ArrayList<>();
+        Collections.shuffle(recetas);
+        for(Receta recetaTry : recetas){
+            if(recetasSimilares.size()>=4){break;}
+            boolean flag = true;
+            for(MenuDiario menuDia :menus_semana.values()){
+                if(menuDia.getRecetas().values().contains(recetaTry)){
+                    flag = false;
+                    break;
+                }
+                if(menuDia.getComida().getPrecio()< recetaTry.getPrecio()|menuDia.getCena().getPrecio()<recetaTry.getPrecio()){
+                    flag = false;
+                    break;
+                }
+            }
+            for(Ingrediente ingTry :recetaTry.getIngredientes().values()){
+                if(customer.getIllegalFood().contains(ingTry.getNombre())){
+                    flag=false;
+                    break;
+                }
+            }
+
+            if(flag){
+                recetasSimilares.add(recetaTry);
+            }
+        }
+        return recetasSimilares;
+    }
+    public void cambioReceta(Receta receta, String bloque, int dia){
+        if(receta!=null) {
+            if (bloque.equals("Comida")) {
+                if (dia == 0) {
+                    getLunes().setComida(receta);
+                } else if (dia == 1) {
+                    getMartes().setComida(receta);
+                } else if (dia == 2) {
+                    getMiercoles().setComida(receta);
+                } else if (dia == 3) {
+                    getJueves().setComida(receta);
+                } else {
+                    getViernes().setComida(receta);
+                }
+            } else if (bloque.equals("Cena")) {
+                if (dia == 0) {
+                    getLunes().setCena(receta);
+                } else if (dia == 1) {
+                    getMartes().setCena(receta);
+                } else if (dia == 2) {
+                    getMiercoles().setCena(receta);
+                } else if (dia == 3) {
+                    getJueves().setCena(receta);
+                } else {
+                    getViernes().setCena(receta);
+                }
+            }
+        }
     }
 }

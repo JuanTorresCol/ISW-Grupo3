@@ -5,6 +5,7 @@ import java.util.Map;
 
 import icai.dtc.isw.dao.CustomerDAO;
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.Receta;
 
 // clase que conecta el DAO de customer con la GUI
 public class CustomerControler {
@@ -101,7 +102,8 @@ public class CustomerControler {
                     sexo,
                     edad,
                     alergias,
-                    noComeList
+                    noComeList,
+                    usuario.getRecetasFav()
             );
 
             CustomerDAO.editCliente(customerEdit);
@@ -109,6 +111,10 @@ public class CustomerControler {
         }
 
         return flag;
+    }
+
+    public static void refreshFavoritos(Customer usuario){
+        CustomerDAO.editCliente(usuario);
     }
 
     // Convierte un String tipo "cerdo, marisco, alcohol" en ArrayList<String>
@@ -125,6 +131,11 @@ public class CustomerControler {
             }
         }
         return lista;
+    }
+
+    public static void eliminarReceta(Customer usuario, Receta receta){
+        usuario.eliminarRecetaFav(receta);
+        CustomerDAO.editCliente(usuario);
     }
 }
 

@@ -22,6 +22,8 @@ public class Customer implements Serializable {
     private ArrayList<String> illegalFood;
     // Alimentos que el usuario no quiere comer por preferencia
     private ArrayList<String> alimentosNoCome;
+    //recetas que el cliente ha guardado como favoritas
+    private ArrayList<Receta> recetas = new ArrayList<>();
 
     public Customer() {
         this.userId = util.createUserId("default");
@@ -47,7 +49,7 @@ public class Customer implements Serializable {
 
     // Constructor con todos los atributos
     public Customer(String userId, String userName, String userPass, String userGender, int userAge,
-                    ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome) {
+                    ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome, ArrayList<Receta> recetasFavo) {
         this.userId = userId;
         this.userName = userName;
         this.userPass = userPass;
@@ -55,6 +57,7 @@ public class Customer implements Serializable {
         this.userAge = userAge;
         this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();
         this.alimentosNoCome = (alimentosNoCome != null) ? alimentosNoCome : new ArrayList<>();
+        this.recetas = recetasFavo;
     }
 
     //getters y setters
@@ -111,6 +114,24 @@ public class Customer implements Serializable {
 
     public boolean noPuedeConsumir(Producto producto) {
         return producto != null && noPuedeConsumirNombre(producto.getNombre());
+    }
+
+    public ArrayList<Receta> getRecetasFav() {return recetas;}
+
+    public void anadirRecetaFav(Receta recetaNew){
+        this.recetas.add(recetaNew);
+    }
+
+    public ArrayList<String> getRecetasFavId(){
+        ArrayList<String> recetasId = new ArrayList<>();
+        for(Receta receta : this.recetas){
+            recetasId.add(receta.getId());
+        }
+        return recetasId;
+    }
+
+    public void eliminarRecetaFav(Receta recetaElim){
+        this.recetas.remove(recetaElim);
     }
 }
 

@@ -1,5 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
@@ -13,23 +14,23 @@ import static icai.dtc.isw.ui.UiUtils.*;
 import javax.swing.SwingWorker;
 import icai.dtc.isw.ui.Refreshable;
 
-public class RecetasSimilaresPanel extends JPanel implements Refreshable {
+public class GuardadasPanel extends JPanel implements Refreshable {
 
     private final JVentana app;
     private final JPanel lista;
 
-    public RecetasSimilaresPanel(JVentana app) {
+    public GuardadasPanel(JVentana app) {
         this.app = app;
         setLayout(new BorderLayout());
         setBackground(BG);
         setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
 
-        JLabel t = pillTitle("CAMBIAR RECETA");
+        JLabel t = pillTitle("FAVORITOS");
 
         lista = new JPanel();
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
-        lista.add(center(new JLabel("Cargando recetas similares...")));
+        lista.add(center(new JLabel("Cargando recetas guardadas...")));
 
         add(t, BorderLayout.NORTH);
         add(wrapCentered(lista), BorderLayout.CENTER);
@@ -45,29 +46,28 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
     @Override
     public void refreshAsync() {
         lista.removeAll();
-        lista.add(center(new JLabel("Cargando recetas similares...")));
+        lista.add(center(new JLabel("Cargando recetas guardadas...")));
         lista.revalidate();
         lista.repaint();
 
         new SwingWorker<ArrayList<Receta>, Void>() {
             @Override
             protected ArrayList<Receta> doInBackground() {
-                return app.getMenuSemanal()
-                        .getRecetasSimilares(RecetaControler.getRecetas(), app.getUsuario());
+                return app.getUsuario().getRecetasFav();
             }
 
             @Override
             protected void done() {
                 try {
-                    ArrayList<Receta> recetasCambio = get();
+                    ArrayList<Receta> recetasFavoritas = get();
                     lista.removeAll();
-                    for (Receta r : recetasCambio) {
+                    for (Receta r : recetasFavoritas) {
                         lista.add(similarCard(r, r.getNombre(), r.getDuracion()+" mins", r.getDificultad().toString()));
                         lista.add(Box.createVerticalStrut(12));
                     }
                 } catch (Exception ex) {
                     lista.removeAll();
-                    lista.add(center(new JLabel("No se pudieron cargar las recetas.")));
+                    lista.add(center(new JLabel("Aún no hay recetas guardadas.")));
                 }
                 lista.revalidate();
                 lista.repaint();
@@ -91,16 +91,20 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         name.setFont(H3);
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
-        JButton sel = outlineButton("SELECCIONAR", _ -> {
-            app.getMenuSemanal().cambioReceta(receta, app.getBloque(),app.getDia());
-            app.refreshCard("menuDia");
-            app.showCard("menuDia");
+        JButton infor = outlineButton("VER INFORMACION", _ -> {
+            JOptionPane.showMessageDialog(this, "Histórico en desarrollo");
+        });
+        JButton del = outlineButton("ELIMINAR", _ -> {
+            CustomerControler.eliminarReceta(app.getUsuario(),receta);
+            app.showCard("perfil");
+            JOptionPane.showMessageDialog(this, "Receta eliminada con éxito");
         });
 
         info.add(name);
         info.add(meta);
         info.add(Box.createVerticalStrut(6));
-        info.add(sel);
+        info.add(infor);
+        info.add(del);
 
         card.add(img, BorderLayout.WEST);
         card.add(info, BorderLayout.CENTER);

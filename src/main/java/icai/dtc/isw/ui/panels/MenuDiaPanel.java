@@ -1,7 +1,9 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.domain.MenuDiario;
+import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
@@ -72,8 +74,8 @@ public class MenuDiaPanel extends JPanel {
         cards.setOpaque(false);
         cards.setBorder(new EmptyBorder(10,10,10,10));
         cards.setLayout(new BoxLayout(cards, BoxLayout.Y_AXIS));
-        renderCards();          // pinta estado inicial
-        updateChipSelection();  // marca Lunes activo
+        renderCards();
+        updateChipSelection();
 
         add(header, BorderLayout.NORTH);
         add(stack(tiraDias, cards), BorderLayout.CENTER);
@@ -82,7 +84,6 @@ public class MenuDiaPanel extends JPanel {
                 _ -> app.showCard("listaCompra"),
                 _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
-
 
     }
 
@@ -132,6 +133,7 @@ public class MenuDiaPanel extends JPanel {
             if (menuDia.getComida() != null) {
                 cards.add(menuCard(
                         app,
+                        menuDia.getComida(),
                         "Comida",
                         menuDia.getComida().getNombre(),
                         menuDia.getComida().getDuracion() + " mins",
@@ -143,6 +145,7 @@ public class MenuDiaPanel extends JPanel {
             if (menuDia.getCena() != null) {
                 cards.add(menuCard(
                         app,
+                        menuDia.getCena(),
                         "Cena",
                         menuDia.getCena().getNombre(),
                         menuDia.getCena().getDuracion() + " mins",
@@ -157,7 +160,7 @@ public class MenuDiaPanel extends JPanel {
         cards.repaint();
     }
 
-    private JPanel menuCard(JVentana app, String bloque, String titulo, String tiempo, String dificultad) {
+    private JPanel menuCard(JVentana app, Receta receta, String bloque, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(BG_OSCURO);
@@ -193,8 +196,17 @@ public class MenuDiaPanel extends JPanel {
 
         JPanel acciones = flowLeft();
         JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));
-        JButton cambiar = outlineButton("CAMBIAR", _ -> app.showCard("recetasSimilares"));
-        JButton guardar = outlineButton("GUARDAR", _ -> System.out.println("Proximamente..."));
+        JButton cambiar = outlineButton("CAMBIAR", _ -> {
+            app.setBloque(bloque);
+            app.setDia(idxDia);
+            app.refreshCard("recetasSimilares");
+            app.showCard("recetasSimilares");
+        });
+        JButton guardar = outlineButton("GUARDAR", _ -> {
+            app.getUsuario().anadirRecetaFav(receta);
+            CustomerControler.refreshFavoritos(app.getUsuario());
+            JOptionPane.showMessageDialog(this, "Receta guardada con éxito");
+        });
         acciones.add(ver);
         acciones.add(cambiar);
         acciones.add(guardar);
