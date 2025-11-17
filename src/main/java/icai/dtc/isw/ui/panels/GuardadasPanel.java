@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import static icai.dtc.isw.ui.UiUtils.*;
 
 import javax.swing.SwingWorker;
+import javax.swing.border.EmptyBorder;
+
 import icai.dtc.isw.ui.Refreshable;
 
 public class GuardadasPanel extends JPanel implements Refreshable {
@@ -23,7 +25,7 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         this.app = app;
         setLayout(new BorderLayout());
         setBackground(BG);
-        setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
+        //setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
 
         JLabel t = pillTitle("FAVORITOS");
 
@@ -32,8 +34,15 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.add(center(new JLabel("Cargando recetas guardadas...")));
 
-        add(t, BorderLayout.NORTH);
-        add(wrapCentered(lista), BorderLayout.CENTER);
+
+        JScrollPane scroll = new JScrollPane(wrapCentered(lista));
+        scroll.getViewport().setBackground(BG);
+        scroll.setOpaque(false);
+        scroll.setBackground(BG);
+        scroll.setBorder(BorderFactory.createEmptyBorder(5,15,5,15));
+
+        add(center(t), BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
         add(bottomNav(
                 _ -> app.showCard("menuDia"),
                 _ -> app.showCard("listaCompra"),
