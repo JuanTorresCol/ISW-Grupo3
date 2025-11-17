@@ -48,7 +48,7 @@ public class Producto {
         if (this.nombre.equals("huevo")) {
             this.unidad = Unidad.u;
             this.cantidad = 12;
-            this.precio_unit = ingrediente.getPrecio_unitario()*12/(Integer.parseInt(cantidad.replace("g", ""))/50);
+            this.precio_unit = ingrediente.getPrecio_unitario()*12/(Integer.parseInt(cantidad.replace("u", "")));
         } else if (cantidad.contains("u")) {
             this.unidad = Unidad.u;
             this.cantidad = Integer.parseInt(cantidad.replace("u", ""));
