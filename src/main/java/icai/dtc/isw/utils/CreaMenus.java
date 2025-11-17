@@ -31,6 +31,8 @@ public class CreaMenus {
         final int B = Math.max(0, presupuestoEuros * 100);
         final int INF = 1_000_000;
 
+        Collections.shuffle(recetas);
+
         java.util.List<Receta> legales = new java.util.ArrayList<>();
         for (Receta r : recetas) {
             java.util.Collection<String> ings = r.getIngredientes().keySet();
