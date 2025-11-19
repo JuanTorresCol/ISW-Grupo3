@@ -183,27 +183,27 @@ public final class RecetasCsv {
 //        }
 //    }
 
-//    private static Unidad calcularUnidad(Ingrediente ing){
-//        if (ing.getNombre().equals("huevo")) {
-//            return Unidad.u;
-//        } else if (ing.getCantidad().contains("u")) {
-//            return Unidad.u;
-//        } else if (ing.getCantidad().contains("ml")) {
-//            return Unidad.l;
-//        } else if (ing.getCantidad().contains("l")) {
-//            return Unidad.l;
-//        } else if (ing.getCantidad().contains("g")) {
-//            return Unidad.kg;
-//        } else if (ing.getCantidad().contains("kg")) {
-//            return Unidad.kg;
-//        } else if (ing.getCantidad().contains("cda")) {
-//            return Unidad.u;
-//        } else if (ing.getCantidad().contains("cdta")) {
-//            return Unidad.u;
-//        } else {
-//            return Unidad.u;
-//        }
-//    }
+    private static Unidad calcularUnidad(Ingrediente ing){
+        if (ing.getNombre().equals("huevo")) {
+            return Unidad.u;
+        } else if (ing.getCantidad().contains("u")) {
+            return Unidad.u;
+        } else if (ing.getCantidad().contains("ml")) {
+            return Unidad.l;
+        } else if (ing.getCantidad().contains("l")) {
+            return Unidad.l;
+        } else if (ing.getCantidad().contains("g")) {
+            return Unidad.kg;
+        } else if (ing.getCantidad().contains("kg")) {
+            return Unidad.kg;
+        } else if (ing.getCantidad().contains("cda")) {
+            return Unidad.u;
+        } else if (ing.getCantidad().contains("cdta")) {
+            return Unidad.u;
+        } else {
+            return Unidad.u;
+        }
+    }
 
     // Carga de productos ya existentes
 //    static void main(String[] args) throws Exception{
@@ -231,21 +231,51 @@ public final class RecetasCsv {
 //        }
 //    }
 
-    // Carga de recetas ya existentes
-    static void main(String[] args) throws Exception {
-        Path path;
-        if (args.length == 0) {
+//    // Carga de recetas desde el csv
+//    static void main(String[] args) throws Exception {
+//        Path path;
+//        if (args.length == 0) {
+//
+//            path = Path.of("src/main/resources/recetas2.csv");
+//            System.err.println("No se pasó ruta por argumento. Usando por defecto: " + path.toAbsolutePath());
+//        } else {
+//            path = Path.of(args[0]);
+//        }
+//        List<Receta> recetas = leer(path);
+//        RecetaControler recetaControler = new RecetaControler();
+//        for (Receta receta : recetas) {
+//            recetaControler.registerReceta(receta);
+//        }
+//    }
 
+    // Carga de nuevos alimentos
+    static void main(String[] args) throws Exception{
+        Path path;
+        ProductoControler productoControler = new ProductoControler();
+        if (args.length == 0) {
             path = Path.of("src/main/resources/recetas2.csv");
             System.err.println("No se pasó ruta por argumento. Usando por defecto: " + path.toAbsolutePath());
         } else {
             path = Path.of(args[0]);
         }
+        Scanner scanner = new Scanner(System.in);
         List<Receta> recetas = leer(path);
-        RecetaControler recetaControler = new RecetaControler();
-        for (Receta receta : recetas) {
-            recetaControler.registerReceta(receta);
+        for(Receta receta : recetas){
+            for(Ingrediente ing : receta.getIngredientes().values()){
+                Unidad unidad = calcularUnidad(ing);
+                Producto test = productoControler.getProductoName(ing.getNombre());
+                if (test==(null)) {
+                    System.out.print("Ingrese el precio de: "+ing.getNombre()+ " "+ ing.getCantidad());
+                    double precio = scanner.nextDouble();
+                    productoControler.registerProducto(new Producto(ing, Math.round(precio * 100.0) / 100.0, unidad));
+                } else if (!test.getUnidadP().equals(unidad)) {
+                    System.out.print("Ingrese el precio de: "+ing.getNombre()+ " "+ ing.getCantidad());
+                    double precio = scanner.nextDouble();
+                    productoControler.registerProducto(new Producto(ing, Math.round(precio * 100.0) / 100.0, unidad));
+                }
+            }
         }
+        scanner.close();
     }
 }
 
