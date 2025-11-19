@@ -52,13 +52,16 @@ public class MenuSemanal {
         for(Producto p: productos) {
             for (MenuDiario menuDiario : this.menus_semana.values()) {
                 for (Receta receta : menuDiario.getRecetas().values()) {
-                    if(receta.getNombre().equals(p.getNombre())) {
-                        for(EntryLista entry : lista.getEntries()) {
-                            if(entry.getNombreEntrada().equals(p.getNombre())) {
-                                entry.otroMas();
-                            } else{
-                                lista.insertarEntry(new EntryLista(p.getNombre(), p.getPrecio(), 1, p.getUnidadP()));
+                    for(Ingrediente ing : receta.getIngredientes().values()) {
+                        if (ing.getNombre().equals(p.getNombre())) {
+                            boolean flag = true;
+                            for (EntryLista entry : lista.getEntries()) {
+                                if (entry.getNombreEntrada().equals(p.getNombre())) {
+                                    entry.otroMas();
+                                    flag = false;
+                                }
                             }
+                            if(flag) {lista.insertarEntry(new EntryLista(p.getNombre(), p.getPrecio(), 1, p.getUnidadP()));}
                         }
                     }
                 }

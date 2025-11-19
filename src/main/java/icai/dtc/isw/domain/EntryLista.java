@@ -21,7 +21,7 @@ public class EntryLista {
     }
 
     public String entradaString(){
-        return(String.valueOf(this.cantidad)+ this.unidad +" de "+this.nombre+" a un precio de: "+ this.precioCompra + "$.");
+        return(String.valueOf(this.cantidad)+ this.unidad +" de "+this.nombre+" a un precio de: "+ String.format("%.2f", this.precioCompra) + "$.");
     }
 
     public String getNombreEntrada(){

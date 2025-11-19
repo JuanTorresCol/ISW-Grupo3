@@ -6,7 +6,9 @@ public class ListaCompra {
 
     private ArrayList<EntryLista> listaCompra;
 
-    public ListaCompra(){}
+    public ListaCompra(){
+        this.listaCompra = new ArrayList<>();
+    }
 
     public void insertarEntry(EntryLista entry){
         this.listaCompra.add(entry);
@@ -18,7 +20,7 @@ public class ListaCompra {
         for(EntryLista entry : this.listaCompra){
             cadena.add(entry.entradaString());
         }
-        cadena.add("Precio total: "+ calculaPrecio()+ "$");
+        cadena.add("Precio total: "+ Math.round(calculaPrecio()*100)/100+ "$");
         return cadena;
     }
 
