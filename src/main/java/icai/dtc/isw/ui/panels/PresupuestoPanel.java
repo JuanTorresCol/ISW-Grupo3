@@ -1,5 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.ui.JVentana;
 
@@ -19,45 +20,86 @@ public class PresupuestoPanel extends JPanel {
         setBackground(BG);
 
         JLabel t = title("<html><div style='text-align: center;'>Introducir<br> presupuesto<br>semanal<html>");
-        t.setBorder(BorderFactory.createEmptyBorder(150,0,90,0));
+        t.setBorder(BorderFactory.createEmptyBorder(150, 0, 90, 0));
         add(t, BorderLayout.NORTH);
+
         JPanel center = new JPanel();
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
         JPanel dinero = flowCenter();
         presupuestoSpinner.setPreferredSize(new Dimension(100, 50));
-        presupuestoSpinner.setBorder(new EmptyBorder(0,0,0,0));
-        fuenteSpinner(presupuestoSpinner,H);
-        fondoSpinner(presupuestoSpinner,BG);
+        presupuestoSpinner.setBorder(new EmptyBorder(0, 0, 0, 0));
+        fuenteSpinner(presupuestoSpinner, H);
+        fondoSpinner(presupuestoSpinner, BG);
         dinero.add(presupuestoSpinner);
         JLabel euro = labelBig("€");
-        euro.setBorder(new EmptyBorder(0,0,0,30));
+        euro.setBorder(new EmptyBorder(0, 0, 0, 30));
         dinero.add(euro);
 
         ((JSpinner.DefaultEditor) presupuestoSpinner.getEditor()).getTextField().setColumns(6);
 
+        JProgressBar loading = new JProgressBar();
+        loading.setIndeterminate(true);
+        loading.setBorder(new EmptyBorder(20, 0, 0, 0));
+        loading.setVisible(false);
+
         JButton generar = pillButton("Generar menú");
         generar.addActionListener(_ -> {
-            // Obtener el valor del spinner
             int presupuesto = ((Number) presupuestoSpinner.getValue()).intValue();
             MenuSemanal menu = app.getMenuSemanal();
             menu.setPresupuesto(presupuesto);
-            menu.generarMenu(app);
-            app.setLista(menu.generarListaCompra());
-            app.refreshCard("listaCompra");
-            app.refreshCard("menuDia");
 
-            if(menu.getLunes()!= null) {
-                // Mostrar la siguiente pantalla
-                app.showCard("menuDia");
-            }else{
-                // Mostrar que ha ocurrido un error
-                JOptionPane.showMessageDialog(this, "No se ha podido crear un menu con el presupuesto proporcionado");
-            }
+            generar.setEnabled(false);
+            presupuestoSpinner.setEnabled(false);
+            loading.setVisible(true);
+
+            SwingWorker<ListaCompra, Void> worker = new SwingWorker<>() {
+                @Override
+                protected ListaCompra doInBackground() throws Exception {
+                    menu.generarMenu(app);
+
+                    if (menu.getLunes() == null) {
+                        return null;
+                    }
+                    return menu.generarListaCompra();
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        ListaCompra lista = get();
+                        if (lista != null && menu.getLunes() != null) {
+                            app.setLista(lista);
+                            app.refreshCard("listaCompra");
+                            app.refreshCard("menuDia");
+                            app.showCard("menuDia");
+                        } else {
+                            JOptionPane.showMessageDialog(
+                                    PresupuestoPanel.this,
+                                    "No se ha podido crear un menú con el presupuesto proporcionado"
+                            );
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(
+                                PresupuestoPanel.this,
+                                "Error al generar el menú/lista: " + ex.getMessage()
+                        );
+                    } finally {
+                        generar.setEnabled(true);
+                        presupuestoSpinner.setEnabled(true);
+                        loading.setVisible(false);
+                    }
+                }
+            };
+
+            worker.execute();
         });
+
         center.add(dinero);
         center.add(center(generar));
+        center.add(loading);
 
         add(center, BorderLayout.CENTER);
     }
