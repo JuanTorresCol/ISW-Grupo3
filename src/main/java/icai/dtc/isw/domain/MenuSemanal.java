@@ -70,13 +70,17 @@ public class MenuSemanal {
         return lista;
     }
 
-    public ArrayList<Receta> getRecetasMenu() {
-        ArrayList<Receta> recetas = new ArrayList<>();
-        for(MenuDiario dia :menus_semana.values()){
-            recetas.add(dia.getComida());
-            recetas.add(dia.getCena());
+    public ListaCompra updateLista(Receta receta, ListaCompra listaCompra) {
+        for(EntryLista entry: listaCompra.getEntries()) {
+            for(Ingrediente ing : receta.getIngredientes().values()) {
+                if(entry.getNombreEntrada().equals(ing.getNombre())) {
+                    if(entry.getCantidad()==1){
+                        listaCompra.deleteEntry(entry);
+                    } else{entry.unoMenos();}
+                }
+            }
         }
-        return recetas;
+        return listaCompra;
     }
 
     @Override

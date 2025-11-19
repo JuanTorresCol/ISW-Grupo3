@@ -20,6 +20,11 @@ public class EntryLista {
         this.cantidad += 1;
     }
 
+    public void unoMenos(){
+        this.precioCompra = this.precioCompra - this.precio;
+        this.cantidad -= 1;
+    }
+
     public String entradaString(){
         return(String.valueOf(this.cantidad)+ this.unidad +" de "+this.nombre+" a un precio de: "+ String.format("%.2f", this.precioCompra) + "$.");
     }
@@ -30,5 +35,8 @@ public class EntryLista {
 
     public double getPrecio(){
         return this.precio;
+    }
+    public int getCantidad(){
+        return this.cantidad;
     }
 }

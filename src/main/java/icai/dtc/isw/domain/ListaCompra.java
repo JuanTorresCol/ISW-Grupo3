@@ -14,6 +14,10 @@ public class ListaCompra {
         this.listaCompra.add(entry);
     }
 
+    public void deleteEntry(EntryLista entry){
+        this.listaCompra.remove(entry);
+    }
+
     public ArrayList<String> verEntradas(){
         ArrayList<String> cadena = new ArrayList<>();
         cadena.add("Lista de la compra:");
