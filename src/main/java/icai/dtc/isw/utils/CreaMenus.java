@@ -47,7 +47,8 @@ public class CreaMenus {
         int[] bad = new int[n];
         for (int i = 0; i < n; i++) {
             Receta r = legales.get(i);
-            precio[i] = (int) Math.round(r.getPrecio() * 100.0); // a céntimos
+//            precio[i] = (int) Math.round(r.getPrecio() * 100.0); // a céntimos
+            precio[i] = 10;
             bad[i] = contieneAlguno(r.getIngredientes().keySet(), noCome) ? 1 : 0;
         }
 

@@ -12,7 +12,8 @@ public class MenuDiario {
     public MenuDiario(Receta receta, Receta receta2) {
         recetas.put("comida",receta);
         recetas.put("cena",receta2);
-        this.precio=receta.getPrecio() + receta2.getPrecio();
+        this.precio= 10;
+//        this.precio=receta.getPrecio() + receta2.getPrecio();
     }
 
     public Map<String,Receta> getRecetas() {

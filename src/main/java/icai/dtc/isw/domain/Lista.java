@@ -50,6 +50,7 @@ public class Lista {
         }
         return cadena;
     }
+
     private boolean comprobarSiExiste(Producto producto, ArrayList<Producto> productos){
         boolean f = true;
         for(Producto productoCheck : productos){

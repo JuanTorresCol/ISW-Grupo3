@@ -21,22 +21,21 @@ public class RecetaDAO {
             while (rs.next()) {
                 Map<String, Ingrediente> ingredientes = new HashMap<>();
 
-                ArrayList<String> ingredient = util.toArrayList(rs.getArray(7));
+                ArrayList<String> ingredient = util.toArrayList(rs.getArray(6));
                 for (String item : ingredient) {
                     String[] partes = item.split(",");
                     ingredientes.put(
                             partes[0],
-                            new Ingrediente(partes[0], partes[1], Double.parseDouble(partes[2]))
+                            new Ingrediente(partes[0], partes[1])
                     );
                 }
 
                 lista.add(new Receta(
                         rs.getString(1),
                         rs.getString(2),
-                        Dificultad.valueOf(rs.getString(6)),
+                        Dificultad.valueOf(rs.getString(5)),
                         rs.getInt(3),
-                        rs.getDouble(4),
-                        rs.getString(5),
+                        rs.getString(4),
                         ingredientes
                 ));
             }
@@ -57,14 +56,14 @@ public class RecetaDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     Map<String, Ingrediente> ingredientes = new HashMap<>();
-                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(7));
+                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(6));
                     for (String item : ingredients) {
                         String[] partes = item.split(",");
                         ingredientes.put(partes[0],
-                                new Ingrediente(partes[0], partes[1], Double.parseDouble(partes[2])));
+                                new Ingrediente(partes[0], partes[1]));
                     }
-                    re = new Receta(rs.getString(1), rs.getString(2), Dificultad.valueOf(rs.getString(6)),
-                            rs.getInt(3), rs.getDouble(4), rs.getString(5), ingredientes);
+                    re = new Receta(rs.getString(1), rs.getString(2), Dificultad.valueOf(rs.getString(5)),
+                            rs.getInt(3), rs.getString(4), ingredientes);
                 }
             }
         } catch (SQLException ex) {
@@ -82,13 +81,13 @@ public class RecetaDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     Map<String, Ingrediente> ingredientes = new HashMap<>();
-                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(7));
+                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(6));
                     for (String item : ingredients) {
                         String[] partes = item.split(",");
-                        ingredientes.put(partes[0], new Ingrediente(partes[0], partes[1], Double.parseDouble(partes[2])));
+                        ingredientes.put(partes[0], new Ingrediente(partes[0], partes[1]));
                     }
-                    re = new Receta(rs.getString(1), rs.getString(2), Dificultad.valueOf(rs.getString(6)),
-                            rs.getInt(3), rs.getDouble(4), rs.getString(5), ingredientes);
+                    re = new Receta(rs.getString(1), rs.getString(2), Dificultad.valueOf(rs.getString(5)),
+                            rs.getInt(3), rs.getString(4), ingredientes);
                 }
             }
         } catch (SQLException ex) {
@@ -100,7 +99,7 @@ public class RecetaDAO {
     // registra una nueva receta en la base de datos
     public static void registerReceta(Receta receta) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO recetas (id, nombre, duracion, precio, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO recetas (id, nombre, duracion, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?)";
         Map<String, Ingrediente> ing;
         ing = receta.getIngredientes();
         ArrayList<String> lista;
@@ -109,17 +108,16 @@ public class RecetaDAO {
             String key = entry.getKey();
             Ingrediente values = entry.getValue();
 
-            String concatenado = key + "," + values.getCantidad() + "," + values.getPrecio_unitario();
+            String concatenado = key + "," + values.getCantidad();
             lista.add(concatenado);
         }
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, receta.getId());
             pst.setString(2, receta.getNombre());
             pst.setInt(3, receta.getDuracion());
-            pst.setDouble(4, receta.getPrecio());
-            pst.setString(5, receta.getDescripcion());
-            pst.setString(6, String.valueOf(receta.getDificultad()));
-            pst.setArray(7,pst.getConnection().createArrayOf("VARCHAR", lista.toArray(new String[0])));
+            pst.setString(4, receta.getDescripcion());
+            pst.setString(5, String.valueOf(receta.getDificultad()));
+            pst.setArray(6,pst.getConnection().createArrayOf("VARCHAR", lista.toArray(new String[0])));
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("Receta insertada con éxito: " + receta.getId());
@@ -137,15 +135,5 @@ public class RecetaDAO {
         for (Receta receta : lista) {
             System.out.println("He leído la receta: " + receta.toString());
         }
-
-
-
-//        ArrayList<Receta> seleccion = Knapsack.selecciona10(lista,110);
-//
-//        System.out.println(seleccion);
-
-
-
-
     }
 }
