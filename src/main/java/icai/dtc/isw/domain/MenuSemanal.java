@@ -1,5 +1,6 @@
 package icai.dtc.isw.domain;
 
+import icai.dtc.isw.controler.ProductoControler;
 import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.utils.CreaMenus;
 import icai.dtc.isw.ui.JVentana;
@@ -44,6 +45,28 @@ public class MenuSemanal {
         }
     }
 
+    public ListaCompra generarListaCompra() {
+        ListaCompra lista = new ListaCompra();
+        ProductoControler productoControler =  new ProductoControler();
+        ArrayList<Producto> productos = productoControler.getProductos();
+        for(Producto p: productos) {
+            for (MenuDiario menuDiario : this.menus_semana.values()) {
+                for (Receta receta : menuDiario.getRecetas().values()) {
+                    if(receta.getNombre().equals(p.getNombre())) {
+                        for(EntryLista entry : lista.getEntries()) {
+                            if(entry.getNombreEntrada().equals(p.getNombre())) {
+                                entry.otroMas();
+                            } else{
+                                lista.insertarEntry(new EntryLista(p.getNombre(), p.getPrecio(), 1, p.getUnidadP()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return lista;
+    }
+
     public ArrayList<Receta> getRecetasMenu() {
         ArrayList<Receta> recetas = new ArrayList<>();
         for(MenuDiario dia :menus_semana.values()){
@@ -61,7 +84,7 @@ public class MenuSemanal {
         return "";
     }
 
-    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer){
+    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer, JVentana app){
         ArrayList<Receta> recetasSimilares = new ArrayList<>();
         Collections.shuffle(recetas);
         for(Receta recetaTry : recetas){
@@ -72,10 +95,10 @@ public class MenuSemanal {
                     flag = false;
                     break;
                 }
-//                if(menuDia.getComida().getPrecio()< recetaTry.getPrecio()|menuDia.getCena().getPrecio()<recetaTry.getPrecio()){
-//                    flag = false;
-//                    break;
-//                }
+                if(menuDia.getPrecioMenu(app.getLista())< recetaTry.getPrecio(app.getLista())*2){
+                    flag = false;
+                    break;
+                }
             }
             for(Ingrediente ingTry :recetaTry.getIngredientes().values()){
                 if(customer.getIllegalFood().contains(ingTry.getNombre())){
@@ -90,6 +113,7 @@ public class MenuSemanal {
         }
         return recetasSimilares;
     }
+
     public void cambioReceta(Receta receta, String bloque, int dia){
         if(receta!=null) {
             if (bloque.equals("Comida")) {

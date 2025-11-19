@@ -59,7 +59,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
             @Override
             protected ArrayList<Receta> doInBackground() {
                 return app.getMenuSemanal()
-                        .getRecetasSimilares(RecetaControler.getRecetas(), app.getUsuario());
+                        .getRecetasSimilares(RecetaControler.getRecetas(), app.getUsuario(), app);
             }
 
             @Override

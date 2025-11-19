@@ -3,6 +3,8 @@ package icai.dtc.isw.controler;
 import icai.dtc.isw.dao.ProductoDAO;
 import icai.dtc.isw.domain.Producto;
 
+import java.util.ArrayList;
+
 // clase que conecta el DAO con la GUI
 public class ProductoControler {
 
@@ -15,5 +17,9 @@ public class ProductoControler {
     // Devuelve el producto por el nombre que tiene
     public static Producto getProductoName(String productoName) {
         return productoDAO.getProductoName(productoName);
+    }
+
+    public static ArrayList<Producto> getProductos() {
+        return productoDAO.getProductos();
     }
 }

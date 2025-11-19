@@ -44,6 +44,7 @@ public class PresupuestoPanel extends JPanel {
             MenuSemanal menu = app.getMenuSemanal();
             menu.setPresupuesto(presupuesto);
             menu.generarMenu(app);
+            app.setLista(menu.generarListaCompra());
             app.refreshCard("listaCompra");
             app.refreshCard("menuDia");
 
@@ -55,25 +56,10 @@ public class PresupuestoPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "No se ha podido crear un menu con el presupuesto proporcionado");
             }
         });
-        //setBorder(BorderFactory.createEmptyBorder(100, 250, 0, 250));
-
-        //center.add(Box.createVerticalStrut(10));
-
-
         center.add(dinero);
-        //center.add(Box.createVerticalStrut(20));
         center.add(center(generar));
 
         add(center, BorderLayout.CENTER);
-        /*add(bottomNav(
-                _ -> {app.showCard("menuDia");app.refreshCard("menuDia");},
-                _ -> {app.showCard("listaCompra");app.refreshCard("listaCompra");},
-                _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
-        ), BorderLayout.SOUTH);*/
-
     }
 
-//    public int getPresupuesto() {
-//        return (int) presupuestoSpinner.getValue();
-//    }
 }

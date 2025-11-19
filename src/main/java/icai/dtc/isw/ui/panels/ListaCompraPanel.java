@@ -1,6 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
-import icai.dtc.isw.domain.Lista;
+import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.ui.JVentana;
 import icai.dtc.isw.ui.Refreshable;
 
@@ -65,8 +65,8 @@ public class ListaCompraPanel extends JPanel implements Refreshable {
         new SwingWorker<java.util.List<String>, Void>() {
             @Override
             protected java.util.List<String> doInBackground() {
-                Lista listaDom = new Lista(0, app.getMenuSemanal());
-                ArrayList<String> productos = listaDom.visualizarProductos();
+                ListaCompra listaDom = app.getLista();
+                ArrayList<String> productos = listaDom.verEntradas();
                 return productos != null ? productos : Collections.emptyList();
             }
 

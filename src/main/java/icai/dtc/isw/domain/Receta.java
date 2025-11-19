@@ -53,6 +53,19 @@ public class Receta {
         return getNombre() + " - " + getDuracion() + " mins - " +" \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
     }
 
+    public double getPrecio(ListaCompra lista){
+        double calculo = 0.00;
+        for(Ingrediente ing : ingredientes.values()){
+            for(EntryLista entry: lista.getEntries()){
+                if(ing.getNombre().equals(entry.getNombreEntrada())){
+                    calculo = calculo + entry.getPrecio();
+                    break;
+                }
+            }
+        }
+        return calculo;
+    }
+
 //    public boolean esAptaPara(Customer customer) {
 //        if (customer == null) return true;
 //

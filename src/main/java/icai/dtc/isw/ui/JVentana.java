@@ -2,6 +2,7 @@ package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.domain.MenuSemanal;
 
 import icai.dtc.isw.ui.panels.*;
@@ -23,6 +24,7 @@ public class JVentana extends JFrame {
     private MenuSemanal menuSemanal = new MenuSemanal();
     private String bloque;
     private int dia;
+    private ListaCompra lista;
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -192,14 +194,17 @@ public class JVentana extends JFrame {
         this.bloque = bloque;
     }
 
-    public String getBloque() { return bloque; }
+    public String getBloque() { return this.bloque; }
 
     public void setDia(int dia) {
         this.dia = dia;
     }
 
-    public int getDia() { return dia; }
-
+    public int getDia() { return this.dia; }
+    public void setLista(ListaCompra lista){
+        this.lista = lista;
+    }
+    public ListaCompra getLista(){return this.lista;}
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {

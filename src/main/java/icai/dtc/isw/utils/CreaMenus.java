@@ -1,5 +1,8 @@
 package icai.dtc.isw.utils;
 
+import icai.dtc.isw.controler.ProductoControler;
+import icai.dtc.isw.domain.Ingrediente;
+import icai.dtc.isw.domain.Producto;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
@@ -18,6 +21,21 @@ public class CreaMenus {
             }
         }
         return false;
+    }
+
+    private static int getPrecioSinLista(Receta receta) {
+        ProductoControler productoControler = new ProductoControler();
+        ArrayList<Producto> productos = productoControler.getProductos();
+        double calculo = 0.00;
+        for(Ingrediente ing : receta.getIngredientes().values()){
+            for(Producto p : productos){
+                if(ing.getNombre().equals(p.getNombre())){
+                    calculo += p.getPrecio();
+                    break;
+                }
+            }
+        }
+        return (int) Math.round(calculo * 100.0);
     }
 
     // devuelve las diez recetas que mas se ajustan a un presupuesto / alergias / preferencias, en el caso de que no se pueda devuelve null
@@ -47,8 +65,7 @@ public class CreaMenus {
         int[] bad = new int[n];
         for (int i = 0; i < n; i++) {
             Receta r = legales.get(i);
-//            precio[i] = (int) Math.round(r.getPrecio() * 100.0); // a céntimos
-            precio[i] = 10;
+            precio[i] = getPrecioSinLista(r);
             bad[i] = contieneAlguno(r.getIngredientes().keySet(), noCome) ? 1 : 0;
         }
 

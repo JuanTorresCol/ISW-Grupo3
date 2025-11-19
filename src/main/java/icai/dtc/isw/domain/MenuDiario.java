@@ -6,14 +6,11 @@ import java.util.Map;
 public class MenuDiario {
 
     private final int size = 2;
-    private double precio;
     private Map<String, Receta> recetas = new HashMap<>(size);
 
     public MenuDiario(Receta receta, Receta receta2) {
         recetas.put("comida",receta);
         recetas.put("cena",receta2);
-        this.precio= 10;
-//        this.precio=receta.getPrecio() + receta2.getPrecio();
     }
 
     public Map<String,Receta> getRecetas() {
@@ -36,13 +33,20 @@ public class MenuDiario {
         this.recetas.put("cena",receta);
     }
 
-    public double getprecio(){
-        return this.precio;
+    public double getPrecioMenu(ListaCompra lista){
+        double calculo = 0;
+        for (Receta receta : recetas.values()){
+            String nombre = receta.getNombre();
+            for(EntryLista entry : lista.getEntries()){
+                if(entry.getNombreEntrada().equals(nombre)){
+                    calculo+=entry.getPrecio();
+                    break;
+                }
+            }
+        }
+        return calculo;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
 
     @Override
     public String toString() {
