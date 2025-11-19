@@ -24,12 +24,12 @@ public class Receta {
     // calcula el precio de una receta
     private void calcularPrecio() {
         double calculo = 0;
-        for(Ingrediente ingrediente: ingredientes.values()){
-            ProductoControler productoCon = new ProductoControler();
-            Producto producto = productoCon.getProductoName(ingrediente.getNombre());
-            calculo = calculo + producto.getPrecio_unit();
-        }
-        this.precio = Math.round(calculo * 100.0) / 100.0;
+//        for(Ingrediente ingrediente: ingredientes.values()){
+//            ProductoControler productoCon = new ProductoControler();
+//            Producto producto = productoCon.getProductoName(ingrediente.getNombre());
+//            calculo = calculo + producto.getPrecio_unit();
+//        }
+//        this.precio = Math.round(calculo * 100.0) / 100.0;
     }
 
     // contructor de receta sin saber su precio

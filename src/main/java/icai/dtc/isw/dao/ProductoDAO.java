@@ -2,7 +2,6 @@ package icai.dtc.isw.dao;
 
 import icai.dtc.isw.domain.Producto;
 
-import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.domain.Unidad;
 import icai.dtc.isw.utils.Util;
 
@@ -19,14 +18,13 @@ public class ProductoDAO {
     // registra un producto en la base de datos
     public static void registerProducto(Producto producto) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO producto (productoId, nombre, cantidad, unidad, preciounit) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO producto (productoId, nombre, unidad, precio) VALUES (?,?,?,?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, producto.getId());
             pst.setString(2, producto.getNombre());
-            pst.setInt(3, producto.getCantidad());
-            pst.setString(4, producto.getUnidadP().toString());
-            pst.setDouble(5,producto.getPrecio_unit());
+            pst.setString(3, producto.getUnidadP().toString());
+            pst.setDouble(4,producto.getPrecio());
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("Producto insertadao con éxito: " + producto.getId());
@@ -44,7 +42,7 @@ public class ProductoDAO {
             pst.setString(1, productoName);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    pr = new Producto(rs.getString(1),rs.getString(2),rs.getInt(3), Unidad.valueOf(rs.getString(4)), rs.getDouble(5));
+                    pr = new Producto(rs.getString(1),rs.getString(2), Unidad.valueOf(rs.getString(3)), rs.getDouble(4));
                 }
             }
         } catch (SQLException ex) {
@@ -60,7 +58,7 @@ public class ProductoDAO {
         try (PreparedStatement pst = con.prepareStatement("SELECT * FROM producto")) {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    lista.add(new Producto(rs.getString(1),rs.getString(2),rs.getInt(3), Unidad.valueOf(rs.getString(4)), rs.getDouble(5)));
+                    lista.add(new Producto(rs.getString(1),rs.getString(2), Unidad.valueOf(rs.getString(3)), rs.getDouble(4)));
                 }
             }
         } catch (SQLException ex) {

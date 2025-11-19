@@ -10,126 +10,55 @@ import java.util.Map;
 public class Producto {
     private String codigo;
     private String nombre;
-    private int cantidad;
     private Unidad unidad;
-    private double precio_unit;
+    private double precio;
 
     private Util util = new Util();
 
     // Constructor para el producto a base del ingrediente del que proviene
-    public Producto(Ingrediente ingrediente) {
+    public Producto(Ingrediente ingrediente, double precio, Unidad unidad) {
         this.nombre = ingrediente.getNombre();
-        calcCantidad(ingrediente);
+        this.unidad = unidad;
+        this.precio = precio;
         this.codigo = util.createUserId(ingrediente.getNombre());
     }
 
     // Constructor default producto
     public Producto(){
         this.codigo = "1";
-        this.cantidad = 0;
         this.unidad = null;
-        this.precio_unit = 0;
+        this.precio = 0;
         this.nombre = "a";
     }
 
     // Constructor para el producto cuando viene de la base de datos
-    public Producto(String codigo, String nombre, int cantidad, Unidad unidad, double precio_unit) {
+    public Producto(String codigo, String nombre, Unidad unidad, double precio) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.cantidad = cantidad;
         this.unidad = unidad;
-        this.precio_unit = precio_unit;
+        this.precio = precio;
     }
 
-    // Calculo de la cantidad y unidad del producto asi como de su precio unitario
-    public void calcCantidad(Ingrediente ingrediente){
-        String cantidad;
-        cantidad = ingrediente.getCantidad();
-        if (this.nombre.equals("huevo")) {
-            this.unidad = Unidad.u;
-            this.cantidad = 12;
-            this.precio_unit = ingrediente.getPrecio_unitario()*12/(Integer.parseInt(cantidad.replace("u", "")));
-        } else if (cantidad.contains("u")) {
-            this.unidad = Unidad.u;
-            this.cantidad = Integer.parseInt(cantidad.replace("u", ""));
-            this.precio_unit = ingrediente.getPrecio_unitario() / this.cantidad;
-        } else if (cantidad.contains("ml")) {
-            this.unidad = Unidad.l;
-            this.cantidad = 1;
-            this.precio_unit = ingrediente.getPrecio_unitario() * 1000 / Integer.parseInt(cantidad.replace("ml", ""));
-        } else if (cantidad.contains("l")) {
-            this.unidad = Unidad.l;
-            this.cantidad = Integer.parseInt(cantidad.replace("l", ""));
-            this.precio_unit = ingrediente.getPrecio_unitario() / this.cantidad;
-        } else if (cantidad.contains("g")) {
-            this.unidad = Unidad.kg;
-            this.cantidad = 1;
-            this.precio_unit = ingrediente.getPrecio_unitario() * 1000 / Integer.parseInt(cantidad.replace("g", ""));
-        } else if (cantidad.contains("kg")) {
-            this.unidad = Unidad.kg;
-            this.cantidad = Integer.parseInt(cantidad.replace("kg", ""));
-            this.precio_unit = ingrediente.getPrecio_unitario() / this.cantidad;
-        } else if (cantidad.contains("cda")) {
-            this.unidad = Unidad.cda;
-            this.cantidad = Integer.parseInt(cantidad.replace("cda", ""));
-            this.precio_unit = ingrediente.getPrecio_unitario();
-        } else if (cantidad.contains("cdta")) {
-            this.unidad = Unidad.cdta;
-            this.cantidad = Integer.parseInt(cantidad.replace("cdta", ""));
-            this.precio_unit = ingrediente.getPrecio_unitario();
-        } else {
-            this.unidad = Unidad.u;
-            this.cantidad = 1;
-            this.precio_unit = 1.00;
-        }
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
     public String getId() {
-        return codigo;
+        return this.codigo;
     }
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
     public Unidad getUnidadP() {
-        return unidad;
+        return this.unidad;
     }
-    public double getPrecio_unit() {
-        return precio_unit;
+    public double getPrecio() {
+        return this.precio;
     }
 
     // En el caso de que un producto aparezca más de una vez en la lista se incrementa su precio
     public void repiteProd(){
-        this.precio_unit = this.precio_unit + this.precio_unit;}
-
-    // metodo para registrar todos los productos que no aparecen ya en la base de datos
-    public static void registerAllProductos(){
-        ProductoControler productoCon = new ProductoControler();
-        RecetaControler recetaCon = new RecetaControler();
-
-        ArrayList<Receta> recetas;
-        recetas = recetaCon.getRecetas();
-        for (Receta receta : recetas) {
-            Map<String,Ingrediente> ingredientes = receta.getIngredientes();;
-            for (Ingrediente ingrediente : ingredientes.values()) {
-                Producto test = productoCon.getProductoName(ingrediente.getNombre());
-                if (test==(null)) {
-                    productoCon.registerProducto(new Producto(ingrediente));
-                }
-            }
-        }
-    }
+        this.precio = this.precio + this.precio;}
 
     @Override
     public String toString() {
-        return getNombre() + ": " + getCantidad() + getUnidadP();
+        return getNombre() + ": " + getUnidadP() + " a un precio de "+ getPrecio();
     }
 
-    // rellena la base de datos de productos
-    // solo ejecutar una vez o despues de hacer un truncate a la db
-    public static void main(String[] args) {
-        registerAllProductos();
-    }
 }

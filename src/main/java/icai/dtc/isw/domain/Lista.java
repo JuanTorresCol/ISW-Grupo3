@@ -46,7 +46,7 @@ public class Lista {
         ArrayList cadena = new ArrayList<>();
         cadena.add("Lista de la compra:");
         for(Producto prod : this.productos){
-            cadena.add(String.valueOf(df.format(prod.getCantidad()))+prod.getUnidadP()+" "+prod.getNombre() + " a un precio de "+ df.format(prod.getPrecio_unit()) +"$");
+            cadena.add(prod.getNombre() +": "+prod.getUnidadP()+ " a un precio de "+ df.format(prod.getPrecio()) +"$");
         }
         return cadena;
     }

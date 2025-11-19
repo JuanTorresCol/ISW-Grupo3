@@ -5,7 +5,5 @@ public enum Unidad {
     ml,
     l,
     g,
-    kg,
-    cda,
-    cdta
+    kg
 }
