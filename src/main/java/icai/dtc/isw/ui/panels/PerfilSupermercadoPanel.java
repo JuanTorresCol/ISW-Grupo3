@@ -50,7 +50,8 @@ public class PerfilSupermercadoPanel extends JPanel {
         // Histórico (placeholder)
         JLabel prev = labelBold("OTROS");
         JButton s1 = flatLink("Productos en Stock", _ -> {
-            JOptionPane.showMessageDialog(this, "En proceso de creación...");
+            app.refreshCard("productosSuper");
+            app.showCard("productosSuper");
         });
         JButton exit = flatLink("Cerrar Sesión >", _ -> app.logoutSuper());
         content.add(center(prev));

@@ -64,7 +64,7 @@ public class SupermercadoDAO {
 
             pst.setArray(4, pst.getConnection().createArrayOf(
                     "varchar",
-                    superM.getProductos().toArray(new String[0])));
+                    superM.getProductosId().toArray(new String[0])));
 
             pst.setInt(5,1);
 

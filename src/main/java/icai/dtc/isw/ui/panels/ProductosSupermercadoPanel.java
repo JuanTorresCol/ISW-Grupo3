@@ -1,0 +1,118 @@
+package icai.dtc.isw.ui.panels;
+
+import icai.dtc.isw.controler.RecetaControler;
+import icai.dtc.isw.domain.Producto;
+import icai.dtc.isw.domain.Receta;
+import icai.dtc.isw.domain.Unidad;
+import icai.dtc.isw.ui.JVentana;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+import static icai.dtc.isw.ui.UiUtils.*;
+
+import javax.swing.SwingWorker;
+import icai.dtc.isw.ui.Refreshable;
+
+public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
+
+    private final JVentana app;
+    private final JPanel lista;
+
+    public ProductosSupermercadoPanel(JVentana app) {
+        this.app = app;
+        setLayout(new BorderLayout());
+        setBackground(BG);
+        //setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
+
+        JLabel t = pillTitle("PRODUCTOS");
+
+        lista = new JPanel();
+        lista.setOpaque(false);
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.add(center(new JLabel("Cargando productos...")));
+
+        JScrollPane scroll = new JScrollPane(wrapCentered(lista));
+        scroll.getViewport().setBackground(BG);
+        scroll.setOpaque(false);
+        scroll.setBackground(BG);
+        scroll.setBorder(BorderFactory.createEmptyBorder(5,15,5,15));
+
+        add(center(t), BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
+        add(Box.createVerticalStrut(16));
+        JButton nuevo = flatLink("Nuevo Producto >", _ -> app.showCard("anadirNuevoProducto"));
+        JButton exit = flatLink("Salir >", _ -> app.showCard("perfilSupermercado"));
+        add(nuevo, BorderLayout.CENTER);
+        add(Box.createVerticalStrut(10));
+        add(exit, BorderLayout.CENTER);
+        add(Box.createVerticalStrut(10));
+
+        refreshAsync();
+    }
+
+    @Override
+    public void refreshAsync() {
+        lista.removeAll();
+        lista.add(center(new JLabel("Cargando productos...")));
+        lista.revalidate();
+        lista.repaint();
+
+        new SwingWorker<ArrayList<Producto>, Void>() {
+            @Override
+            protected ArrayList<Producto> doInBackground() {
+                return app.getSupermercado().getProductos();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    ArrayList<Producto> productos = get();
+                    lista.removeAll();
+                    for (Producto p : productos) {
+                        lista.add(similarCard(p, p.getNombre(),p.getPrecio(),p.getUnidadP()));
+                        lista.add(Box.createVerticalStrut(12));
+                    }
+                } catch (Exception ex) {
+                    lista.removeAll();
+                    lista.add(center(new JLabel("No se pudieron cargar los productos.")));
+                }
+                lista.revalidate();
+                lista.repaint();
+            }
+        }.execute();
+    }
+
+    private JPanel similarCard(Producto producto, String nombre, double precio, Unidad unidad) {
+        JPanel card = roundedCard();
+        card.setLayout(new BorderLayout(10,0));
+
+        JPanel img = new JPanel();
+        img.setPreferredSize(new Dimension(140, 80));
+        img.setBackground(new Color(170, 187, 197));
+        img.add(new JLabel("Img"));
+
+        JPanel info = new JPanel();
+        info.setOpaque(false);
+        info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
+        JLabel name = new JLabel(nombre);
+        name.setFont(H3);
+        JLabel meta = new JLabel("1 " + unidad + " a " + precio + "$");
+        meta.setFont(SMALL);
+        JButton sel = outlineButton("ELIMINAR", _ -> {
+            app.getSupermercado().eliminarProducto(producto);
+            app.refreshCard("perfilSupermercado");
+        });
+
+        info.add(name);
+        info.add(meta);
+        info.add(Box.createVerticalStrut(6));
+        info.add(sel);
+
+        card.add(img, BorderLayout.WEST);
+        card.add(info, BorderLayout.CENTER);
+        return card;
+    }
+}
+

@@ -1,5 +1,6 @@
 package icai.dtc.isw.domain;
 
+
 import java.util.ArrayList;
 
 public class Supermercado extends Usuario{
@@ -23,6 +24,14 @@ public class Supermercado extends Usuario{
 
     public ArrayList<Producto> getProductos() {
         return productos;
+    }
+
+    public ArrayList<String> getProductosId(){
+        ArrayList<String> productoId = new ArrayList<>();
+        for(Producto prod : this.productos){
+            productoId.add(prod.getId());
+        }
+        return productoId;
     }
 
     public int getNumProd(){
