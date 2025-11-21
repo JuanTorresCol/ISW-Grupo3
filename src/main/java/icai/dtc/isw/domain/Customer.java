@@ -6,16 +6,13 @@ import java.util.ArrayList;
 
 import icai.dtc.isw.utils.Util;
 
-public class Customer implements Serializable {
+public class Customer extends Usuario implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     private static final Util util = new Util();
 
-    private String userId;
-    private String userName;
-    private String userPass;
     private String userGender;
     private int userAge;
     // Alérgenos / restricciones por salud
@@ -26,9 +23,7 @@ public class Customer implements Serializable {
     private ArrayList<Receta> recetas = new ArrayList<>();
 
     public Customer() {
-        this.userId = util.createUserId("default");
-        this.userName = "e";
-        this.userPass = "e";
+        super();
         this.userGender = "e";
         this.userAge = 1;
         this.illegalFood = new ArrayList<>();
@@ -38,9 +33,7 @@ public class Customer implements Serializable {
     // Constructor sin ID conocido (se genera a partir del nombre)
     public Customer(String userName, String userPass, String userGender, int userAge,
                     ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome) {
-        this.userId = util.createUserId(userName);
-        this.userName = userName;
-        this.userPass = userPass;
+        super(userName,userPass);
         this.userGender = userGender;
         this.userAge = userAge;
         this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();
@@ -50,9 +43,7 @@ public class Customer implements Serializable {
     // Constructor con todos los atributos
     public Customer(String userId, String userName, String userPass, String userGender, int userAge,
                     ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome, ArrayList<Receta> recetasFavo) {
-        this.userId = userId;
-        this.userName = userName;
-        this.userPass = userPass;
+        super(userId, userName, userPass);
         this.userGender = userGender;
         this.userAge = userAge;
         this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();
@@ -61,11 +52,6 @@ public class Customer implements Serializable {
     }
 
     //getters y setters
-    public String getUserId() {return userId;}
-    public void setUserId(String userId) {this.userId = userId;}
-    public String getUserName() {return userName;}
-    public String getUserPass() {return userPass;}
-    public void setUserPass(String userPass) {this.userPass = userPass;}
     public String getUserGender() {return userGender;}
     public void setUserGender(String userGender) {this.userGender = userGender;}
     public int getUserAge() {return userAge;}
