@@ -6,6 +6,7 @@ import java.util.Map;
 import icai.dtc.isw.dao.CustomerDAO;
 import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.domain.Receta;
+import icai.dtc.isw.domain.Usuario;
 
 // clase que conecta el DAO de customer con la GUI
 public class CustomerControler {

@@ -1,9 +1,7 @@
 package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
-import icai.dtc.isw.domain.Customer;
-import icai.dtc.isw.domain.ListaCompra;
-import icai.dtc.isw.domain.MenuSemanal;
+import icai.dtc.isw.domain.*;
 
 import icai.dtc.isw.ui.panels.*;
 
@@ -20,7 +18,8 @@ public class JVentana extends JFrame {
     // --- Controlador / estado ---
     private final CustomerControler controler = new CustomerControler();
     private String customerId;
-    private Customer usuario = new Customer();
+    private Customer customer;
+    private Supermercado supermercado;
     private MenuSemanal menuSemanal = new MenuSemanal();
     private String bloque;
     private int dia;
@@ -124,7 +123,7 @@ public class JVentana extends JFrame {
     public void onLoginSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
         this.customerId = c.getUserId();
-        this.usuario = cargarPerfilUsuario();
+        this.customer = cargarPerfilUsuario();
 
         ensurePanel("presupuesto");
         showCard("presupuesto");
@@ -133,7 +132,7 @@ public class JVentana extends JFrame {
     public void onRegisterSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Registro completado");
         this.customerId = c.getUserId();
-        this.usuario = cargarPerfilUsuario();
+        this.customer = cargarPerfilUsuario();
 
         ensurePanel("presupuesto");
         showCard("presupuesto");
@@ -162,9 +161,9 @@ public class JVentana extends JFrame {
 //    public String getCustomerId() { return customerId; }
 //    public void setCustomerId(String id) { this.customerId = id; }
 
-    public Customer getUsuario() { return usuario; }
+    public Customer getUsuario() { return customer; }
 
-    public void setUsuario(Customer u) { this.usuario = u; }
+    public void setUsuario(Customer u) { this.customer = u; }
 
     public MenuSemanal getMenuSemanal() {
         return menuSemanal;
@@ -174,7 +173,7 @@ public class JVentana extends JFrame {
         Runnable r = () -> {
 
             this.customerId = null;
-            this.usuario = new Customer();
+            this.customer = new Customer();
             this.menuSemanal = new MenuSemanal();
 
             for (JComponent comp : createdCards.values()) {

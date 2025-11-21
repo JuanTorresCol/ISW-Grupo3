@@ -2,6 +2,8 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.utils.Util;
 
+import java.util.ArrayList;
+
 public class Usuario {
     private String userId;
     private String userName;
@@ -30,5 +32,4 @@ public class Usuario {
     public String getUserName() {return userName;}
     public String getUserPass() {return userPass;}
     public void setUserPass(String userPass) {this.userPass = userPass;}
-
 }
