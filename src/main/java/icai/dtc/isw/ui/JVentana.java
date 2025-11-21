@@ -63,6 +63,7 @@ public class JVentana extends JFrame {
         postAuthFactories.put("recetasSimilares", () -> new JScrollPane(new RecetasSimilaresPanel(this)));
         postAuthFactories.put("listaCompra", () -> new ListaCompraPanel(this));
         postAuthFactories.put("perfil", () -> new PerfilPanel(this));
+        postAuthFactories.put("perfilSupermercado", () -> new PerfilSupermercadoPanel(this));
         postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
         postAuthFactories.put("recetasGuardadas", () -> new JScrollPane(new GuardadasPanel(this)));
 
@@ -129,6 +130,16 @@ public class JVentana extends JFrame {
         showCard("presupuesto");
     }
 
+    public void onLoginSuccessSupermercado(Supermercado supermercado) {
+        JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+        this.customerId = supermercado.getUserId();
+        this.supermercado = supermercado;
+
+        ensurePanel("perfilSupermercado");
+        refreshCard("perfilSupermercado");
+        showCard("perfilSupermercado");
+    }
+
     public void onRegisterSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Registro completado");
         this.customerId = c.getUserId();
@@ -163,6 +174,8 @@ public class JVentana extends JFrame {
 
     public Customer getUsuario() { return customer; }
 
+    public Supermercado getSupermercado(){return supermercado;}
+
     public void setUsuario(Customer u) { this.customer = u; }
 
     public MenuSemanal getMenuSemanal() {
@@ -189,12 +202,31 @@ public class JVentana extends JFrame {
         if (SwingUtilities.isEventDispatchThread()) r.run();
         else SwingUtilities.invokeLater(r);
     }
+
+    public void logoutSuper() {
+        Runnable r = () -> {
+
+            this.customerId = null;
+            this.supermercado = new Supermercado();
+
+            for (JComponent comp : createdCards.values()) {
+                mainPanel.remove(comp);
+            }
+            createdCards.clear();
+
+            showCard("inicio");
+
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        };
+        if (SwingUtilities.isEventDispatchThread()) r.run();
+        else SwingUtilities.invokeLater(r);
+    }
     public void setBloque(String bloque) {
         this.bloque = bloque;
     }
 
     public String getBloque() { return this.bloque; }
-
     public void setDia(int dia) {
         this.dia = dia;
     }

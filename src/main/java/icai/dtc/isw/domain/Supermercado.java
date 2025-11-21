@@ -24,6 +24,10 @@ public class Supermercado extends Usuario{
     public ArrayList<Producto> getProductos() {
         return productos;
     }
+
+    public int getNumProd(){
+        return productos.size();
+    }
     public void setProductos(ArrayList<Producto> productos) {
         this.productos = productos;
     }

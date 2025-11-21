@@ -54,7 +54,7 @@ public class LoginPanel extends JPanel {
             } else {
                 Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
                 if(supermercado != null) {
-                    app.onLoginSuccessSupermercado();
+                    app.onLoginSuccessSupermercado(supermercado);
                 }else{JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");}
 
             }
