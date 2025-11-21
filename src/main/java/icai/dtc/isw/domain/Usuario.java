@@ -2,15 +2,10 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.utils.Util;
 
-import java.io.Serial;
-
 public class Usuario {
     private String userId;
     private String userName;
     private String userPass;
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private static final Util util = new Util();
 

@@ -20,7 +20,6 @@ public class CustomerDAO {
         return String.join(",", lista);
     }
 
-
     private static ArrayList<String> stringToList(String data) {
         ArrayList<String> res = new ArrayList<>();
         if (data == null || data.isBlank()) return res;
@@ -36,35 +35,37 @@ public class CustomerDAO {
     }
 
     private static Customer mapToCustomer(ResultSet rs) throws SQLException {
-        String id = rs.getString("id");
-        String name = rs.getString("name");
-        String pass = rs.getString("password");
-        String gender = rs.getString("gender");
-        int age = rs.getInt("age");
+        if(rs.getInt("puesto")==0) {
+            String id = rs.getString("id");
+            String name = rs.getString("name");
+            String pass = rs.getString("password");
+            String gender = rs.getString("gender");
+            int age = rs.getInt("age");
 
-        // foodrestriction
-        var foodRestrictionArray = rs.getArray("foodrestriction");
-        ArrayList<String> illegalFood = util.toArrayList(foodRestrictionArray);
+            // foodrestriction
+            var foodRestrictionArray = rs.getArray("foodrestriction");
+            ArrayList<String> illegalFood = util.toArrayList(foodRestrictionArray);
 
-        // alimentosnocome
-        String noComeStr = rs.getString("alimentosnocome");
-        ArrayList<String> alimentosNoCome = stringToList(noComeStr);
+            // alimentosnocome
+            String noComeStr = rs.getString("alimentosnocome");
+            ArrayList<String> alimentosNoCome = stringToList(noComeStr);
 
-        var favRecetasV = rs.getArray("favrecetas");
-        ArrayList<String> favRecetasId = util.toArrayList(favRecetasV);
-        ArrayList<Receta> favRecetas = new ArrayList<>();
-        for(String idReceta: favRecetasId){
-            favRecetas.add(RecetaControler.getRecetaId(idReceta));
-        }
+            var favRecetasV = rs.getArray("favrecetas");
+            ArrayList<String> favRecetasId = util.toArrayList(favRecetasV);
+            ArrayList<Receta> favRecetas = new ArrayList<>();
+            for (String idReceta : favRecetasId) {
+                favRecetas.add(RecetaControler.getRecetaId(idReceta));
+            }
 
-        return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome, favRecetas);
+            return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome, favRecetas);
+        } else{return null;}
     }
 
     // registra un nuevo cliente en la base de datos
     public static void registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome, favrecetas) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
-                "VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome, favrecetas, puesto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "VALUES (?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, customer.getUserId());
@@ -85,6 +86,8 @@ public class CustomerDAO {
             pst.setArray(8, pst.getConnection().createArrayOf(
                     "varchar",
                     customer.getRecetasFavId().toArray(new String[0])));
+
+            pst.setInt(9,0);
 
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {

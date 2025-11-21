@@ -19,6 +19,7 @@ public class ProductoControler {
         return productoDAO.getProductoName(productoName);
     }
 
+    public static Producto getProductoId(String productoId){return productoDAO.getProductoId(productoId);}
     public static ArrayList<Producto> getProductos() {
         return productoDAO.getProductos();
     }

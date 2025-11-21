@@ -51,6 +51,22 @@ public class ProductoDAO {
         return pr;
     }
 
+    public static Producto getProductoId(String productoId) {
+        Connection con=ConnectionDAO.getInstance().getConnection();
+        Producto pr = null;
+        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM producto WHERE id = ?")) {
+            pst.setString(1, productoId);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    pr = new Producto(rs.getString(1),rs.getString(2), Unidad.valueOf(rs.getString(3)), rs.getDouble(4));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return pr;
+    }
+
     // saca los productos existentes en la base de datos
     public static ArrayList<Producto> getProductos() {
         Connection con=ConnectionDAO.getInstance().getConnection();
