@@ -97,7 +97,7 @@ public class SupermercadoDAO {
     }
 
 //    public static void main(String[] args) {
-//        // insertar informacion a mano
+//        // insertar informacion a mano, por cada ejecución se introduce un nuevo super
 //        registerSupermercado(new Supermercado());
 //    }
 }

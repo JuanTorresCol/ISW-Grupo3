@@ -62,10 +62,11 @@ public class CustomerDAO {
     }
 
     // registra un nuevo cliente en la base de datos
-    public static void registerCliente(Customer customer) {
+    public static boolean registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO usuarios (id, name, password, gender, age, foodrestriction, alimentosnocome, favrecetas, puesto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                "VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO usuarios " +
+                "(id, name, password, gender, age, foodrestriction, alimentosnocome, favrecetas, puesto) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, customer.getUserId());
@@ -93,8 +94,10 @@ public class CustomerDAO {
             if (rowsInserted > 0) {
                 System.out.println("Cliente insertado con éxito: " + customer.getUserId());
             }
+            return true;
         } catch (SQLException ex) {
             System.out.println("Error al insertar cliente: " + ex.getMessage());
+            return false;
         }
     }
 

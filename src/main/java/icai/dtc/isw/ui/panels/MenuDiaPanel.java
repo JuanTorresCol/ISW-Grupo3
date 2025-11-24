@@ -33,7 +33,7 @@ public class MenuDiaPanel extends JPanel {
     public MenuDiaPanel(JVentana app) {
         this.app = app;
         this.menuSemanal = app.getMenuSemanal();
-        this.menuDia = menuSemanal.getLunes();
+        this.menuDia = this.menuSemanal.getLunes();
 
         setLayout(new BorderLayout());
         setBackground(BG);

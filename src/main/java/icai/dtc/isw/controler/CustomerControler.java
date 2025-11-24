@@ -41,9 +41,10 @@ public class CustomerControler {
             ArrayList<String> noComeList = parseLista(alimentosNoCome);
 
             customerEnter = new Customer(userName, pass, sexo, edad, alergias, noComeList);
-            CustomerDAO.registerCliente(customerEnter);
-            flag = "b";
-
+            boolean a = CustomerDAO.registerCliente(customerEnter);
+            if(a) {
+                flag = "b";
+            } else{flag = "a";}
         } else {
             customerEnter = new Customer();
         }
