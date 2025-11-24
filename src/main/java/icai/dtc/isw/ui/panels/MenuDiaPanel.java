@@ -195,7 +195,12 @@ public class MenuDiaPanel extends JPanel {
         //card.add(Box.createVerticalStrut(1));
 
         JPanel acciones = flowLeft();
-        JButton ver = outlineButton("VER RECETA", _ -> app.showCard("recetaDetalle"));
+        JButton ver = outlineButton("VER RECETA", _ -> {
+            app.setBloque(bloque);
+            app.setDia(idxDia);
+            app.refreshCard("recetaDetalle");
+            app.showCard("recetaDetalle");
+        });
         JButton cambiar = outlineButton("CAMBIAR", _ -> {
             app.setBloque(bloque);
             app.setDia(idxDia);

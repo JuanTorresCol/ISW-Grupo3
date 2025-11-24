@@ -1,5 +1,7 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.domain.MenuSemanal;
+import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
 import javax.swing.*;
@@ -13,24 +15,26 @@ public class RecetaDetallePanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(BG);
 
+        Receta receta = findReceta(app);
+
         JPanel header = flowLeft();
         JButton back = flatLink("< ATRÁS", _ -> app.showCard("menuDia"));
         header.add(back);
 
-        JLabel t = pillTitle("RECETA: PASTA CON POLLO");
+        JLabel t = pillTitle(receta.getNombre().toUpperCase());
 
 
         JPanel ing = section("INGREDIENTES",
-                "- 80-100 g de pasta\n- 1 pechuga de pollo pequeña\n- 1 diente de ajo\n- 1/4 de cebolla\n- 100 ml de nata (opcional)\n- Aceite de oliva, sal, pimienta\n- Queso rallado (opcional)\n- Verduras al gusto");
+                receta.ingredientesToString());
 
         JPanel steps = section("INSTRUCCIONES",
-                "1. Cocer la pasta.\n2. Saltear el pollo.\n3. Añadir verduras.\n4. Unir todo con la pasta y servir.");
+                receta.formatearDescripcion(receta.getDescripcion()));
 
         JPanel center = new JPanel();
         center.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
-        center.add(center(t));
+        center.add(t);
         center.add(Box.createVerticalStrut(10));
         center.add(ing);
         center.add(Box.createVerticalStrut(10));
@@ -43,5 +47,47 @@ public class RecetaDetallePanel extends JPanel {
                 _ -> app.showCard("listaCompra"),
                 _ -> { app.setUsuario(app.cargarPerfilUsuario()); app.refreshCard("perfil"); app.showCard("perfil"); }
         ), BorderLayout.SOUTH);
+    }
+
+    public Receta findReceta(JVentana app){
+        int dia = app.getDia();
+        String bloque = app.getBloque();
+        MenuSemanal menuS = app.getMenuSemanal();
+        if(dia == 0){
+            if(bloque.equals("Comida")){
+                return menuS.getLunes().getComida();
+            } else if(bloque.equals("Cena")){
+                return menuS.getLunes().getCena();
+            }
+        }
+        if(dia == 1){
+            if(bloque.equals("Comida")){
+                return menuS.getMartes().getComida();
+            } else if(bloque.equals("Cena")){
+                return menuS.getMartes().getCena();
+            }
+        }
+        if(dia == 2){
+            if(bloque.equals("Comida")){
+                return menuS.getMiercoles().getComida();
+            } else if(bloque.equals("Cena")){
+                return menuS.getMiercoles().getCena();
+            }
+        }
+        if(dia == 3){
+            if(bloque.equals("Comida")){
+                return menuS.getJueves().getComida();
+            } else if(bloque.equals("Cena")){
+                return menuS.getJueves().getCena();
+            }
+        }
+        if(dia == 4){
+            if(bloque.equals("Comida")){
+                return menuS.getViernes().getComida();
+            } else if(bloque.equals("Cena")){
+                return menuS.getViernes().getCena();
+            }
+        }
+        return null;
     }
 }

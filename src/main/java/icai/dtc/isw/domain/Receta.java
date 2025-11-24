@@ -66,6 +66,48 @@ public class Receta {
         return calculo;
     }
 
+    public String ingredientesToString() {
+        if (ingredientes == null || ingredientes.isEmpty()) {
+            return "No hay ingredientes registrados.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ingredientes:\n");
+
+        for (Ingrediente ing : ingredientes.values()) {
+            sb.append("- ")
+                    .append(ing.getNombre())
+                    .append(": ")
+                    .append(ing.getCantidad())
+                    .append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public static String formatearDescripcion(String descripcion) {
+        if (descripcion == null || descripcion.isBlank()) {
+            return "";
+        }
+
+        StringBuilder resultado = new StringBuilder();
+        String[] palabras = descripcion.split("\\s+");
+        StringBuilder lineaActual = new StringBuilder();
+
+        for (String palabra : palabras) {
+            if (lineaActual.length() + palabra.length() + 1 > 50) {
+                resultado.append(lineaActual.toString().trim()).append("\n");
+                lineaActual.setLength(0); // limpiar línea
+            }
+            lineaActual.append(palabra).append(" ");
+        }
+        if (lineaActual.length() > 0) {
+            resultado.append(lineaActual.toString().trim());
+        }
+
+        return resultado.toString();
+    }
+
 //    public boolean esAptaPara(Customer customer) {
 //        if (customer == null) return true;
 //
