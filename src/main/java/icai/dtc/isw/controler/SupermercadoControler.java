@@ -1,6 +1,7 @@
 package icai.dtc.isw.controler;
 
 import icai.dtc.isw.dao.SupermercadoDAO;
+import icai.dtc.isw.domain.Producto;
 import icai.dtc.isw.domain.Supermercado;
 
 import java.util.ArrayList;
@@ -16,6 +17,10 @@ public class SupermercadoControler {
 //        }
 //        return null;
         return SupermercadoDAO.getSuper(user);
+
     }
 
+    public static void addProducto(Supermercado supermercado){
+        SupermercadoDAO.addProducto(supermercado);
+    }
 }

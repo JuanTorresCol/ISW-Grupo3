@@ -1,6 +1,7 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.controler.ProductoControler;
+import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.domain.Producto;
 import icai.dtc.isw.domain.Supermercado;
 import icai.dtc.isw.utils.Util;
@@ -33,6 +34,29 @@ public class SupermercadoDAO {
             }
         }
         return res;
+    }
+
+    // añade un producto a un supermercado
+    public static void addProducto(Supermercado supermercado) {
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        String sql = "UPDATE usuarios SET favrecetas = ? WHERE id = ?";
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setArray(1, pst.getConnection().createArrayOf(
+                    "varchar",
+                    supermercado.getProductosId().toArray(new String[0])
+            ));
+
+            pst.setString(2, supermercado.getUserId());
+
+            int rowsUpdated = pst.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Producto añadido con éxito: " + supermercado.getUserId());
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al añadir producto: " + ex.getMessage());
+        }
     }
 
     private static Supermercado mapToSuper(ResultSet rs) throws SQLException {

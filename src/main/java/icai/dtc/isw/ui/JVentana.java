@@ -1,6 +1,8 @@
 package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
+import icai.dtc.isw.controler.ProductoControler;
+import icai.dtc.isw.controler.SupermercadoControler;
 import icai.dtc.isw.domain.*;
 
 import icai.dtc.isw.ui.panels.*;
@@ -159,6 +161,16 @@ public class JVentana extends JFrame {
     public void onAuthFailed(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("inicio");
+    }
+
+    public void onProdInsertSuccess(Producto prod){
+        ProductoControler.registerProducto(prod);
+        getSupermercado().anadirProducto(prod);
+        SupermercadoControler.addProducto(getSupermercado());
+        JOptionPane.showMessageDialog(this, "Producto registrado exitosamente");
+        refreshCard("productosSupermercado");
+        refreshCard("perfilSupermercado");
+        showCard("productosSupermercado");
     }
 
     public void onAuthFailed2(String msg) {

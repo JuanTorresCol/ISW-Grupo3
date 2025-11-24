@@ -115,8 +115,7 @@ public class NuevoProductoPanel extends JPanel {
         );
 
         if (b) {
-            JOptionPane.showMessageDialog(this,"En desarrollo...");
-            //app.onProdInsertSuccess(new Producto(name, unidad, precio));
+            app.onProdInsertSuccess(new Producto(name, unidad, precio));
         } else {
             if(name==null){JOptionPane.showMessageDialog(this,"Introduzca un nombre");
             } else if(precio==0){
