@@ -6,6 +6,7 @@ import icai.dtc.isw.utils.Util;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 public class Producto {
     private String codigo;
@@ -14,6 +15,13 @@ public class Producto {
     private double precio;
 
     private Util util = new Util();
+
+    public Producto(String nombre, Unidad unidad, double precio) {
+        this.nombre = nombre;
+        this.unidad = unidad;
+        this.precio = precio;
+        this.codigo = util.createUserId(nombre);
+    }
 
     // Constructor para el producto a base del ingrediente del que proviene
     public Producto(Ingrediente ingrediente, double precio, Unidad unidad) {

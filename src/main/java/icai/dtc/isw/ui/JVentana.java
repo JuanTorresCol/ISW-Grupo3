@@ -67,7 +67,7 @@ public class JVentana extends JFrame {
         postAuthFactories.put("productosSuper", () -> new ProductosSupermercadoPanel(this));
         postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
         postAuthFactories.put("recetasGuardadas", () -> new JScrollPane(new GuardadasPanel(this)));
-        //postAuthFactories.put("anadirNuevoProducto", () -> new NuevoProductoPanel(this));
+        postAuthFactories.put("anadirNuevoProducto", () -> new NuevoProductoPanel(this));
 
         add(mainPanel);
 

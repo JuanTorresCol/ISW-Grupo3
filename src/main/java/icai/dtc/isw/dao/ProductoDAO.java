@@ -16,7 +16,7 @@ public class ProductoDAO {
     public static final Util util = new Util();
 
     // registra un producto en la base de datos
-    public static void registerProducto(Producto producto) {
+    public static boolean registerProducto(Producto producto) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "INSERT INTO producto (productoId, nombre, unidad, precio) VALUES (?,?,?,?)";
 
@@ -29,8 +29,10 @@ public class ProductoDAO {
             if (rowsInserted > 0) {
                 System.out.println("Producto insertadao con éxito: " + producto.getId());
             }
+            return true;
         } catch (SQLException ex) {
             System.out.println("Error al insertar el producto: " + ex.getMessage());
+            return false;
         }
     }
 

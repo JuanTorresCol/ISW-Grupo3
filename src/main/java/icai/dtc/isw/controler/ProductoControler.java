@@ -11,8 +11,8 @@ public class ProductoControler {
     static ProductoDAO productoDAO = new ProductoDAO();
 
     // Registra un nuevo producto a la base de datos
-    public static void registerProducto(Producto producto){
-        productoDAO.registerProducto(producto);}
+    public static boolean registerProducto(Producto producto){
+        return productoDAO.registerProducto(producto);}
 
     // Devuelve el producto por el nombre que tiene
     public static Producto getProductoName(String productoName) {
