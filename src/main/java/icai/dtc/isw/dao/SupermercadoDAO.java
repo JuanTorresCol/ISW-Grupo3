@@ -71,7 +71,6 @@ public class SupermercadoDAO {
             for (String idProducto : favRecetasId) {
                 productos.add(ProductoControler.getProductoId(idProducto));
             }
-
             return new Supermercado(id, name, pass, productos);
         } else{return null;}
     }

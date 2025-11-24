@@ -1,8 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
-import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.Producto;
-import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.domain.Unidad;
 import icai.dtc.isw.ui.JVentana;
 
@@ -43,7 +41,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         barra.setOpaque(false);
         barra.setLayout(new BoxLayout(barra, BoxLayout.X_AXIS));
         JButton nuevo = flatLink("Nuevo Producto >", _ -> app.showCard("anadirNuevoProducto"));
-        JButton exit = flatLink("Salir >", _ -> app.showCard("perfilSupermercado"));
+        JButton exit  = flatLink("Salir >", _ -> app.showCard("perfilSupermercado"));
         barra.add(Box.createHorizontalGlue());
         barra.add(nuevo);
         barra.add(Box.createHorizontalStrut(10));
@@ -55,7 +53,6 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
 
         refreshAsync();
     }
-
 
     @Override
     public void refreshAsync() {
@@ -75,7 +72,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
                 try {
                     ArrayList<Producto> productos = get();
                     lista.removeAll();
-                    if (productos.isEmpty()) {
+                    if (productos == null || productos.isEmpty()) {
                         lista.add(center(new JLabel("No hay productos aún.")));
                     } else {
                         for (Producto p : productos) {
@@ -90,38 +87,37 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
                 lista.revalidate();
                 lista.repaint();
             }
+        }.execute();
+    }
 
+    private JPanel similarCard(Producto producto, String nombre, double precio, Unidad unidad) {
+        JPanel card = roundedCard();
+        card.setLayout(new BorderLayout(10, 0));
 
-            private JPanel similarCard(Producto producto, String nombre, double precio, Unidad unidad) {
-                JPanel card = roundedCard();
-                card.setLayout(new BorderLayout(10, 0));
+        JPanel img = new JPanel();
+        img.setPreferredSize(new Dimension(140, 80));
+        img.setBackground(new Color(170, 187, 197));
+        img.add(new JLabel("Img"));
 
-                JPanel img = new JPanel();
-                img.setPreferredSize(new Dimension(140, 80));
-                img.setBackground(new Color(170, 187, 197));
-                img.add(new JLabel("Img"));
+        JPanel info = new JPanel();
+        info.setOpaque(false);
+        info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
+        JLabel name = new JLabel(nombre);
+        name.setFont(H3);
+        JLabel meta = new JLabel("1 " + unidad + " a " + precio + "$");
+        meta.setFont(SMALL);
+        JButton sel = outlineButton("ELIMINAR", _ -> {
+            app.getSupermercado().eliminarProducto(producto);
+            app.refreshCard("perfilSupermercado");
+        });
 
-                JPanel info = new JPanel();
-                info.setOpaque(false);
-                info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
-                JLabel name = new JLabel(nombre);
-                name.setFont(H3);
-                JLabel meta = new JLabel("1 " + unidad + " a " + precio + "$");
-                meta.setFont(SMALL);
-                JButton sel = outlineButton("ELIMINAR", _ -> {
-                    app.getSupermercado().eliminarProducto(producto);
-                    app.refreshCard("perfilSupermercado");
-                });
+        info.add(name);
+        info.add(meta);
+        info.add(Box.createVerticalStrut(6));
+        info.add(sel);
 
-                info.add(name);
-                info.add(meta);
-                info.add(Box.createVerticalStrut(6));
-                info.add(sel);
-
-                card.add(img, BorderLayout.WEST);
-                card.add(info, BorderLayout.CENTER);
-                return card;
-            }
-        };
+        card.add(img, BorderLayout.WEST);
+        card.add(info, BorderLayout.CENTER);
+        return card;
     }
 }

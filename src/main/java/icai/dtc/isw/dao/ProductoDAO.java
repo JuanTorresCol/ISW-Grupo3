@@ -56,7 +56,7 @@ public class ProductoDAO {
     public static Producto getProductoId(String productoId) {
         Connection con=ConnectionDAO.getInstance().getConnection();
         Producto pr = null;
-        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM producto WHERE id = ?")) {
+        try (PreparedStatement pst = con.prepareStatement("SELECT * FROM producto WHERE productoid = ?")) {
             pst.setString(1, productoId);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {

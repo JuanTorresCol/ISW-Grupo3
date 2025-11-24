@@ -96,13 +96,13 @@ public class NuevoProductoPanel extends JPanel {
     }
     private void onNuevoProducto(JVentana app) {
         String name = nombreField.getText();
-        int precio;
+        double precio;
         if(precioField.getText() == null){
-            precio = 0;
-        } else if(Integer.parseInt(precioField.getText())<0){
-            precio = 0;
+            precio = 0.00;
+        } else if(Double.parseDouble(precioField.getText())<0){
+            precio = 0.00;
         }else{
-            precio = Integer.parseInt(precioField.getText());
+            precio = Double.parseDouble(precioField.getText());
         }
 
         Unidad unidad = null;
