@@ -250,6 +250,9 @@ public class JVentana extends JFrame {
         this.lista = lista;
     }
     public ListaCompra getLista(){return this.lista;}
+    public void setSupermercado(Supermercado supermercado) {
+        this.supermercado = supermercado;
+    }
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {

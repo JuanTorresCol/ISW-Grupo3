@@ -20,7 +20,12 @@ public class ProductoControler {
     }
 
     public static Producto getProductoId(String productoId){return productoDAO.getProductoId(productoId);}
+
     public static ArrayList<Producto> getProductos() {
         return productoDAO.getProductos();
+    }
+
+    public static void eliminarProducto(Producto producto){
+        ProductoDAO.deleteProducto(producto);
     }
 }

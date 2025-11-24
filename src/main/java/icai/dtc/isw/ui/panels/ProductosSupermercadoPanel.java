@@ -1,6 +1,9 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.ProductoControler;
+import icai.dtc.isw.controler.SupermercadoControler;
 import icai.dtc.isw.domain.Producto;
+import icai.dtc.isw.domain.Supermercado;
 import icai.dtc.isw.domain.Unidad;
 import icai.dtc.isw.ui.JVentana;
 
@@ -102,8 +105,11 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         JLabel meta = new JLabel("1 " + unidad + " a " + precio + "$");
         meta.setFont(SMALL);
         JButton sel = outlineButton("ELIMINAR", _ -> {
-            app.getSupermercado().eliminarProducto(producto);
+            eliminarProducto(app.getSupermercado(),producto);
+            JOptionPane.showMessageDialog(this, "Eliminado exitosamente");
             app.refreshCard("perfilSupermercado");
+            app.refreshCard("productosSuper");
+            app.showCard("productosSuper");
         });
 
         info.add(name);
@@ -113,5 +119,9 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
 
         card.add(info, BorderLayout.CENTER);
         return card;
+    }
+    public void eliminarProducto(Supermercado supermercado, Producto producto) {
+        ProductoControler.eliminarProducto(producto);
+        SupermercadoControler.addProducto(supermercado);
     }
 }

@@ -35,6 +35,35 @@ public class ProductoDAO {
             return false;
         }
     }
+    // elimina un producto de la base de datos usando el id del propio Producto
+    public static boolean deleteProducto(Producto producto) {
+        if (producto == null || producto.getId() == null) {
+            System.out.println("Error al eliminar: producto o id nulo");
+            return false;
+        }
+        return deleteProductoById(producto.getId());
+    }
+
+    // elimina un producto de la base de datos identificándolo por su id
+    public static boolean deleteProductoById(String productoId) {
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        String sql = "DELETE FROM producto WHERE productoId = ?";
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, productoId);
+            int rowsDeleted = pst.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Producto eliminado con éxito: " + productoId);
+                return true;
+            } else {
+                System.out.println("No se encontró producto con id: " + productoId);
+                return false;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar el producto: " + ex.getMessage());
+            return false;
+        }
+    }
 
     // busca un producto en la base de datos en funcion al nombre que tiene
     public static Producto getProductoName(String productoName) {
@@ -84,6 +113,7 @@ public class ProductoDAO {
         }
         return lista;
     }
+
 
 
     // imprime por pantalla todos los productos que se encuentran en la base de datos mostrando su ID
