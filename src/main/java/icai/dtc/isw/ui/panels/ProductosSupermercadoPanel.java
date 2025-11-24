@@ -105,6 +105,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         JLabel meta = new JLabel("1 " + unidad + " a " + precio + "$");
         meta.setFont(SMALL);
         JButton sel = outlineButton("ELIMINAR", _ -> {
+            app.getSupermercado().eliminarProducto(producto);
             eliminarProducto(app.getSupermercado(),producto);
             JOptionPane.showMessageDialog(this, "Eliminado exitosamente");
             app.refreshCard("perfilSupermercado");

@@ -95,37 +95,36 @@ public class NuevoProductoPanel extends JPanel {
         repaint();
     }
     private void onNuevoProducto(JVentana app) {
-        String name = nombreField.getText();
-        double precio;
-        if(precioField.getText() == null){
-            precio = 0.00;
-        } else if(Double.parseDouble(precioField.getText())<0){
-            precio = 0.00;
-        }else{
-            precio = Double.parseDouble(precioField.getText());
+        String name = nombreField.getText().trim();
+        Double precio = null;
+        try {
+            String ptxt = precioField.getText().trim().replace(",", ".");
+            precio = Double.parseDouble(ptxt);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Introduzca un precio numérico válido");
+            return;
+        }
+        if (precio <= 0) {
+            JOptionPane.showMessageDialog(this, "Introduzca un precio mayor que 0");
+            return;
         }
 
-        Unidad unidad = null;
-        if (kgCheckBox.isSelected()) unidad = Unidad.kg;
-        if (lCheckBox.isSelected()) unidad = Unidad.l;
-        if (uCheckBox.isSelected()) unidad = Unidad.u;
+        Unidad unidad = unidadSeleccionada();
 
-        boolean b = ProductoControler.registerProducto(
-                new Producto(name, unidad, precio)
-        );
-
-        if (b) {
-            app.onProdInsertSuccess(new Producto(name, unidad, precio));
+        Producto prod = new Producto(name, unidad, precio);
+        boolean ok = ProductoControler.registerProducto(prod);
+        if (ok) {
+            app.onProdInsertSuccess(prod);
         } else {
-            if(name==null){JOptionPane.showMessageDialog(this,"Introduzca un nombre");
-            } else if(precio==0){
-                JOptionPane.showMessageDialog(this,"Introduzca un precio válido");
-            } else if(unidad == null){
-                JOptionPane.showMessageDialog(this,"Introduzca un unidad válida");
-            } else{
-                JOptionPane.showMessageDialog(this,"El registro del producto no se pudo completar");
-            }
+            JOptionPane.showMessageDialog(this, "El registro del producto no se pudo completar");
         }
+    }
+    private Unidad unidadSeleccionada() {
+        if (kgCheckBox.isSelected()) return Unidad.kg;
+        else if (lCheckBox.isSelected())  return Unidad.l;
+        else if (uCheckBox.isSelected())  return Unidad.u;
+        JOptionPane.showMessageDialog(this, "Seleccione una unidad de venta");
+        return null;
     }
 }
 

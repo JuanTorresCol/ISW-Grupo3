@@ -163,8 +163,7 @@ public class JVentana extends JFrame {
         showCard("inicio");
     }
 
-    public void onProdInsertSuccess(Producto prod){
-        ProductoControler.registerProducto(prod);
+    public void onProdInsertSuccess(Producto prod) {
         getSupermercado().anadirProducto(prod);
         SupermercadoControler.addProducto(getSupermercado());
         JOptionPane.showMessageDialog(this, "Producto registrado exitosamente");

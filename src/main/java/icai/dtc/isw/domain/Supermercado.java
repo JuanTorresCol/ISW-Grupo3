@@ -40,9 +40,9 @@ public class Supermercado extends Usuario{
         this.productos = productos;
     }
     public void anadirProducto(Producto producto){
-        productos.add(producto);
+        this.productos.add(producto);
     }
     public void eliminarProducto(Producto producto){
-        productos.remove(producto);
+        this.productos.remove(producto);
     }
 }
