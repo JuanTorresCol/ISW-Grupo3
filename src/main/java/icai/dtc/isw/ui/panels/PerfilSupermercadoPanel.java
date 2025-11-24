@@ -47,7 +47,6 @@ public class PerfilSupermercadoPanel extends JPanel {
 
         content.add(keyValue("NÚMERO DE PRODUCTOS: ", String.valueOf(usuario.getNumProd())));
 
-        // Histórico (placeholder)
         JLabel prev = labelBold("OTROS");
         JButton s1 = flatLink("Productos en Stock", _ -> {
             app.refreshCard("productosSuper");
@@ -57,6 +56,7 @@ public class PerfilSupermercadoPanel extends JPanel {
         content.add(center(prev));
         content.add(center(s1));
         content.add(center(exit));
+        add(content);
 
     }
 }
