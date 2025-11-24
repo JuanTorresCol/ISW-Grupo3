@@ -1,8 +1,6 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.controler.ProductoControler;
-import icai.dtc.isw.controler.RecetaControler;
-import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.domain.Producto;
 import icai.dtc.isw.domain.Supermercado;
 import icai.dtc.isw.utils.Util;
@@ -38,24 +36,25 @@ public class SupermercadoDAO {
     }
 
     private static Supermercado mapToSuper(ResultSet rs) throws SQLException {
-        String id = rs.getString("id");
-        String name = rs.getString("name");
-        String pass = rs.getString("password");
+        if(rs.getInt("puesto")==1) {
+            String id = rs.getString("id");
+            String name = rs.getString("name");
+            String pass = rs.getString("password");
 
-        var favRecetasV = rs.getArray("favrecetas");
-        ArrayList<String> favRecetasId = util.toArrayList(favRecetasV);
-        ArrayList<Producto> productos = new ArrayList<>();
-        for(String idProducto: favRecetasId){
-            productos.add(ProductoControler.getProductoId(idProducto));
-        }
+            var favRecetasV = rs.getArray("favrecetas");
+            ArrayList<String> favRecetasId = util.toArrayList(favRecetasV);
+            ArrayList<Producto> productos = new ArrayList<>();
+            for (String idProducto : favRecetasId) {
+                productos.add(ProductoControler.getProductoId(idProducto));
+            }
 
-        return new Supermercado(id, name, pass,productos);
+            return new Supermercado(id, name, pass, productos);
+        } else{return null;}
     }
 
     public static void registerSupermercado(Supermercado superM) {
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "INSERT INTO usuarios (id, name, password,favrecetas, puesto) VALUES (?, ?, ?, ?, ?) " +
-                "VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO usuarios (id, name, password,favrecetas, puesto) VALUES (?, ?, ?, ?, ?) ";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, superM.getUserId());
@@ -96,8 +95,28 @@ public class SupermercadoDAO {
         return listaSupermercados;
     }
 
-//    public static void main(String[] args) {
-//        // insertar informacion a mano, por cada ejecución se introduce un nuevo super
-//        registerSupermercado(new Supermercado());
-//    }
+    // devuelve un supermercado en función a su nombre
+    public static Supermercado getSuper(String inputName) {
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        String sql = "SELECT * FROM usuarios WHERE name = ?";
+        Supermercado cu = null;
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, inputName);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    cu = mapToSuper(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return cu;
+    }
+
+    public static void main(String[] args) {
+        // insertar informacion a mano, por cada ejecución se introduce un nuevo super
+        registerSupermercado(new Supermercado("Lidl", "l123"));
+    }
 }

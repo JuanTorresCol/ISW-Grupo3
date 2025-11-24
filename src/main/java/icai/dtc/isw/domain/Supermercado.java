@@ -12,9 +12,8 @@ public class Supermercado extends Usuario{
         this.productos = new ArrayList<>();
     }
 
-    public Supermercado(String userName, String userPass, ArrayList<Producto> productos) {
+    public Supermercado(String userName, String userPass) {
         super(userName, userPass);
-        this.productos = productos;
     }
 
     public Supermercado(String userId, String userName, String userPass,  ArrayList<Producto> productos){
