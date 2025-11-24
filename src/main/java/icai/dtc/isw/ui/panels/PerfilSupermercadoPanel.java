@@ -32,9 +32,9 @@ public class PerfilSupermercadoPanel extends JPanel {
         JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
-
+        cab.add(center(new JLabel("SUPERMERCADO", SwingConstants.CENTER)));
         cab.add(center(user));
-        cab.add(Box.createVerticalStrut(6));
+        // cab.add(Box.createVerticalStrut(6));
 
         // Datos básicos
         content.add(center(t));
