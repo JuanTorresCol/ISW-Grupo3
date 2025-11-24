@@ -94,11 +94,6 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10, 0));
 
-        JPanel img = new JPanel();
-        img.setPreferredSize(new Dimension(140, 80));
-        img.setBackground(new Color(170, 187, 197));
-        img.add(new JLabel("Img"));
-
         JPanel info = new JPanel();
         info.setOpaque(false);
         info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
@@ -116,7 +111,6 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         info.add(Box.createVerticalStrut(6));
         info.add(sel);
 
-        card.add(img, BorderLayout.WEST);
         card.add(info, BorderLayout.CENTER);
         return card;
     }
