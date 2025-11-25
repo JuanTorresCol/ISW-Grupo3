@@ -130,12 +130,13 @@ public class SupermercadoDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     cu = mapToSuper(rs);
+                    return cu;
                 }
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return cu;
+        return null;
     }
 
     public static void main(String[] args) {

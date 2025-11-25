@@ -2,10 +2,7 @@ package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.SupermercadoControler;
-import icai.dtc.isw.domain.Customer;
-import icai.dtc.isw.domain.ListaCompra;
-import icai.dtc.isw.domain.MenuSemanal;
-import icai.dtc.isw.domain.Supermercado;
+import icai.dtc.isw.domain.*;
 import icai.dtc.isw.ui.JVentana;
 import icai.dtc.isw.ui.UiUtils;
 
@@ -50,19 +47,21 @@ public class LoginPanel extends JPanel {
         btnEntrar.addActionListener(_ -> {
             String userName = usuarioLoginField.getText().trim();
             String pass = new String(contrasenaLoginField.getPassword());
-            Customer customerCheck = controler.getCustomerMenu(userName).getCustomer();
-            MenuSemanal menuSemanal = controler.getCustomerMenu(userName).getMenu();
-            if (customerCheck != null && pass.equals(customerCheck.getUserPass())) {
-                app.setMenu(menuSemanal);
-                loginSuccess(menuSemanal, app);
-                app.onLoginSuccess(customerCheck);
+            ContainerMenuCustomer container = controler.getCustomerMenu(userName);
+            if (container != null) {
+                if (pass.equals(container.getCustomer().getUserPass())) {
+                    Customer customerCheck = container.getCustomer();
+                    MenuSemanal menuSemanal = container.getMenu();
+                    app.setMenu(menuSemanal);
+                    loginSuccess(menuSemanal, app);
+                    app.onLoginSuccess(customerCheck);
+                }else{JOptionPane.showMessageDialog(this, "Contraseña incorrecta, pruebe otra vez.");}
             } else {
                 Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
                 if(supermercado != null) {
                     app.onLoginSuccessSupermercado(supermercado);
                     System.out.println(app.getSupermercado().getProductosId());
                 }else{JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");}
-
             }
         });
 
