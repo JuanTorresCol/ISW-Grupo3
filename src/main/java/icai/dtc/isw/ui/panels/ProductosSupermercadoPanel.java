@@ -21,6 +21,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
     private final JVentana app;
     private final JPanel lista;
 
+    // constructor del panel que alberga las cards de los productos del supermercado
     public ProductosSupermercadoPanel(JVentana app) {
         this.app = app;
         setLayout(new BorderLayout());
@@ -57,6 +58,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         refreshAsync();
     }
 
+    // el proceso de carga de los productos se lleva a cabo en el background ya que es pesado
     @Override
     public void refreshAsync() {
         lista.removeAll();
@@ -93,6 +95,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         }.execute();
     }
 
+    // contiene la información de un producto
     private JPanel similarCard(Producto producto, String nombre, double precio, Unidad unidad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10, 0));
@@ -144,6 +147,8 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
 
         return card;
     }
+
+    // opción para eliminar un producto de los que tiene el supermercado en stock
     public void eliminarProducto(Supermercado supermercado, Producto producto) {
         ProductoControler.eliminarProducto(producto);
         SupermercadoControler.addProducto(supermercado);

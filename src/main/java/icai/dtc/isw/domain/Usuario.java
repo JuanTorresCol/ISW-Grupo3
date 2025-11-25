@@ -2,22 +2,21 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.utils.Util;
 
-import java.util.ArrayList;
-
+// clase padre de Supermercado y Customer
+// contiene la información que ambas clases comparten
 public class Usuario {
     private String userId;
-    private String userName;
+    private final String userName;
     private String userPass;
 
-    private static final Util util = new Util();
 
     public Usuario(String userName, String userPass) {
-        this.userId = util.createUserId(userName);
+        this.userId = Util.createUserId(userName);
         this.userName = userName;
         this.userPass = userPass;
     }
     public Usuario(){
-        this.userId = util.createUserId("default");
+        this.userId = Util.createUserId("default");
         this.userName = "e";
         this.userPass = "e";
     }

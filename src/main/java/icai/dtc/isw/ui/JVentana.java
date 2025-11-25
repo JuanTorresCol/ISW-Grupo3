@@ -1,7 +1,7 @@
 package icai.dtc.isw.ui;
 
 import icai.dtc.isw.controler.CustomerControler;
-import icai.dtc.isw.controler.ProductoControler;
+
 import icai.dtc.isw.controler.SupermercadoControler;
 import icai.dtc.isw.domain.*;
 
@@ -127,6 +127,7 @@ public class JVentana extends JFrame {
         mainPanel.repaint();
     }
 
+    // flujo de login válido de un customer
     public void onLoginSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
         this.customerId = c.getUserId();
@@ -136,6 +137,7 @@ public class JVentana extends JFrame {
         showCard("menuDia");
     }
 
+    // flujo de un login válido de un supermercado
     public void onLoginSuccessSupermercado(Supermercado supermercado) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
         this.customerId = supermercado.getUserId();
@@ -146,6 +148,7 @@ public class JVentana extends JFrame {
         showCard("perfilSupermercado");
     }
 
+    // flujo de operación de registro válida
     public void onRegisterSuccess(Customer c) {
         JOptionPane.showMessageDialog(this, "Registro completado");
         this.customerId = c.getUserId();
@@ -155,16 +158,19 @@ public class JVentana extends JFrame {
         showCard("presupuesto");
     }
 
+    // flujo de operación de edición válida
     public void onEditSuccess() {
         JOptionPane.showMessageDialog(this, "Edición completada");
         showCard("menuDia");
     }
 
+    // mensaje de error por msg motivo (en panel de login/registro)
     public void onAuthFailed(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("inicio");
     }
 
+    // flujo de inserción de producto válida
     public void onProdInsertSuccess(Producto prod) {
         getSupermercado().anadirProducto(prod);
         SupermercadoControler.addProducto(getSupermercado());
@@ -174,18 +180,17 @@ public class JVentana extends JFrame {
         showCard("productosSupermercado");
     }
 
+    // mensaje de error por msg motivo (en panel de edición de perfil)
     public void onAuthFailed2(String msg) {
         JOptionPane.showMessageDialog(this, msg);
         showCard("perfil");
     }
 
+    // carga un customer desde su ID
     public Customer cargarPerfilUsuario() {
         if (customerId == null) return new Customer();
         return CustomerControler.getClienteId(customerId);
     }
-
-//    public String getCustomerId() { return customerId; }
-//    public void setCustomerId(String id) { this.customerId = id; }
 
     public Customer getUsuario() { return customer; }
 
@@ -196,10 +201,12 @@ public class JVentana extends JFrame {
     public MenuSemanal getMenuSemanal() {
         return menuSemanal;
     }
+
     public void setMenu(MenuSemanal m){
         this.menuSemanal = m;
     }
 
+    // flujo de logout desde un perfil de customer
     public void logout() {
         Runnable r = () -> {
 
@@ -221,6 +228,7 @@ public class JVentana extends JFrame {
         else SwingUtilities.invokeLater(r);
     }
 
+    // flujo de logout desde un perfil de supermercado
     public void logoutSuper() {
         Runnable r = () -> {
 
@@ -240,6 +248,7 @@ public class JVentana extends JFrame {
         if (SwingUtilities.isEventDispatchThread()) r.run();
         else SwingUtilities.invokeLater(r);
     }
+
     public void setBloque(String bloque) {
         this.bloque = bloque;
     }
@@ -248,7 +257,6 @@ public class JVentana extends JFrame {
     public void setDia(int dia) {
         this.dia = dia;
     }
-
     public int getDia() { return this.dia; }
     public void setLista(ListaCompra lista){
         this.lista = lista;

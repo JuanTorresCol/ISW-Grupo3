@@ -41,6 +41,7 @@ public class MenuDiario {
         this.recetas.put("cena",receta);
     }
 
+    // devuelve el precio del menu de ese dia
     public double getPrecioMenu(ListaCompra lista){
         double calculo = 0;
         for (Receta receta : recetas.values()){

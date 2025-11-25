@@ -13,8 +13,6 @@ import java.util.*;
 
 public class ProductoDAO {
 
-    public static final Util util = new Util();
-
     // registra un producto en la base de datos
     public static boolean registerProducto(Producto producto) {
         Connection con = ConnectionDAO.getInstance().getConnection();
@@ -35,6 +33,7 @@ public class ProductoDAO {
             return false;
         }
     }
+
     // elimina un producto de la base de datos usando el id del propio Producto
     public static boolean deleteProducto(Producto producto) {
         if (producto == null || producto.getId() == null) {
@@ -82,6 +81,7 @@ public class ProductoDAO {
         return pr;
     }
 
+    // devuelve el producto asociado al Id pasado como parámetro
     public static Producto getProductoId(String productoId) {
         Connection con=ConnectionDAO.getInstance().getConnection();
         Producto pr = null;
@@ -113,8 +113,6 @@ public class ProductoDAO {
         }
         return lista;
     }
-
-
 
     // imprime por pantalla todos los productos que se encuentran en la base de datos mostrando su ID
     public static void main(String[] args) {

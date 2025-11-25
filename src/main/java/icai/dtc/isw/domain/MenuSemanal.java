@@ -23,8 +23,6 @@ public class MenuSemanal {
         this.menus_semana.put("viernes", new MenuDiario(s.get(8), s.get(9)));
     }
 
-    public Map<String,MenuDiario> getMenuSemanal() {return menus_semana;}
-    // public double getPresupuesto() {return presupuesto;}
     public void setPresupuesto(int presupuesto) {this.presupuesto = presupuesto;}
     public MenuDiario getLunes() {return menus_semana.get("lunes");}
     public MenuDiario getMartes() {return menus_semana.get("martes");}
@@ -48,10 +46,10 @@ public class MenuSemanal {
         }
     }
 
+    // genera la lista de la compra a partir de las recetas que componen el menu de esa semana
     public ListaCompra generarListaCompra() {
         ListaCompra lista = new ListaCompra();
-        ProductoControler productoControler =  new ProductoControler();
-        ArrayList<Producto> productos = productoControler.getProductos();
+        ArrayList<Producto> productos = ProductoControler.getProductos();
         for(Producto p: productos) {
             for (MenuDiario menuDiario : this.menus_semana.values()) {
                 for (Receta receta : menuDiario.getRecetas().values()) {
@@ -73,6 +71,7 @@ public class MenuSemanal {
         return lista;
     }
 
+    // actualiza la lista de la compra al cambiar una receta por otra
     public ListaCompra updateLista(Receta recetaVieja, Receta recetaNueva, ListaCompra listaCompra) {
         if (recetaVieja != null) {
             for (Ingrediente ing : recetaVieja.getIngredientes().values()) {
@@ -121,6 +120,7 @@ public class MenuSemanal {
         return "";
     }
 
+    // devuelve una lista de recetas en funcion a las condiciones del usuario y su presupuesto
     public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer, JVentana app){
         ArrayList<Receta> recetasSimilares = new ArrayList<>();
         Collections.shuffle(recetas);
@@ -128,7 +128,7 @@ public class MenuSemanal {
             if(recetasSimilares.size()>=4){break;}
             boolean flag = true;
             for(MenuDiario menuDia :menus_semana.values()){
-                if(menuDia.getRecetas().values().contains(recetaTry)){
+                if(menuDia.getRecetas().containsValue(recetaTry)){
                     flag = false;
                     break;
                 }
@@ -143,7 +143,6 @@ public class MenuSemanal {
                     break;
                 }
             }
-
             if(flag){
                 recetasSimilares.add(recetaTry);
             }
@@ -151,6 +150,7 @@ public class MenuSemanal {
         return recetasSimilares;
     }
 
+    // cambia una receta de esa semana por otra
     public Receta cambioReceta(Receta nueva, String bloque, int dia) {
         Receta anterior = null;
 
@@ -195,6 +195,7 @@ public class MenuSemanal {
         return anterior;
     }
 
+    // devuelve el Id de todas las recetas de esa semana
     public ArrayList<String> getRecetasId(){
         ArrayList<String> recetasId = new ArrayList<>();
         recetasId.addAll(menus_semana.get("lunes").getRecetasId());

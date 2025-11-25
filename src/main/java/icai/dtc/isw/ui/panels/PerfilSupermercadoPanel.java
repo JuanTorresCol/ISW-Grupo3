@@ -11,6 +11,7 @@ import static icai.dtc.isw.ui.UiUtils.*;
 
 public class PerfilSupermercadoPanel extends JPanel {
 
+    // constructor del panel que muestra la información del perfil del supermercado
     public PerfilSupermercadoPanel(JVentana app) {
         setLayout(new BorderLayout());
         setBackground(BG);

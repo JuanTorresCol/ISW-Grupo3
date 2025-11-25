@@ -4,14 +4,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import icai.dtc.isw.utils.Util;
-
 public class Customer extends Usuario implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private static final Util util = new Util();
 
     private String userGender;
     private int userAge;
@@ -94,20 +90,25 @@ public class Customer extends Usuario implements Serializable {
         return false;
     }
 
+    // comprueba si el usuario puede consumir el ingrediente
     public boolean noPuedeConsumir(Ingrediente ingrediente) {
         return ingrediente != null && noPuedeConsumirNombre(ingrediente.getNombre());
     }
 
+    // comprueba si el usuario puede consumir el producto
     public boolean noPuedeConsumir(Producto producto) {
         return producto != null && noPuedeConsumirNombre(producto.getNombre());
     }
 
+    // devuelve las recetas favoritas del usuario
     public ArrayList<Receta> getRecetasFav() {return recetas;}
 
+    // añade una nueva receta favorita al usuario
     public void anadirRecetaFav(Receta recetaNew){
         this.recetas.add(recetaNew);
     }
 
+    // devuelve los ID de las recetas favoritas del usuario para almacenarlos en la db
     public ArrayList<String> getRecetasFavId(){
         ArrayList<String> recetasId = new ArrayList<>();
         for(Receta receta : this.recetas){
@@ -116,6 +117,7 @@ public class Customer extends Usuario implements Serializable {
         return recetasId;
     }
 
+    // elimina una receta de las favoritas del usuario
     public void eliminarRecetaFav(Receta recetaElim){
         this.recetas.remove(recetaElim);
     }

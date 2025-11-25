@@ -10,6 +10,7 @@ import static icai.dtc.isw.ui.UiUtils.*;
 
 public class GuardadasDetallePanel extends JPanel {
 
+    // Constructor del panel que muestra el detalle de las recetas guardadas por el usuario
     public GuardadasDetallePanel(JVentana app, Receta receta) {
         setLayout(new BorderLayout());
         setBackground(BG);
@@ -25,7 +26,7 @@ public class GuardadasDetallePanel extends JPanel {
                 receta.ingredientesToString());
 
         JPanel steps = section("INSTRUCCIONES",
-                receta.formatearDescripcion(receta.getDescripcion()));
+                Receta.formatearDescripcion(receta.getDescripcion()));
 
         JPanel center = new JPanel();
         center.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));

@@ -15,6 +15,7 @@ public class PresupuestoPanel extends JPanel {
 
     private final JSpinner presupuestoSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5000, 5));
 
+    // panel del que se obtiene el presupuesto para calcular el menú semanal
     public PresupuestoPanel(JVentana app) {
 
         setLayout(new BorderLayout());
@@ -55,9 +56,10 @@ public class PresupuestoPanel extends JPanel {
             presupuestoSpinner.setEnabled(false);
             loading.setVisible(true);
 
+            // la lógica es pesada por lo que se lleva a cabo en el background
             SwingWorker<ListaCompra, Void> worker = new SwingWorker<>() {
                 @Override
-                protected ListaCompra doInBackground() throws Exception {
+                protected ListaCompra doInBackground() {
                     menu.generarMenu(app);
 
                     if (menu.getLunes() == null) {
@@ -106,6 +108,7 @@ public class PresupuestoPanel extends JPanel {
         add(center, BorderLayout.CENTER);
     }
 
+    // guarda el menu dentro de los parámetros de la aplicación
     public void guardarMenu(MenuSemanal menu, JVentana app){
         CustomerControler.guardaMenu(app.getUsuario(), menu);
     }

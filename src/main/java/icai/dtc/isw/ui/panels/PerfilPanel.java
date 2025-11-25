@@ -11,6 +11,7 @@ import static icai.dtc.isw.ui.UiUtils.*;
 
 public class PerfilPanel extends JPanel {
 
+    // constructor del panel que muestra la información del perfil del customer
     public PerfilPanel(JVentana app) {
         setLayout(new BorderLayout());
         setBackground(BG);

@@ -30,6 +30,7 @@ public class MenuDiaPanel extends JPanel {
     private final JPanel tiraDias;
     private final List<JComponent> dayChips = new ArrayList<>();
 
+    // constructor que muestra el menu del dia con opciones para ver el resto de dias
     public MenuDiaPanel(JVentana app) {
         this.app = app;
         this.menuSemanal = app.getMenuSemanal();
@@ -37,8 +38,7 @@ public class MenuDiaPanel extends JPanel {
 
         setLayout(new BorderLayout());
         setBackground(BG);
-        //setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        // Header con flechas
+
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         header.setBorder(new EmptyBorder(0, 5, 0, 5));
@@ -87,11 +87,13 @@ public class MenuDiaPanel extends JPanel {
 
     }
 
+    // en funcion de la flecha pulsada se va a un dia o otro
     private void cambiarDia(int delta) {
         int newIndex = (idxDia + delta + diasSemana.length) % diasSemana.length;
         goToDay(newIndex);
     }
 
+    // devuelve el dia de la semana que es dependiedo del índice de día
     private void goToDay(int newIndex) {
         idxDia = newIndex;
         tituloDiaLabel.setText(dayTitle());
@@ -109,11 +111,11 @@ public class MenuDiaPanel extends JPanel {
         updateChipSelection();
     }
 
+    // Marca el día que se esta viendo
     private void updateChipSelection() {
         for (int i = 0; i < dayChips.size(); i++) {
             JComponent c = dayChips.get(i);
             boolean selected = (i == idxDia);
-            // subrayado inferior en el seleccionado
             c.setBorder(selected
                     ? BorderFactory.createMatteBorder(0, 0, 2, 0, TITLE)
                     : BorderFactory.createEmptyBorder(0, 0, 2, 0));
@@ -122,10 +124,12 @@ public class MenuDiaPanel extends JPanel {
         tiraDias.repaint();
     }
 
+    // devuelve el nombre del día
     private String dayTitle() {
         return diasSemana[idxDia];
     }
 
+    // carga las tarjetas de las recetas para la comida y cena de ese día
     private void renderCards() {
         cards.removeAll();
 
@@ -160,6 +164,8 @@ public class MenuDiaPanel extends JPanel {
         cards.repaint();
     }
 
+    // tarjeta que contiene la información de la receta asi como opciones para ver mas información,
+    // guardar la receta como favorito o cambiar la receta por otra de las sugeridas
     private JPanel menuCard(JVentana app, Receta receta, String bloque, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -175,7 +181,6 @@ public class MenuDiaPanel extends JPanel {
         Dimension d = new Dimension(240,85);
         img.setPreferredSize(d);
         img.setMinimumSize(d);
-        //img.setMaximumSize(d);
         img.setBackground(new Color(170, 187, 197));
         img.add(new JLabel("Imagen"));
         card.add(img);
@@ -188,11 +193,9 @@ public class MenuDiaPanel extends JPanel {
         name.setFont(H3);
         card.add(center(name));
 
-        //card.add(Box.createVerticalStrut(3));
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         card.add(center(meta));
-        //card.add(Box.createVerticalStrut(1));
 
         JPanel acciones = flowLeft();
         JButton ver = outlineButton("VER RECETA", _ -> {

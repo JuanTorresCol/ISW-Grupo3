@@ -24,8 +24,9 @@ public class NuevoProductoPanel extends JPanel {
     private final JCheckBox lCheckBox = new JCheckBox("L");
     private final JCheckBox uCheckBox = new JCheckBox("UNIDAD");
     private JLabel t;
-    private JPanel form;
 
+    // constructor del panel que muestra las opciones para añadir un nuevo producto a los propios
+    // de un supermercado
     public NuevoProductoPanel(JVentana app) {
         JScrollPane scrollPane = new JScrollPane(crearFormulario(app));
 
@@ -54,12 +55,13 @@ public class NuevoProductoPanel extends JPanel {
         add(btnBack , BorderLayout.SOUTH);
     }
 
+    // crea el panel en el que el supermercado introduce información sobre el nuevo producto
     public JPanel crearFormulario(JVentana app) {
 
         setBackground(BG);
         t = title("Añade un Producto");
         t.setBorder(new javax.swing.border.EmptyBorder(20, 5, 20, 5));
-        form = new JPanel();
+        JPanel form = new JPanel();
         form.setOpaque(false);
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -88,15 +90,17 @@ public class NuevoProductoPanel extends JPanel {
         return form;
     }
 
-
+    // elimina el texto el las celdas
     private void resetFields() {
         UiUtils.clearTextBoxes(this);
         revalidate();
         repaint();
     }
+
+    // obtiene los datos del GUI y los manda al backend para que lleve a cabo la lógica
     private void onNuevoProducto(JVentana app) {
         String name = nombreField.getText().trim();
-        Double precio = null;
+        double precio;
         try {
             String ptxt = precioField.getText().trim().replace(",", ".");
             precio = Double.parseDouble(ptxt);
@@ -119,6 +123,8 @@ public class NuevoProductoPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "El registro del producto no se pudo completar");
         }
     }
+
+    // devuelve la unidad que ha sido seleccionada de los JCheckBox
     private Unidad unidadSeleccionada() {
         if (kgCheckBox.isSelected()) return Unidad.kg;
         else if (lCheckBox.isSelected())  return Unidad.l;

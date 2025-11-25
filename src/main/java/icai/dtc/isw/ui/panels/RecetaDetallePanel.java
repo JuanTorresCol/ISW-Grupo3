@@ -11,6 +11,7 @@ import static icai.dtc.isw.ui.UiUtils.*;
 
 public class RecetaDetallePanel extends JPanel {
 
+    // constructor del panel que muestra los detalles de una receta
     public RecetaDetallePanel(JVentana app) {
         setLayout(new BorderLayout());
         setBackground(BG);
@@ -49,6 +50,7 @@ public class RecetaDetallePanel extends JPanel {
         ), BorderLayout.SOUTH);
     }
 
+    // devuelve la receta en función del día y bloque del que proviene la petición
     public Receta findReceta(JVentana app){
         int dia = app.getDia();
         String bloque = app.getBloque();

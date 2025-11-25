@@ -8,23 +8,24 @@ import java.util.ArrayList;
 // clase que conecta el DAO con la GUI
 public class ProductoControler {
 
-    static ProductoDAO productoDAO = new ProductoDAO();
-
     // Registra un nuevo producto a la base de datos
     public static boolean registerProducto(Producto producto){
-        return productoDAO.registerProducto(producto);}
+        return ProductoDAO.registerProducto(producto);}
 
     // Devuelve el producto por el nombre que tiene
     public static Producto getProductoName(String productoName) {
-        return productoDAO.getProductoName(productoName);
+        return ProductoDAO.getProductoName(productoName);
     }
 
-    public static Producto getProductoId(String productoId){return productoDAO.getProductoId(productoId);}
+    // Devuelve el producto que coincida con el Id introducido
+    public static Producto getProductoId(String productoId){return ProductoDAO.getProductoId(productoId);}
 
+    // Devuelve todos los productos
     public static ArrayList<Producto> getProductos() {
-        return productoDAO.getProductos();
+        return ProductoDAO.getProductos();
     }
 
+    // Elimina un producto de la base de datos
     public static void eliminarProducto(Producto producto){
         ProductoDAO.deleteProducto(producto);
     }

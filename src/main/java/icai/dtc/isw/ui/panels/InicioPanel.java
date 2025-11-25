@@ -5,12 +5,10 @@ import icai.dtc.isw.ui.UiUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-
 
 public class InicioPanel extends JPanel {
 
+    // constructor del panel de inicio que da opciones de login y registro
     public InicioPanel(JVentana app) {
 
         setLayout(new BorderLayout());

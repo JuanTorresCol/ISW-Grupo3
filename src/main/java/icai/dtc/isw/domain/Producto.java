@@ -1,26 +1,18 @@
 package icai.dtc.isw.domain;
 
-import icai.dtc.isw.controler.ProductoControler;
-import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.utils.Util;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
-
 public class Producto {
-    private String codigo;
-    private String nombre;
-    private Unidad unidad;
-    private double precio;
-
-    private Util util = new Util();
+    private final String codigo;
+    private final String nombre;
+    private final Unidad unidad;
+    private final double precio;
 
     public Producto(String nombre, Unidad unidad, double precio) {
         this.nombre = nombre;
         this.unidad = unidad;
         this.precio = precio;
-        this.codigo = util.createUserId(nombre);
+        this.codigo = Util.createUserId(nombre);
     }
 
     // Constructor para el producto a base del ingrediente del que proviene
@@ -28,7 +20,7 @@ public class Producto {
         this.nombre = ingrediente.getNombre();
         this.unidad = unidad;
         this.precio = precio;
-        this.codigo = util.createUserId(ingrediente.getNombre());
+        this.codigo = Util.createUserId(ingrediente.getNombre());
     }
 
     // Constructor default producto
@@ -59,10 +51,6 @@ public class Producto {
     public double getPrecio() {
         return this.precio;
     }
-
-    // En el caso de que un producto aparezca más de una vez en la lista se incrementa su precio
-    public void repiteProd(){
-        this.precio = this.precio + this.precio;}
 
     @Override
     public String toString() {

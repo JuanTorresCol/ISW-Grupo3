@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Receta {
-    Util util = new Util();
 
     private final String nombre;
     private final Map<String,Ingrediente> ingredientes;
@@ -21,7 +20,7 @@ public class Receta {
         this.duracion = duracion;
         this.dificultad = dificultad;
         this.ingredientes = new HashMap<>(ingredientes);
-        this.id = util.createUserId(nombre);
+        this.id = Util.createUserId(nombre);
     }
 
     // constructor de receta en funcion a todos sus atributos
@@ -41,18 +40,12 @@ public class Receta {
     public String getId() {return id;}
     public String getNombre() {return nombre;}
 
-     // imprime en consola los ingredientes que contiene una receta
-     public void printIngredientes() {
-        for (Ingrediente ingrediente : ingredientes.values()) {
-            System.out.println(ingrediente.toString());
-        }
-    }
-
     @Override
     public String toString() {
         return getNombre() + " - " + getDuracion() + " mins - " +" \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
     }
 
+    // devuelve el precio de la lista de la compra
     public double getPrecio(ListaCompra lista){
         double calculo = 0.00;
         for(Ingrediente ing : ingredientes.values()){
@@ -66,6 +59,7 @@ public class Receta {
         return calculo;
     }
 
+    // devuelve la información de los ingredientes en formato string
     public String ingredientesToString() {
         if (ingredientes == null || ingredientes.isEmpty()) {
             return "No hay ingredientes registrados.";
@@ -85,6 +79,7 @@ public class Receta {
         return sb.toString();
     }
 
+    // formatea la descricpión de una receta para mostrarla en la información de una receta
     public static String formatearDescripcion(String descripcion) {
         if (descripcion == null || descripcion.isBlank()) {
             return "";
@@ -101,21 +96,10 @@ public class Receta {
             }
             lineaActual.append(palabra).append(" ");
         }
-        if (lineaActual.length() > 0) {
+        if (!lineaActual.isEmpty()) {
             resultado.append(lineaActual.toString().trim());
         }
 
         return resultado.toString();
     }
-
-//    public boolean esAptaPara(Customer customer) {
-//        if (customer == null) return true;
-//
-//        for (Ingrediente ingrediente : ingredientes.values()) {
-//            if (customer.noPuedeConsumir(ingrediente)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 }

@@ -33,8 +33,8 @@ public class EditarPanel extends JPanel {
     private final JTextField otroAlergiaField = textField(  10);
     private final JTextField alimentosNoComeField = textField(20);
     private JLabel t;
-    private JPanel form;
 
+    // constructor del panel de edicion de usuario
     public EditarPanel(JVentana app, CustomerControler controler) {
         this.controler = controler;
 
@@ -67,12 +67,13 @@ public class EditarPanel extends JPanel {
 
     }
 
+    // obtiene la información del usuario
     public JPanel crearFormulario(JVentana app) {
 
         setBackground(BG);
         t = title("Editar Perfil");
         t.setBorder(new javax.swing.border.EmptyBorder(20, 5, 20, 5));
-        form = new JPanel();
+        JPanel form = new JPanel();
         form.setOpaque(false);
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(new EmptyBorder(10, 25, 20, 25));
@@ -115,6 +116,7 @@ public class EditarPanel extends JPanel {
         return form;
     }
 
+    // extrae los datos de GUI y se los manda al backend para llevar a cabo la lógica de edición de usuario
     private void onEditar(JVentana app) {
         String userName = usuarioField.getText();
         String pass = new String(contrasenaField.getPassword());
@@ -135,11 +137,9 @@ public class EditarPanel extends JPanel {
         }
 
         Customer usuario = app.getUsuario();
-
         String resultado = controler.editarPreferencias(
                 usuario, userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome
         );
-
         if ("b".equals(resultado)){
             app.refreshCard("perfil");
             app.onEditSuccess();

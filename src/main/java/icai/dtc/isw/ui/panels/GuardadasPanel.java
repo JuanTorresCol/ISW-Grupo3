@@ -1,18 +1,13 @@
 package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.controler.CustomerControler;
-import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
 import static icai.dtc.isw.ui.UiUtils.*;
-
 import javax.swing.SwingWorker;
-import javax.swing.border.EmptyBorder;
 
 import icai.dtc.isw.ui.Refreshable;
 
@@ -21,11 +16,11 @@ public class GuardadasPanel extends JPanel implements Refreshable {
     private final JVentana app;
     private final JPanel lista;
 
+    // constructor del panel que muestra las recetas guardadas por el usuario
     public GuardadasPanel(JVentana app) {
         this.app = app;
         setLayout(new BorderLayout());
         setBackground(BG);
-        //setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
 
         JLabel t = pillTitle("FAVORITOS");
 
@@ -33,7 +28,6 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.add(center(new JLabel("Cargando recetas guardadas...")));
-
 
         JScrollPane scroll = new JScrollPane(wrapCentered(lista));
         scroll.getViewport().setBackground(BG);
@@ -52,6 +46,8 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         refreshAsync();
     }
 
+    // lleva a cabo la lógica de la extracción y display de las recetas favoritas en el background
+    // esto se hace para mejorar el rendimiento del programa ya que este proceso es costoso
     @Override
     public void refreshAsync() {
         lista.removeAll();
@@ -84,6 +80,7 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         }.execute();
     }
 
+    // tarjetas que contienen la información de una receta de las guardadas por el usuario
     private JPanel similarCard(Receta receta, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10,0));

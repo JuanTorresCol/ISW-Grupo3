@@ -6,26 +6,23 @@ import java.util.Map;
 
 import icai.dtc.isw.dao.CustomerDAO;
 import icai.dtc.isw.domain.*;
-import icai.dtc.isw.ui.JVentana;
 
 // clase que conecta el DAO de customer con la GUI
 public class CustomerControler {
 
-    CustomerDAO customerDAO = new CustomerDAO();
-
     // devuelve una lista con todos los customers de la db
     public void getCustomers(ArrayList<Customer> lista) {
-        customerDAO.getClientes(lista);
+        CustomerDAO.getClientes(lista);
     }
 
     // devuelve un cliente que tenga el nombre pasado como parametro
     public Customer getCustomer(String name) {
-        return (customerDAO.getCliente(name)).getCustomer();
+        return (CustomerDAO.getCliente(name)).getCustomer();
     }
 
     // devuelve un cliente y su menu que tenga el nombre pasado como parámetro
     public ContainerMenuCustomer getCustomerMenu(String name){
-        return(customerDAO.getCliente(name));
+        return(CustomerDAO.getCliente(name));
     }
 
     public static void guardaMenu(Customer cu, MenuSemanal ms){

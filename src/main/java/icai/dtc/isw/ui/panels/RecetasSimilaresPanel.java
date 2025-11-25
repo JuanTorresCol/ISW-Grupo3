@@ -19,11 +19,11 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
     private final JVentana app;
     private final JPanel lista;
 
+    // constructor del panel que muestra las recetas ofrecidas como similares
     public RecetasSimilaresPanel(JVentana app) {
         this.app = app;
         setLayout(new BorderLayout());
         setBackground(BG);
-        //setBorder(BorderFactory.createEmptyBorder(0,250,0,250));
 
         JLabel t = pillTitle("CAMBIAR RECETA");
 
@@ -49,6 +49,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         refreshAsync();
     }
 
+    // se lleva a cabo en el backend para no afectar al rendimiento del resto de las funcionalidades
     @Override
     public void refreshAsync() {
         lista.removeAll();
@@ -82,6 +83,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         }.execute();
     }
 
+    // contiene la información de una de las recetas
     private JPanel similarCard(Receta receta, String titulo, String tiempo, String dificultad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10,0));

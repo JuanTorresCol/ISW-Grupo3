@@ -9,18 +9,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CustomerDAO {
 
-    private static final Util util = new Util();
-
+    // Convierte una lista de String a una String
     private static String listToString(ArrayList<String> lista) {
         if (lista == null || lista.isEmpty()) return "";
         return String.join(",", lista);
     }
 
+    // Convierte un String a una list separando los elementos
     private static ArrayList<String> stringToList(String data) {
         ArrayList<String> res = new ArrayList<>();
         if (data == null || data.isBlank()) return res;
@@ -35,6 +33,7 @@ public class CustomerDAO {
         return res;
     }
 
+    // Devuelve un cliente de los datos extraidos de la base de datos
     private static Customer mapToCustomer(ResultSet rs) throws SQLException {
         if(rs.getInt("puesto")==0) {
             String id = rs.getString("id");
@@ -45,14 +44,14 @@ public class CustomerDAO {
 
             // foodrestriction
             var foodRestrictionArray = rs.getArray("foodrestriction");
-            ArrayList<String> illegalFood = util.toArrayList(foodRestrictionArray);
+            ArrayList<String> illegalFood = Util.toArrayList(foodRestrictionArray);
 
             // alimentosnocome
             String noComeStr = rs.getString("alimentosnocome");
             ArrayList<String> alimentosNoCome = stringToList(noComeStr);
 
             var favRecetasV = rs.getArray("favrecetas");
-            ArrayList<String> favRecetasId = util.toArrayList(favRecetasV);
+            ArrayList<String> favRecetasId = Util.toArrayList(favRecetasV);
             ArrayList<Receta> favRecetas = new ArrayList<>();
             for (String idReceta : favRecetasId) {
                 favRecetas.add(RecetaControler.getRecetaId(idReceta));
@@ -62,11 +61,12 @@ public class CustomerDAO {
         } else{return null;}
     }
 
+    // Devuelve el menu asociado a un cliente de la base de datos
     private static MenuSemanal mapToNewMenu(ResultSet rs) throws SQLException {
         if(rs.getInt("puesto")==0) {
             // Id recetas
             var recetasArr = rs.getArray("menusemanal");
-            ArrayList<String> recetasId = util.toArrayList(recetasArr);
+            ArrayList<String> recetasId = Util.toArrayList(recetasArr);
 
             ArrayList<Receta> recetas = new ArrayList<>();
             for(String recetaId : recetasId){
@@ -77,7 +77,7 @@ public class CustomerDAO {
         } else{return null;}
     }
 
-    // registra un nuevo cliente en la base de datos
+    // Registra un nuevo cliente en la base de datos
     public static boolean registerCliente(Customer customer) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "INSERT INTO usuarios " +
@@ -117,7 +117,7 @@ public class CustomerDAO {
         }
     }
 
-    // devuelve una lista con todos los usuarios
+    // Devuelve una lista con todos los usuarios
     public static void getClientes(ArrayList<Customer> lista) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "SELECT * FROM usuarios";
@@ -135,7 +135,7 @@ public class CustomerDAO {
         }
     }
 
-    // devuelve un cliente en función al ID
+    // Devuelve un cliente en función al ID
     public static Customer getClienteId(String inputId) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "SELECT * FROM usuarios WHERE id = ?";
@@ -155,7 +155,7 @@ public class CustomerDAO {
         return cu;
     }
 
-    // devuelve un cliente en función a su nombre
+    // Devuelve un cliente en función a su nombre
     public static ContainerMenuCustomer getCliente(String inputName) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "SELECT * FROM usuarios WHERE name = ?";
@@ -179,6 +179,7 @@ public class CustomerDAO {
         return mmmmmmmmmmmmm;
     }
 
+    // Guarda en la base de datos
     public static void guardaMenu(Customer cu, ArrayList<String> recetasId){
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "UPDATE usuarios SET menusemanal = ? WHERE id = ?";
@@ -199,7 +200,7 @@ public class CustomerDAO {
         }
     }
 
-    // edita la información de un cliente en la base de datos
+    // Edita la información de un cliente en la base de datos
     public static void editCliente(Customer customerEdit) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "UPDATE usuarios SET name = ?, password = ?, gender = ?, age = ?, " +
@@ -235,7 +236,7 @@ public class CustomerDAO {
         }
     }
 
-    // muestra todos los usuarios que se encuentran en la base de datos
+    // Muestra todos los usuarios que se encuentran en la base de datos
     public static void main(String[] args) {
         ArrayList<Customer> lista = new ArrayList<>();
         CustomerDAO.getClientes(lista);

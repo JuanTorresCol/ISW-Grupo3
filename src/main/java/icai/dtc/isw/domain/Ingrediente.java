@@ -2,10 +2,10 @@ package icai.dtc.isw.domain;
 
 public class Ingrediente {
 
-    private String nombre;
-    private String cantidad;
+    private final String nombre;
+    private final String cantidad;
 
-    // constructor del ingrediente en funcion a sus atributos
+    // constructor del ingrediente en función a sus atributos
     public Ingrediente(String nombre, String cantidad) {
         this.nombre = nombre;
         this.cantidad = cantidad;
@@ -21,6 +21,7 @@ public class Ingrediente {
         return getNombre() + " --> " + getCantidad();
     }
 
+    // devuelve el valor numerico de la cantidad
     public int getCantidadNum(){
         return Integer.parseInt(cantidad.replace("kg", "").
                 replace("g", "").replace("ml","").

@@ -1,10 +1,7 @@
 package icai.dtc.isw.dao;
 
 import java.sql.*;
-
 import icai.dtc.isw.configuration.PropertiesISW;
-
-
 
 public class ConnectionDAO {
 	private static ConnectionDAO connectionDAO;

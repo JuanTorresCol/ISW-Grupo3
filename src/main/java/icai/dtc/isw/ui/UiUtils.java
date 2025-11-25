@@ -26,19 +26,15 @@ public final class UiUtils {
     public static final Font BODY = new Font("Arial", Font.PLAIN, 14);
     public static final Font SMALL = new Font("Arial", Font.PLAIN, 12);
 
+
     public static JPanel basePanel(LayoutManager lm) {
         JPanel p = new JPanel(lm);
         p.setBackground(BG);
         p.setBorder(new EmptyBorder(20, 10, 20, 10));
         return p;
     }
-    public static JPanel margen(){
-        JPanel p = new JPanel();
-        p.setBackground(BG);
-        p.setBorder(new EmptyBorder(0, 5, 0, 5));
-        return p;
-    }
 
+    // vacía el contenido de los formularios de texto
     public static void clearTextBoxes(Container root) {
         for (Component c : root.getComponents()) {
             if (c instanceof JSpinner spinner) {
@@ -67,9 +63,7 @@ public final class UiUtils {
     }
 
     public static JLabel label(String s) {
-        JLabel l = new JLabel(s);
-        l.setFont(H3);
-        l.setForeground(TITLE);
+        JLabel l = labelBold(s);
         l.setBorder(new EmptyBorder(5,2,0,2));
         l.setAlignmentX(Component.LEFT_ALIGNMENT);
         return l;
@@ -78,9 +72,7 @@ public final class UiUtils {
 
 
     public static JLabel labels(String s) {
-        JLabel l = new JLabel(s);
-        l.setFont(H3);
-        l.setForeground(TITLE);
+        JLabel l = labelBold(s);
         l.setBorder(new EmptyBorder(30,2,8,2));
         return l;
     }
@@ -97,15 +89,6 @@ public final class UiUtils {
         l.setFont(H);
         l.setForeground(Color.DARK_GRAY);
         return l;
-    }
-
-    public static Component fieldWrap(Component c) {
-        JPanel p = new JPanel(new BorderLayout());
-        p.setOpaque(false);
-        c.setFont(BODY);
-        p.add(c, BorderLayout.CENTER);
-        p.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return p;
     }
 
     public static Component fieldWrapWest(Component c) {
@@ -213,16 +196,6 @@ public final class UiUtils {
         return b;
     }
 
-    public static JLabel pillLabel(String text) {
-        JLabel l = new JLabel(text + " ");
-        l.setOpaque(true);
-        l.setBackground(ACCENT);
-        l.setForeground(Color.DARK_GRAY);
-        l.setFont(H3);
-        l.setBorder(new EmptyBorder(6,12,6,12));
-        return l;
-    }
-
     public static JPanel roundedCard() {
         JPanel p = new JPanel();
         p.setBackground(CARD_BG);
@@ -239,16 +212,6 @@ public final class UiUtils {
         l.setForeground(Color.DARK_GRAY);
         l.setBorder(new EmptyBorder(8,12,8,12));
         return l;
-    }
-
-    public static JButton chip(String text) {
-        JButton b = new JButton(text);
-        b.setFont(new Font("Arial", Font.BOLD, 14));
-        b.setBackground(new Color(136, 156, 166));
-        b.setForeground(Color.WHITE);
-        b.setFocusPainted(false);
-        b.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
-        return b;
     }
 
     public static void estilizarCheck(JCheckBox cb) {
@@ -365,8 +328,6 @@ public final class UiUtils {
         b.addActionListener(al);
         return b;
     }
-
-
 
     // Recursos
     // Carga una imagen desde resources

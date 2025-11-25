@@ -8,8 +8,6 @@ import java.util.*;
 
 public class RecetaDAO {
 
-    public static final Util util = new Util();
-
     // devuelve una lista con todas las recetas que se encuentran en la base de datos
     public static ArrayList<Receta> getRecetas() {
         Connection con = ConnectionDAO.getInstance().getConnection();
@@ -21,7 +19,7 @@ public class RecetaDAO {
             while (rs.next()) {
                 Map<String, Ingrediente> ingredientes = new HashMap<>();
 
-                ArrayList<String> ingredient = util.toArrayList(rs.getArray(6));
+                ArrayList<String> ingredient = Util.toArrayList(rs.getArray(6));
                 for (String item : ingredient) {
                     String[] partes = item.split(",");
                     ingredientes.put(
@@ -56,7 +54,7 @@ public class RecetaDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     Map<String, Ingrediente> ingredientes = new HashMap<>();
-                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(6));
+                    ArrayList<String> ingredients = Util.toArrayList(rs.getArray(6));
                     for (String item : ingredients) {
                         String[] partes = item.split(",");
                         ingredientes.put(partes[0],
@@ -81,7 +79,7 @@ public class RecetaDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     Map<String, Ingrediente> ingredientes = new HashMap<>();
-                    ArrayList<String> ingredients = util.toArrayList(rs.getArray(6));
+                    ArrayList<String> ingredients = Util.toArrayList(rs.getArray(6));
                     for (String item : ingredients) {
                         String[] partes = item.split(",");
                         ingredientes.put(partes[0], new Ingrediente(partes[0], partes[1]));

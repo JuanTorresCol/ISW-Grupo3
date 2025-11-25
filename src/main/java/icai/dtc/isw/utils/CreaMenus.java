@@ -23,9 +23,9 @@ public class CreaMenus {
         return false;
     }
 
+    // devuelve el precio de un menu sin contar con la lista de la compra o los productos
     private static int getPrecioSinLista(Receta receta) {
-        ProductoControler productoControler = new ProductoControler();
-        ArrayList<Producto> productos = productoControler.getProductos();
+        ArrayList<Producto> productos = ProductoControler.getProductos();
         double calculo = 0.00;
         for(Ingrediente ing : receta.getIngredientes().values()){
             for(Producto p : productos){
@@ -39,6 +39,8 @@ public class CreaMenus {
     }
 
     // devuelve las diez recetas que mas se ajustan a un presupuesto / alergias / preferencias, en el caso de que no se pueda devuelve null
+    // hace uso de un algorítmo knapsack con los pesos ajustados a las necesidades del programa
+    // además incluye otros pesos a tener en cuenta debido a preferencias del usuario
     public static ArrayList<Receta> creaMenuRes(ArrayList<Receta> recetas, int presupuestoEuros, JVentana app) {
         List<String> illegalFood = app.getUsuario() != null && app.getUsuario().getIllegalFood() != null
                 ? app.getUsuario().getIllegalFood() : java.util.Collections.emptyList();
@@ -48,9 +50,7 @@ public class CreaMenus {
         final int K = 10;
         final int B = Math.max(0, presupuestoEuros * 100);
         final int INF = 1_000_000;
-
         Collections.shuffle(recetas);
-
         java.util.List<Receta> legales = new java.util.ArrayList<>();
         for (Receta r : recetas) {
             java.util.Collection<String> ings = r.getIngredientes().keySet();
@@ -59,7 +59,6 @@ public class CreaMenus {
             }
         }
         if (legales.size() < K) return null;
-
         int n = legales.size();
         int[] precio = new int[n];
         int[] bad = new int[n];
@@ -74,13 +73,10 @@ public class CreaMenus {
         long sumaK = 0;
         for (int i = 0; i < K; i++) sumaK += preciosOrdenados.get(i);
         if (sumaK > B) return null;
-
         int[][] dp = new int[K + 1][B + 1];
         for (int k = 0; k <= K; k++) java.util.Arrays.fill(dp[k], INF);
         dp[0][0] = 0;
-
         Node[][] path = new Node[K + 1][B + 1];
-
         for (int i = 0; i < n; i++) {
             int w = precio[i];
             int b = bad[i];
@@ -96,17 +92,14 @@ public class CreaMenus {
                 }
             }
         }
-
         int minBad = INF;
         for (int s = 0; s <= B; s++) if (dp[K][s] < minBad) minBad = dp[K][s];
         if (minBad == INF) return null;
-
         int bestS = -1;
         for (int s = B; s >= 0; s--) {
             if (dp[K][s] == minBad) { bestS = s; break; }
         }
         if (bestS < 0 || path[K][bestS] == null) return null;
-
         java.util.ArrayList<Receta> res = new java.util.ArrayList<>(K);
         for (Node p = path[K][bestS]; p != null; p = p.prev) {
             res.add(legales.get(p.idx));

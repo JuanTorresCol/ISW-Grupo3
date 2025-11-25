@@ -2,6 +2,7 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.controler.ProductoControler;
 
+// clase usada para controlar los distintos productos y sus cantidades a comprar en la lista de la compra
 public class EntryLista {
     private final String nombre;
     private double precioCompra;
@@ -26,6 +27,7 @@ public class EntryLista {
         this.precioCompra = this.precio;
     }
 
+    // vuelve a aparecer el mismo ingrediente en una receta de la semana/receta añadida
     public void otroMas(int cantidadRequired){
         if(this.unidad.equals(Unidad.u)){
             this.precioCompra = this.precioCompra + this.precio;
@@ -40,6 +42,7 @@ public class EntryLista {
         }
     }
 
+    // se elimina una receta y por tanto sus productos de la lista de la compra
     public void unoMenos(int cantidadRequired){
         if(this.unidad.equals(Unidad.u)){
             this.precioCompra = this.precioCompra - this.precio;
@@ -54,6 +57,7 @@ public class EntryLista {
         }
     }
 
+    // formateo de los datos de la linea de la lista
     public String entradaString(){
         return(String.valueOf(this.cantidad)+ this.unidad +" de "+this.nombre+" a un precio de: "+ String.format("%.2f", this.precioCompra) + "$.");
     }

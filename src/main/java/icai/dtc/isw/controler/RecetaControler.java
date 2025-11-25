@@ -17,11 +17,6 @@ public class RecetaControler {
         return RecetaDAO.getRecetaId(recetaId);
     }
 
-    // devuelve todas las recetas con ese nombre
-    public static Receta getRecetaName(String recetaName){
-        return RecetaDAO.getRecetaName(recetaName);
-    }
-
     // ingresa una nueva receta a la base de datos
     public static void registerReceta(Receta receta){
         RecetaDAO.registerReceta(receta);

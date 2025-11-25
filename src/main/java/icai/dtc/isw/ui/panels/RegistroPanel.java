@@ -36,8 +36,8 @@ public class RegistroPanel extends JPanel {
     private final JTextField otroAlergiaField = textField(10);
     private final JTextField alimentosNoComeField = textField(ancho);
     private JLabel t;
-    private JPanel form;
 
+    // constructor del panel que lleva a cabo el registro de un customer nuevo
     public RegistroPanel(JVentana app, CustomerControler controler) {
         this.controler = controler;
 
@@ -55,32 +55,25 @@ public class RegistroPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(BG);
 
-
-        //Quitar scrollbar horizontal
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getViewport().setBackground(BG);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-
         JButton btnBack = pillButton("Volver al inicio");
         btnBack.addActionListener(_ -> app.showCard("inicio"));
 
-
-
-
-
         add(t, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-        //add(center(btnBack) , BorderLayout.SOUTH);
         add(btnBack , BorderLayout.SOUTH);
     }
 
+    // crea los formularios en los cuales el user insertará la información del nuevo registro
     public JPanel crearFormulario(JVentana app) {
 
         setBackground(BG);
         t = title("Crea tu cuenta");
         t.setBorder(new javax.swing.border.EmptyBorder(20, 5, 20, 5));
-        form = new JPanel();
+        JPanel form = new JPanel();
         form.setOpaque(false);
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -126,12 +119,14 @@ public class RegistroPanel extends JPanel {
 
     }
 
-
+    // elimina los datos de los formularos del registro
     private void resetFields() {
         UiUtils.clearTextBoxes(this);
         revalidate();
         repaint();
     }
+
+    // extrae los datos de los formularios en el GUI y se lo manda al backend
     private void onRegistrar(JVentana app) {
         String userName = usuarioField.getText();
         String pass = new String(contrasenaField.getPassword());
@@ -159,8 +154,6 @@ public class RegistroPanel extends JPanel {
             app.onRegisterSuccess(resultado.getKey());
         } else {
             if(userName==null){app.onAuthFailed("Introduzca un nombre de usuario");
-            } else if(pass==null){
-                app.onAuthFailed("Introduzca una constraseña");
             } else if(!pass.equals(passCheck)){
                 app.onAuthFailed("Ambas contraseñas no coinciden");
             } else{

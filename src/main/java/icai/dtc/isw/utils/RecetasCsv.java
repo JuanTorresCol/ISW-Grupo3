@@ -1,7 +1,6 @@
 package icai.dtc.isw.utils;
 
 import icai.dtc.isw.controler.ProductoControler;
-import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.*;
 
 import java.io.*;
@@ -21,22 +20,13 @@ import java.util.*;
 public final class RecetasCsv {
 
     private RecetasCsv() {}
-    /** Lee el CSV desde un Path (UTF-8). */
+
+    // Lee el CSV desde un Path
     public static List<Receta> leer(Path csvPath) throws IOException {
         try (BufferedReader br = Files.newBufferedReader(csvPath, StandardCharsets.UTF_8)) {
             return leer(br);
         }
     }
-
-    /** Lee el CSV desde un InputStream (UTF-8). */
-    public static List<Receta> leer(InputStream in) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
-            return leer(br);
-        }
-    }
-
-    // === Implementación ===
-
     private static List<Receta> leer(BufferedReader br) throws IOException {
         List<Receta> out = new ArrayList<>();
         String line;
@@ -71,6 +61,7 @@ public final class RecetasCsv {
         return out;
     }
 
+    // obtiene una receta a base del String que la define
     private static Receta parseReceta(List<String> cols, int lineNum) {
         if (cols.size() < 5) {
             throw new IllegalArgumentException("Se esperaban 5 columnas, encontradas " + cols.size());
@@ -99,6 +90,7 @@ public final class RecetasCsv {
         return new Receta(nombre, dificultad,duracion, descripcion, alimentos);
     }
 
+    // Obtiene un ingrediente a base de el String que lo define
     private static Map<String, Ingrediente> parseAlimentos(String s, int lineNum) {
         Map<String, Ingrediente> mapa = new LinkedHashMap<>();
         if (s == null || s.isEmpty()) return mapa;
@@ -135,6 +127,7 @@ public final class RecetasCsv {
         return mapa;
     }
 
+    // formatea el csv a una lista de Strings
     private static List<String> splitCsvLine(String line) {
         List<String> cols = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
@@ -183,6 +176,7 @@ public final class RecetasCsv {
 //        }
 //    }
 
+    // calcula la unidad de un ingrediente
     private static Unidad calcularUnidad(Ingrediente ing){
         if (ing.getNombre().equals("huevo")) {
             return Unidad.u;
@@ -251,7 +245,6 @@ public final class RecetasCsv {
     // Carga de nuevos alimentos
     static void main(String[] args) throws Exception{
         Path path;
-        ProductoControler productoControler = new ProductoControler();
         if (args.length == 0) {
             path = Path.of("src/main/resources/recetas2.csv");
             System.err.println("No se pasó ruta por argumento. Usando por defecto: " + path.toAbsolutePath());
@@ -263,15 +256,15 @@ public final class RecetasCsv {
         for(Receta receta : recetas){
             for(Ingrediente ing : receta.getIngredientes().values()){
                 Unidad unidad = calcularUnidad(ing);
-                Producto test = productoControler.getProductoName(ing.getNombre());
+                Producto test = ProductoControler.getProductoName(ing.getNombre());
                 if (test==(null)) {
                     System.out.print("Ingrese el precio de: "+ing.getNombre()+ " "+ ing.getCantidad());
                     double precio = scanner.nextDouble();
-                    productoControler.registerProducto(new Producto(ing, Math.round(precio * 100.0) / 100.0, unidad));
+                    ProductoControler.registerProducto(new Producto(ing, Math.round(precio * 100.0) / 100.0, unidad));
                 } else if (!test.getUnidadP().equals(unidad)) {
                     System.out.print("Ingrese el precio de: "+ing.getNombre()+ " "+ ing.getCantidad());
                     double precio = scanner.nextDouble();
-                    productoControler.registerProducto(new Producto(ing, Math.round(precio * 100.0) / 100.0, unidad));
+                    ProductoControler.registerProducto(new Producto(ing, Math.round(precio * 100.0) / 100.0, unidad));
                 }
             }
         }

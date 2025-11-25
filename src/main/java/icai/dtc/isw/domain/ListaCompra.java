@@ -14,10 +14,7 @@ public class ListaCompra {
         this.listaCompra.add(entry);
     }
 
-    public void deleteEntry(EntryLista entry){
-        this.listaCompra.remove(entry);
-    }
-
+    // devuelve las entradas de la lista formateadas correctamente
     public ArrayList<String> verEntradas(){
         ArrayList<String> cadena = new ArrayList<>();
         cadena.add("Lista de la compra:");
@@ -28,6 +25,7 @@ public class ListaCompra {
         return cadena;
     }
 
+    // calcula el precio de la lista de la compra en su entero
     public double calculaPrecio(){
         double calc = 0;
         for(EntryLista entry : this.listaCompra){

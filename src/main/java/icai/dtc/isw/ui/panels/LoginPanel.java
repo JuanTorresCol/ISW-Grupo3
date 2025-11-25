@@ -17,6 +17,7 @@ public class LoginPanel extends JPanel {
 
     CustomerControler controler = new CustomerControler();
 
+    // constructor del panel que permite hace rlogin tanto a supermercados como a customers
     public LoginPanel(JVentana app) {
         this.addComponentListener(new ComponentAdapter() {
             @Override public void componentShown(ComponentEvent e) {
@@ -48,6 +49,8 @@ public class LoginPanel extends JPanel {
             String userName = usuarioLoginField.getText().trim();
             String pass = new String(contrasenaLoginField.getPassword());
             ContainerMenuCustomer container = controler.getCustomerMenu(userName);
+
+            // a continuación el programa diferencia entre un Customer y un Supermercado
             if (container != null) {
                 if (!(container.getCustomer() == null)) {
                     if (pass.equals(container.getCustomer().getUserPass())) {
@@ -60,7 +63,7 @@ public class LoginPanel extends JPanel {
                         JOptionPane.showMessageDialog(this, "Contraseña incorrecta, pruebe otra vez.");
                     }
                 } else {
-                    Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
+                    Supermercado supermercado = SupermercadoControler.loginSupermercado(userName);
                     if (supermercado != null) {
                         app.onLoginSuccessSupermercado(supermercado);
                         System.out.println(app.getSupermercado().getProductosId());
@@ -79,16 +82,19 @@ public class LoginPanel extends JPanel {
         add(form, BorderLayout.CENTER);
         add(stack(center(btnEntrar), btnBack), BorderLayout.SOUTH);
     }
+
+    // vacia las celdas de la pestaña del login por si se cierra sesión y se desea volver a iniciar sesión
     private void resetFields() {
         UiUtils.clearTextBoxes(this);
         revalidate();
         repaint();
     }
 
+    // extrae los datos de la GUI y los manda al backend para que lleve a cabo la lógica del login
     public void loginSuccess(MenuSemanal menu, JVentana app){
         SwingWorker<ListaCompra, Void> worker = new SwingWorker<>() {
             @Override
-            protected ListaCompra doInBackground() throws Exception {
+            protected ListaCompra doInBackground() {
 
                 if (menu.getLunes() == null) {
                     return null;
