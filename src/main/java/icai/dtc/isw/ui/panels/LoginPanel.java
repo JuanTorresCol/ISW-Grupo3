@@ -52,8 +52,8 @@ public class LoginPanel extends JPanel {
             Customer customerCheck = controler.getCustomerMenu(userName).getCustomer();
             MenuSemanal menuSemanal = controler.getCustomerMenu(userName).getMenu();
             if (customerCheck != null && pass.equals(customerCheck.getUserPass())) {
-                app.onLoginSuccess(customerCheck);
                 app.setMenu(menuSemanal);
+                app.onLoginSuccess(customerCheck);
             } else {
                 Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
                 if(supermercado != null) {
