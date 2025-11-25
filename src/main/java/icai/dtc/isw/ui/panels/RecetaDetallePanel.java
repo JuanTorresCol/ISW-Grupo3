@@ -28,7 +28,7 @@ public class RecetaDetallePanel extends JPanel {
                 receta.ingredientesToString());
 
         JPanel steps = section("INSTRUCCIONES",
-                receta.formatearDescripcion(receta.getDescripcion()));
+                Receta.formatearDescripcion(receta.getDescripcion()));
 
         JPanel center = new JPanel();
         center.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));

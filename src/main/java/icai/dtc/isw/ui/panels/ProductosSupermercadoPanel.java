@@ -97,28 +97,51 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10, 0));
 
+        int CARD_WIDTH = 400;
+        int CARD_HEIGHT = 60;
+        Dimension cardSize = new Dimension(CARD_WIDTH, CARD_HEIGHT);
+
+        card.setPreferredSize(cardSize);
+        card.setMaximumSize(cardSize);
+
         JPanel info = new JPanel();
         info.setOpaque(false);
-        info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
+        info.setLayout(new BorderLayout());
+
+        JPanel textPanel = new JPanel();
+        textPanel.setOpaque(false);
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+
         JLabel name = new JLabel(nombre);
         name.setFont(H3);
+
         JLabel meta = new JLabel("1 " + unidad + " a " + precio + "$");
         meta.setFont(SMALL);
+
+        textPanel.add(name);
+        textPanel.add(meta);
+
         JButton sel = outlineButton("ELIMINAR", _ -> {
             app.getSupermercado().eliminarProducto(producto);
-            eliminarProducto(app.getSupermercado(),producto);
+            eliminarProducto(app.getSupermercado(), producto);
             JOptionPane.showMessageDialog(this, "Eliminado exitosamente");
             app.refreshCard("perfilSupermercado");
             app.refreshCard("productosSuper");
             app.showCard("productosSuper");
         });
 
-        info.add(name);
-        info.add(meta);
-        info.add(Box.createVerticalStrut(6));
-        info.add(sel);
+        JPanel buttonWrapper = new JPanel();
+        buttonWrapper.setOpaque(false);
+        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.Y_AXIS));
+        buttonWrapper.add(Box.createVerticalGlue());
+        buttonWrapper.add(sel);
+        buttonWrapper.add(Box.createVerticalGlue());
+
+        info.add(textPanel, BorderLayout.CENTER);
+        info.add(buttonWrapper, BorderLayout.EAST);
 
         card.add(info, BorderLayout.CENTER);
+
         return card;
     }
     public void eliminarProducto(Supermercado supermercado, Producto producto) {

@@ -49,19 +49,25 @@ public class LoginPanel extends JPanel {
             String pass = new String(contrasenaLoginField.getPassword());
             ContainerMenuCustomer container = controler.getCustomerMenu(userName);
             if (container != null) {
-                if (pass.equals(container.getCustomer().getUserPass())) {
-                    Customer customerCheck = container.getCustomer();
-                    MenuSemanal menuSemanal = container.getMenu();
-                    app.setMenu(menuSemanal);
-                    loginSuccess(menuSemanal, app);
-                    app.onLoginSuccess(customerCheck);
-                }else{JOptionPane.showMessageDialog(this, "Contraseña incorrecta, pruebe otra vez.");}
-            } else {
-                Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
-                if(supermercado != null) {
-                    app.onLoginSuccessSupermercado(supermercado);
-                    System.out.println(app.getSupermercado().getProductosId());
-                }else{JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");}
+                if (!(container.getCustomer() == null)) {
+                    if (pass.equals(container.getCustomer().getUserPass())) {
+                        Customer customerCheck = container.getCustomer();
+                        MenuSemanal menuSemanal = container.getMenu();
+                        app.setMenu(menuSemanal);
+                        loginSuccess(menuSemanal, app);
+                        app.onLoginSuccess(customerCheck);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Contraseña incorrecta, pruebe otra vez.");
+                    }
+                } else {
+                    Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
+                    if (supermercado != null) {
+                        app.onLoginSuccessSupermercado(supermercado);
+                        System.out.println(app.getSupermercado().getProductosId());
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
+                    }
+                }
             }
         });
 
