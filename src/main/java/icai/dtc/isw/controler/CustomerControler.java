@@ -1,12 +1,12 @@
 package icai.dtc.isw.controler;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 
 import icai.dtc.isw.dao.CustomerDAO;
-import icai.dtc.isw.domain.Customer;
-import icai.dtc.isw.domain.Receta;
-import icai.dtc.isw.domain.Usuario;
+import icai.dtc.isw.domain.*;
+import icai.dtc.isw.ui.JVentana;
 
 // clase que conecta el DAO de customer con la GUI
 public class CustomerControler {
@@ -20,7 +20,16 @@ public class CustomerControler {
 
     // devuelve un cliente que tenga el nombre pasado como parametro
     public Customer getCustomer(String name) {
-        return (customerDAO.getCliente(name));
+        return (customerDAO.getCliente(name)).getCustomer();
+    }
+
+    // devuelve un cliente y su menu que tenga el nombre pasado como parámetro
+    public ContainerMenuCustomer getCustomerMenu(String name){
+        return(customerDAO.getCliente(name));
+    }
+
+    public static void guardaMenu(Customer cu, MenuSemanal ms){
+        CustomerDAO.guardaMenu(cu,ms.getRecetasId());
     }
 
     // realiza el registro de un nuevo cliente en la base de datos

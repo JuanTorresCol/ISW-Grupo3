@@ -1,8 +1,7 @@
 package icai.dtc.isw.dao;
 
 import icai.dtc.isw.controler.RecetaControler;
-import icai.dtc.isw.domain.Customer;
-import icai.dtc.isw.domain.Receta;
+import icai.dtc.isw.domain.*;
 import icai.dtc.isw.utils.Util;
 
 import java.sql.Connection;
@@ -10,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomerDAO {
 
@@ -58,6 +59,21 @@ public class CustomerDAO {
             }
 
             return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome, favRecetas);
+        } else{return null;}
+    }
+
+    private static MenuSemanal mapToNewMenu(ResultSet rs) throws SQLException {
+        if(rs.getInt("puesto")==0) {
+            // Id recetas
+            var recetasArr = rs.getArray("menusemanal");
+            ArrayList<String> recetasId = util.toArrayList(recetasArr);
+
+            ArrayList<Receta> recetas = new ArrayList<>();
+            for(String recetaId : recetasId){
+                recetas.add(RecetaControler.getRecetaId(recetaId));
+            }
+
+            return new MenuSemanal(recetas);
         } else{return null;}
     }
 
@@ -140,10 +156,12 @@ public class CustomerDAO {
     }
 
     // devuelve un cliente en función a su nombre
-    public static Customer getCliente(String inputName) {
+    public static ContainerMenuCustomer getCliente(String inputName) {
         Connection con = ConnectionDAO.getInstance().getConnection();
         String sql = "SELECT * FROM usuarios WHERE name = ?";
-        Customer cu = null;
+        Customer cu;
+        MenuSemanal ms;
+        ContainerMenuCustomer mmmmmmmmmmmmm = null;
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, inputName);
@@ -151,12 +169,34 @@ public class CustomerDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     cu = mapToCustomer(rs);
+                    ms = mapToNewMenu(rs);
+                    mmmmmmmmmmmmm = new ContainerMenuCustomer(ms, cu);
                 }
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return cu;
+        return mmmmmmmmmmmmm;
+    }
+
+    public static void guardaMenu(Customer cu, ArrayList<String> recetasId){
+        Connection con = ConnectionDAO.getInstance().getConnection();
+        String sql = "UPDATE usuarios SET menusemanal = ? WHERE id = ?";
+
+        try(PreparedStatement pst = con.prepareStatement(sql)){
+            pst.setArray(1, pst.getConnection().createArrayOf(
+                    "varchar",
+                    recetasId.toArray(new String[0])
+            ));
+            pst.setString(2,cu.getUserId())
+            ;
+            int rowsUpdated = pst.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Cliente editado con éxito: " + cu.getUserId());
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al editar cliente: " + ex.getMessage());
+        }
     }
 
     // edita la información de un cliente en la base de datos

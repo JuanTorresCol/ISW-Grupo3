@@ -3,6 +3,7 @@ package icai.dtc.isw.ui.panels;
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.SupermercadoControler;
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.domain.Supermercado;
 import icai.dtc.isw.ui.JVentana;
 import icai.dtc.isw.ui.UiUtils;
@@ -48,9 +49,11 @@ public class LoginPanel extends JPanel {
         btnEntrar.addActionListener(_ -> {
             String userName = usuarioLoginField.getText().trim();
             String pass = new String(contrasenaLoginField.getPassword());
-            Customer customerCheck = controler.getCustomer(userName);
+            Customer customerCheck = controler.getCustomerMenu(userName).getCustomer();
+            MenuSemanal menuSemanal = controler.getCustomerMenu(userName).getMenu();
             if (customerCheck != null && pass.equals(customerCheck.getUserPass())) {
                 app.onLoginSuccess(customerCheck);
+                app.setMenu(menuSemanal);
             } else {
                 Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
                 if(supermercado != null) {

@@ -15,6 +15,13 @@ public class MenuSemanal {
 
     public MenuSemanal() {
     }
+    public MenuSemanal(ArrayList<Receta> s){
+        this.menus_semana.put("lunes", new MenuDiario(s.get(0), s.get(1)));
+        this.menus_semana.put("martes", new MenuDiario(s.get(2), s.get(3)));
+        this.menus_semana.put("miercoles", new MenuDiario(s.get(4), s.get(5)));
+        this.menus_semana.put("jueves", new MenuDiario(s.get(6), s.get(7)));
+        this.menus_semana.put("viernes", new MenuDiario(s.get(8), s.get(9)));
+    }
 
     public Map<String,MenuDiario> getMenuSemanal() {return menus_semana;}
     // public double getPresupuesto() {return presupuesto;}
@@ -109,7 +116,6 @@ public class MenuSemanal {
         return listaCompra;
     }
 
-
     @Override
     public String toString() {
         for (MenuDiario menu : menus_semana.values()){
@@ -190,6 +196,16 @@ public class MenuSemanal {
         }
 
         return anterior;
+    }
+
+    public ArrayList<String> getRecetasId(){
+        ArrayList<String> recetasId = new ArrayList<>();
+        recetasId.addAll(menus_semana.get("lunes").getRecetasId());
+        recetasId.addAll(menus_semana.get("martes").getRecetasId());
+        recetasId.addAll(menus_semana.get("miercoles").getRecetasId());
+        recetasId.addAll(menus_semana.get("jueves").getRecetasId());
+        recetasId.addAll(menus_semana.get("viernes").getRecetasId());
+        return recetasId;
     }
 
 }

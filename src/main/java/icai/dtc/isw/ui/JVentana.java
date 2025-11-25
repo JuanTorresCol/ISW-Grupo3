@@ -132,8 +132,8 @@ public class JVentana extends JFrame {
         this.customerId = c.getUserId();
         this.customer = cargarPerfilUsuario();
 
-        ensurePanel("presupuesto");
-        showCard("presupuesto");
+        ensurePanel("menuDia");
+        showCard("menuDia");
     }
 
     public void onLoginSuccessSupermercado(Supermercado supermercado) {
@@ -195,6 +195,9 @@ public class JVentana extends JFrame {
 
     public MenuSemanal getMenuSemanal() {
         return menuSemanal;
+    }
+    public void setMenu(MenuSemanal m){
+        this.menuSemanal = m;
     }
 
     public void logout() {

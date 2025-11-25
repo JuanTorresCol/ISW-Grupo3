@@ -1,5 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.ui.JVentana;
@@ -71,6 +72,7 @@ public class PresupuestoPanel extends JPanel {
                         ListaCompra lista = get();
                         if (lista != null && menu.getLunes() != null) {
                             app.setLista(lista);
+                            guardarMenu(menu, app);
                             app.refreshCard("listaCompra");
                             app.refreshCard("menuDia");
                             app.showCard("menuDia");
@@ -102,6 +104,10 @@ public class PresupuestoPanel extends JPanel {
         center.add(loading);
 
         add(center, BorderLayout.CENTER);
+    }
+
+    public void guardarMenu(MenuSemanal menu, JVentana app){
+        CustomerControler.guardaMenu(app.getUsuario(), menu);
     }
 
 }

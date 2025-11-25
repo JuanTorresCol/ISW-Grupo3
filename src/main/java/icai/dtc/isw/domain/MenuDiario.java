@@ -1,5 +1,6 @@
 package icai.dtc.isw.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,13 @@ public class MenuDiario {
     public MenuDiario(Receta receta, Receta receta2) {
         recetas.put("comida",receta);
         recetas.put("cena",receta2);
+    }
+
+    public ArrayList<String> getRecetasId(){
+        ArrayList<String> recetasId = new ArrayList<>();
+        recetasId.add(recetas.get("comida").getId());
+        recetasId.add(recetas.get("cena").getId());
+        return recetasId;
     }
 
     public Map<String,Receta> getRecetas() {
