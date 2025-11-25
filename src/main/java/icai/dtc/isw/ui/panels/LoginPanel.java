@@ -3,6 +3,7 @@ package icai.dtc.isw.ui.panels;
 import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.SupermercadoControler;
 import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.domain.MenuSemanal;
 import icai.dtc.isw.domain.Supermercado;
 import icai.dtc.isw.ui.JVentana;
@@ -53,6 +54,7 @@ public class LoginPanel extends JPanel {
             MenuSemanal menuSemanal = controler.getCustomerMenu(userName).getMenu();
             if (customerCheck != null && pass.equals(customerCheck.getUserPass())) {
                 app.setMenu(menuSemanal);
+                loginSuccess(menuSemanal, app);
                 app.onLoginSuccess(customerCheck);
             } else {
                 Supermercado supermercado = SupermercadoControler.loginSupermercado(userName, pass);
@@ -76,5 +78,42 @@ public class LoginPanel extends JPanel {
         UiUtils.clearTextBoxes(this);
         revalidate();
         repaint();
+    }
+
+    public void loginSuccess(MenuSemanal menu, JVentana app){
+        SwingWorker<ListaCompra, Void> worker = new SwingWorker<>() {
+            @Override
+            protected ListaCompra doInBackground() throws Exception {
+
+                if (menu.getLunes() == null) {
+                    return null;
+                }
+                return menu.generarListaCompra();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    ListaCompra lista = get();
+                    if (lista != null && menu.getLunes() != null) {
+                        app.setLista(lista);
+                        app.refreshCard("listaCompra");
+                        app.refreshCard("menuDia");
+                        app.showCard("menuDia");
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                LoginPanel.this,
+                                "No se ha podido hacer login"
+                        );
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                            LoginPanel.this,
+                            "Error al generar la lista: " + ex.getMessage()
+                    );
+                }
+            }
+        };worker.execute();
     }
 }
