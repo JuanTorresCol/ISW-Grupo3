@@ -5,10 +5,7 @@ import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.utils.CreaMenus;
 import icai.dtc.isw.ui.JVentana;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MenuSemanal {
 
@@ -69,18 +66,49 @@ public class MenuSemanal {
         return lista;
     }
 
-    public ListaCompra updateLista(Receta receta, ListaCompra listaCompra) {
-        for(EntryLista entry: listaCompra.getEntries()) {
-            for(Ingrediente ing : receta.getIngredientes().values()) {
-                if(entry.getNombreEntrada().equals(ing.getNombre())) {
-                    if(entry.getCantidad()==1){
-                        listaCompra.deleteEntry(entry);
-                    } else{entry.unoMenos();}
+    public ListaCompra updateLista(Receta recetaVieja, Receta recetaNueva, ListaCompra listaCompra) {
+        //Quitar ingredientes de la receta vieja
+        if (recetaVieja != null) {
+            for (Ingrediente ing : recetaVieja.getIngredientes().values()) {
+                Iterator<EntryLista> it = listaCompra.getEntries().iterator();
+                while (it.hasNext()) {
+                    EntryLista entry = it.next();
+                    if (entry.getNombreEntrada().equals(ing.getNombre())) {
+                        // aquí asumo que unoMenos() resta 1 unidad
+                        if (entry.getCantidad() == 1) {
+                            it.remove();
+                        } else {
+                            entry.unoMenos();
+                        }
+                        break;
+                    }
                 }
             }
         }
+
+        // Añadir ingredientes de la receta nueva
+        if (recetaNueva != null) {
+            for (Ingrediente ing : recetaNueva.getIngredientes().values()) {
+                EntryLista encontrada = null;
+                for (EntryLista entry : listaCompra.getEntries()) {
+                    if (entry.getNombreEntrada().equals(ing.getNombre())) {
+                        encontrada = entry;
+                        break;
+                    }
+                }
+
+                if (encontrada == null) {
+                    listaCompra.insertarEntry(
+                            new EntryLista(ing.getNombre(), 1));
+                } else {
+                    encontrada.otroMas();
+                }
+            }
+        }
+
         return listaCompra;
     }
+
 
     @Override
     public String toString() {
@@ -120,33 +148,48 @@ public class MenuSemanal {
         return recetasSimilares;
     }
 
-    public void cambioReceta(Receta receta, String bloque, int dia){
-        if(receta!=null) {
-            if (bloque.equals("Comida")) {
+    public Receta cambioReceta(Receta nueva, String bloque, int dia) {
+        Receta anterior = null;
+
+        if (nueva != null) {
+            if ("Comida".equals(bloque)) {
                 if (dia == 0) {
-                    getLunes().setComida(receta);
+                    anterior = getLunes().getComida();
+                    getLunes().setComida(nueva);
                 } else if (dia == 1) {
-                    getMartes().setComida(receta);
+                    anterior = getMartes().getComida();
+                    getMartes().setComida(nueva);
                 } else if (dia == 2) {
-                    getMiercoles().setComida(receta);
+                    anterior = getMiercoles().getComida();
+                    getMiercoles().setComida(nueva);
                 } else if (dia == 3) {
-                    getJueves().setComida(receta);
+                    anterior = getJueves().getComida();
+                    getJueves().setComida(nueva);
                 } else {
-                    getViernes().setComida(receta);
+                    anterior = getViernes().getComida();
+                    getViernes().setComida(nueva);
                 }
-            } else if (bloque.equals("Cena")) {
+            } else if ("Cena".equals(bloque)) {
                 if (dia == 0) {
-                    getLunes().setCena(receta);
+                    anterior = getLunes().getCena();
+                    getLunes().setCena(nueva);
                 } else if (dia == 1) {
-                    getMartes().setCena(receta);
+                    anterior = getMartes().getCena();
+                    getMartes().setCena(nueva);
                 } else if (dia == 2) {
-                    getMiercoles().setCena(receta);
+                    anterior = getMiercoles().getCena();
+                    getMiercoles().setCena(nueva);
                 } else if (dia == 3) {
-                    getJueves().setCena(receta);
+                    anterior = getJueves().getCena();
+                    getJueves().setCena(nueva);
                 } else {
-                    getViernes().setCena(receta);
+                    anterior = getViernes().getCena();
+                    getViernes().setCena(nueva);
                 }
             }
         }
+
+        return anterior;
     }
+
 }

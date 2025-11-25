@@ -1,6 +1,7 @@
 package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.controler.RecetaControler;
+import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.domain.Receta;
 import icai.dtc.isw.ui.JVentana;
 
@@ -98,8 +99,10 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         JButton sel = outlineButton("SELECCIONAR", _ -> {
-            app.getMenuSemanal().cambioReceta(receta, app.getBloque(),app.getDia());
-            app.setLista(app.getMenuSemanal().updateLista(receta,app.getLista()));
+            Receta recetaVieja = app.getMenuSemanal().cambioReceta(receta, app.getBloque(), app.getDia());
+            ListaCompra nuevaLista = app.getMenuSemanal().updateLista(recetaVieja, receta, app.getLista());
+            app.setLista(nuevaLista);
+
             app.refreshCard("menuDia");
             app.refreshCard("listaCompra");
             app.showCard("menuDia");
