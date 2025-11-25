@@ -32,12 +32,28 @@ public class PerfilPanel extends JPanel {
         JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
-        JButton editar = pillButton("Editar perfil");
-        editar.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton editar = pillButton("Editar Perfil");
+        JButton crearNuevoMenu = pillButton("Crear Nuevo Menú");
+
         editar.addActionListener(_ -> app.showCard("editarPerfil"));
+
+        crearNuevoMenu.addActionListener(_ -> {
+            app.ensurePanel("presupuesto");
+            app.showCard("presupuesto");
+        });
+
+        editar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        crearNuevoMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        botones.setOpaque(false);
+        botones.add(editar);
+        botones.add(crearNuevoMenu);
+
         cab.add(center(user));
         cab.add(Box.createVerticalStrut(6));
-        cab.add(center(editar));
+        cab.add(botones);
 
         // Datos básicos
         content.add(center(t));

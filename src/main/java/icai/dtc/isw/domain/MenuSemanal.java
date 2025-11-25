@@ -74,14 +74,12 @@ public class MenuSemanal {
     }
 
     public ListaCompra updateLista(Receta recetaVieja, Receta recetaNueva, ListaCompra listaCompra) {
-        //Quitar ingredientes de la receta vieja
         if (recetaVieja != null) {
             for (Ingrediente ing : recetaVieja.getIngredientes().values()) {
                 Iterator<EntryLista> it = listaCompra.getEntries().iterator();
                 while (it.hasNext()) {
                     EntryLista entry = it.next();
                     if (entry.getNombreEntrada().equals(ing.getNombre())) {
-                        // aquí asumo que unoMenos() resta 1 unidad
                         if (entry.getCantidad() == 1) {
                             it.remove();
                         } else {
@@ -93,7 +91,6 @@ public class MenuSemanal {
             }
         }
 
-        // Añadir ingredientes de la receta nueva
         if (recetaNueva != null) {
             for (Ingrediente ing : recetaNueva.getIngredientes().values()) {
                 EntryLista encontrada = null;

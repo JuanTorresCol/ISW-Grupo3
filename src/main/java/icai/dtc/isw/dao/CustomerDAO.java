@@ -192,10 +192,10 @@ public class CustomerDAO {
             ;
             int rowsUpdated = pst.executeUpdate();
             if (rowsUpdated > 0) {
-                System.out.println("Cliente editado con éxito: " + cu.getUserId());
+                System.out.println("Menú guardado con éxito: " + cu.getUserId());
             }
         } catch (SQLException ex) {
-            System.out.println("Error al editar cliente: " + ex.getMessage());
+            System.out.println("Error al guardar el menú: " + ex.getMessage());
         }
     }
 
