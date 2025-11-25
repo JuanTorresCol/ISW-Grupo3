@@ -26,6 +26,7 @@ public class JVentana extends JFrame {
     private String bloque;
     private int dia;
     private ListaCompra lista;
+    private Receta receta;
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -56,20 +57,21 @@ public class JVentana extends JFrame {
         mainPanel.add(new InicioPanel(this), "inicio");
         mainPanel.add(new RegistroPanel(this, controler), "registro");
         mainPanel.add(new LoginPanel(this), "login");
-        mainPanel.add(new PresupuestoPanel(this), "lista");   // si lo necesitas antes
+        mainPanel.add(new PresupuestoPanel(this), "lista");
 
         // POST-AUTH (lazy)
         postAuthFactories.put("presupuesto", () -> new PresupuestoPanel(this));
         postAuthFactories.put("menuDia", () -> new MenuDiaPanel(this));
-        postAuthFactories.put("recetaDetalle", () -> new JScrollPane(new RecetaDetallePanel(this)));
-        postAuthFactories.put("recetasSimilares", () -> new JScrollPane(new RecetasSimilaresPanel(this)));
+        postAuthFactories.put("recetaDetalle", () -> new RecetaDetallePanel(this));
+        postAuthFactories.put("recetasSimilares", () -> new RecetasSimilaresPanel(this));
         postAuthFactories.put("listaCompra", () -> new ListaCompraPanel(this));
         postAuthFactories.put("perfil", () -> new PerfilPanel(this));
         postAuthFactories.put("perfilSupermercado", () -> new PerfilSupermercadoPanel(this));
         postAuthFactories.put("productosSuper", () -> new ProductosSupermercadoPanel(this));
         postAuthFactories.put("editarPerfil", () -> new EditarPanel(this, controler));
-        postAuthFactories.put("recetasGuardadas", () -> new JScrollPane(new GuardadasPanel(this)));
+        postAuthFactories.put("recetasGuardadas", () -> new GuardadasPanel(this));
         postAuthFactories.put("anadirNuevoProducto", () -> new NuevoProductoPanel(this));
+        postAuthFactories.put("recetasGuardadasDetalle", () -> new GuardadasDetallePanel(this, receta));
 
         add(mainPanel);
 
@@ -249,8 +251,8 @@ public class JVentana extends JFrame {
         this.lista = lista;
     }
     public ListaCompra getLista(){return this.lista;}
-    public void setSupermercado(Supermercado supermercado) {
-        this.supermercado = supermercado;
+    public void setReceta(Receta receta) {
+        this.receta = receta;
     }
 
     // ---------- GUI Main ----------

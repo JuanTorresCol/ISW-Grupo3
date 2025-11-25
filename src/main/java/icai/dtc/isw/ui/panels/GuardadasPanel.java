@@ -101,7 +101,9 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         JLabel meta = new JLabel("⏱ " + tiempo + "    🧾 " + dificultad);
         meta.setFont(SMALL);
         JButton infor = outlineButton("VER INFORMACION", _ -> {
-            JOptionPane.showMessageDialog(this, "Histórico en desarrollo");
+            app.setReceta(receta);
+            app.refreshCard("recetasGuardadasDetalle");
+            app.showCard("recetasGuardadasDetalle");
         });
         JButton del = outlineButton("ELIMINAR", _ -> {
             CustomerControler.eliminarReceta(app.getUsuario(),receta);
