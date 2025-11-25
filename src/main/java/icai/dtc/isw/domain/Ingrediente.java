@@ -11,13 +11,20 @@ public class Ingrediente {
         this.cantidad = cantidad;
     }
 
-    public String getNombre() {return nombre;}
-    public String getCantidad() {return cantidad;}
+    public String getNombre() {return this.nombre;}
+
+    public String getCantidad() {return this.cantidad;}
 
     @Override
     public String toString()
     {
         return getNombre() + " --> " + getCantidad();
+    }
+
+    public int getCantidadNum(){
+        return Integer.parseInt(cantidad.replace("kg", "").
+                replace("g", "").replace("ml","").
+                replace("l", "").replace("u", ""));
     }
 
 }

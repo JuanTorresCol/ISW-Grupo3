@@ -55,7 +55,6 @@ public class MenuDiario {
         return calculo;
     }
 
-
     @Override
     public String toString() {
         for (Receta r: recetas.values()){

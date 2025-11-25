@@ -60,11 +60,11 @@ public class MenuSemanal {
                             boolean flag = true;
                             for (EntryLista entry : lista.getEntries()) {
                                 if (entry.getNombreEntrada().equals(p.getNombre())) {
-                                    entry.otroMas();
+                                    entry.otroMas(ing.getCantidadNum());
                                     flag = false;
                                 }
                             }
-                            if(flag) {lista.insertarEntry(new EntryLista(p.getNombre(), p.getPrecio(), 1, p.getUnidadP()));}
+                            if(flag) {lista.insertarEntry(new EntryLista(p.getNombre(), p.getPrecio(), 1, p.getUnidadP(), ing.getCantidadNum()));}
                         }
                     }
                 }
@@ -83,7 +83,7 @@ public class MenuSemanal {
                         if (entry.getCantidad() == 1) {
                             it.remove();
                         } else {
-                            entry.unoMenos();
+                            entry.unoMenos(ing.getCantidadNum());
                         }
                         break;
                     }
@@ -105,7 +105,7 @@ public class MenuSemanal {
                     listaCompra.insertarEntry(
                             new EntryLista(ing.getNombre(), 1));
                 } else {
-                    encontrada.otroMas();
+                    encontrada.otroMas(ing.getCantidadNum());
                 }
             }
         }

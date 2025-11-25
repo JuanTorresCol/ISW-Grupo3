@@ -8,31 +8,50 @@ public class EntryLista {
     private double precio;
     private int cantidad;
     private Unidad unidad;
+    private int cantidadUsed = 0;
 
-    public EntryLista(String nombre, double precio, int cantidad, Unidad unidad) {
+    public EntryLista(String nombre, double precio, int cantidad, Unidad unidad, int cantidadUsed) {
         this.nombre = nombre;
         this.precio = precio;
         this.cantidad = cantidad;
         this.unidad = unidad;
         this.precioCompra = precio;
+        this.cantidadUsed = cantidadUsed;
     }
 
     public EntryLista(String nombre, int cantidad) {
         this.nombre = nombre;
         setPrecioyUnidad();
         this.cantidad = cantidad;
-        this.unidad = unidad;
         this.precioCompra = this.precio;
     }
 
-    public void otroMas(){
-        this.precioCompra = this.precioCompra + this.precio;
-        this.cantidad += 1;
+    public void otroMas(int cantidadRequired){
+        if(this.unidad.equals(Unidad.u)){
+            this.precioCompra = this.precioCompra + this.precio;
+            this.cantidad += 1;
+            this.cantidadUsed += 1;
+        } else if(this.cantidadUsed+cantidadRequired>1000){
+            this.precioCompra = this.precioCompra + this.precio;
+            this.cantidad += 1;
+            this.cantidadUsed = this.cantidadUsed + cantidadRequired - 1000;
+        } else{
+            this.cantidadUsed += cantidadRequired;
+        }
     }
 
-    public void unoMenos(){
-        this.precioCompra = this.precioCompra - this.precio;
-        this.cantidad -= 1;
+    public void unoMenos(int cantidadRequired){
+        if(this.unidad.equals(Unidad.u)){
+            this.precioCompra = this.precioCompra - this.precio;
+            this.cantidad -= 1;
+            this.cantidadUsed -= 1;
+        } else if(this.cantidadUsed+cantidadRequired<0){
+            this.precioCompra = this.precioCompra - this.precio;
+            this.cantidad -= 1;
+            this.cantidadUsed = this.cantidadUsed + cantidadRequired + 1000;
+        } else{
+            this.cantidadUsed -= cantidadRequired;
+        }
     }
 
     public String entradaString(){
