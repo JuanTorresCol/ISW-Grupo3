@@ -145,20 +145,25 @@ public class RegistroPanel extends JPanel {
         if (otroCheckBox.isSelected() && !otroAlergiaField.getText().isBlank()) {
             seleccionAlergia.add(otroAlergiaField.getText().trim());
         }
+        if(controler.getCustomerMenu(userName) == null) {
 
-        Map.Entry<Customer, String> resultado = controler.realizarRegistro(
-                userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome
-        );
+            Map.Entry<Customer, String> resultado = controler.realizarRegistro(
+                    userName, pass, passCheck, sexo, edad, seleccionAlergia, alimentosNoCome
+            );
 
-        if ("b".equals(resultado.getValue())) {
-            app.onRegisterSuccess(resultado.getKey());
-        } else {
-            if(userName==null){app.onAuthFailed("Introduzca un nombre de usuario", "registro");
-            } else if(!pass.equals(passCheck)){
-                app.onAuthFailed("Ambas contraseñas no coinciden", "registro");
-            } else{
-                app.onAuthFailed("El registro no se pudo completar", "registro");
+            if ("b".equals(resultado.getValue())) {
+                app.onRegisterSuccess(resultado.getKey());
+            } else {
+                if (userName == null) {
+                    app.onAuthFailed("Introduzca un nombre de usuario", "registro");
+                } else if (!pass.equals(passCheck)) {
+                    app.onAuthFailed("Ambas contraseñas no coinciden", "registro");
+                } else {
+                    app.onAuthFailed("El registro no se pudo completar", "registro");
+                }
             }
+        }else{
+            app.onAuthFailed("El nombre de usuario ya esta en uso, eliga otro.", "registro");
         }
     }
 }
