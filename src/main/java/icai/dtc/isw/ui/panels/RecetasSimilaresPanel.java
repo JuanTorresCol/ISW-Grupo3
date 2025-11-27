@@ -27,6 +27,10 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
 
         JLabel t = pillTitle("CAMBIAR RECETA");
 
+        JPanel header = flowLeft();
+        JButton back = flatLink("< ATRÁS", _ -> app.showCard("menuDia"));
+        header.add(back);
+
         lista = new JPanel();
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
@@ -38,7 +42,8 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
         scroll.setBackground(BG);
         scroll.setBorder(BorderFactory.createEmptyBorder(5,15,5,15));
 
-        add(center(t), BorderLayout.NORTH);
+        header.add(center(t));
+        add(header, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
         add(bottomNav(
                 _ -> app.showCard("menuDia"),

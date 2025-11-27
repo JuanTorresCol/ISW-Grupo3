@@ -24,6 +24,10 @@ public class GuardadasPanel extends JPanel implements Refreshable {
 
         JLabel t = pillTitle("FAVORITOS");
 
+        JPanel header = flowLeft();
+        JButton back = flatLink("< ATRÁS", _ -> app.showCard("perfil"));
+        header.add(back);
+
         lista = new JPanel();
         lista.setOpaque(false);
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
@@ -35,7 +39,8 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         scroll.setBackground(BG);
         scroll.setBorder(BorderFactory.createEmptyBorder(5,15,5,15));
 
-        add(center(t), BorderLayout.NORTH);
+        header.add(center(t));
+        add(header, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
         add(bottomNav(
                 _ -> app.showCard("menuDia"),
