@@ -1,5 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
+import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.RecetaControler;
 import icai.dtc.isw.domain.ListaCompra;
 import icai.dtc.isw.domain.Receta;
@@ -104,6 +105,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
             Receta recetaVieja = app.getMenuSemanal().cambioReceta(receta, app.getBloque(), app.getDia());
             ListaCompra nuevaLista = app.getMenuSemanal().updateLista(recetaVieja, receta, app.getLista());
             app.setLista(nuevaLista);
+            CustomerControler.guardaMenu(app.getUsuario(), app.getMenuSemanal());
 
             app.refreshCard("menuDia");
             app.refreshCard("listaCompra");
