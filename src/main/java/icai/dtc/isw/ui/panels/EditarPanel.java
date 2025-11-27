@@ -78,6 +78,24 @@ public class EditarPanel extends JPanel {
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(new EmptyBorder(10, 25, 20, 25));
 
+        usuarioField.setText(app.getUsuario().getUserName());
+        if(app.getUsuario().getUserGender().equals("HOMBRE")){
+            sexoComboBox.setSelectedIndex(0);
+        } else if(app.getUsuario().getUserGender().equals("MUJER")){
+            sexoComboBox.setSelectedIndex(1);
+        } else{
+            sexoComboBox.setSelectedIndex(2);
+        }
+        alimentosNoComeField.setText(app.getUsuario().alimentosNoComeToString());
+
+        ArrayList<String> alergiasAlim = app.getUsuario().getIllegalFood();
+        if(alergiasAlim.contains("Gluten")){glutenCheckBox.setSelected(true);}
+        else if(alergiasAlim.contains("Lactosa")){lactosaCheckBox.setSelected(true);}
+        else if(alergiasAlim.contains("Marisco")){mariscoCheckBox.setSelected(true);}
+        else if(alergiasAlim.contains("Otro")){otroCheckBox.setSelected(true);}
+        else if(alergiasAlim.contains("Huevo")){huevoCheckBox.setSelected(true);}
+        else if(alergiasAlim.contains("Frutos secos")){frutosSecosCheckBox.setSelected(true);}
+
         form.add(labels("USUARIO"));
         form.add(fieldWrapWest(usuarioField));
 

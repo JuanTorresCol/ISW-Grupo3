@@ -65,6 +65,14 @@ public class Customer extends Usuario implements Serializable {
         return String.join(",", illegalFood);
     }
 
+    // Devuelve los alimentos a los cuales el usuario es alérgico en formato String
+    public String alimentosNoComeToString() {
+        if (alimentosNoCome == null || alimentosNoCome.isEmpty()) {
+            return "";
+        }
+        return String.join(",", alimentosNoCome);
+    }
+
     // indica si el cliente no puede comerlo por alergia o preferencia
     public boolean noPuedeConsumirNombre(String nombre) {
         if (nombre == null) return false;
