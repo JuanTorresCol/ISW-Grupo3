@@ -1,8 +1,6 @@
 package icai.dtc.isw.ui.panels;
 
-import icai.dtc.isw.controler.CustomerControler;
 import icai.dtc.isw.controler.ProductoControler;
-import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.domain.Producto;
 import icai.dtc.isw.domain.Unidad;
 import icai.dtc.isw.ui.JVentana;
@@ -12,9 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
@@ -77,7 +73,7 @@ public class EditarProductoPanel extends JPanel {
 
         if(app.getProducto().getUnidadP().equals(Unidad.u)){uCheckBox.setSelected(true);}
         else if(app.getProducto().getUnidadP().equals(Unidad.l)){lCheckBox.setSelected(true);}
-        else if(app.getProducto().getUnidadP().equals(Unidad.u)){uCheckBox.setSelected(true);}
+        else if(app.getProducto().getUnidadP().equals(Unidad.kg)){kgCheckBox.setSelected(true);}
 
         form.add(labels("CÓDIGO DE IDENTIFICACIÓN"));
         form.add(fieldWrapWest(codigoField));
