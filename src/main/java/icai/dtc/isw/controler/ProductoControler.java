@@ -29,4 +29,8 @@ public class ProductoControler {
     public static void eliminarProducto(Producto producto){
         ProductoDAO.deleteProducto(producto);
     }
+
+    public static boolean updateProducto(Producto producto){
+        return ProductoDAO.updateProducto(producto);
+    }
 }

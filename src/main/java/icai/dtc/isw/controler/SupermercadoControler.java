@@ -11,6 +11,11 @@ public class SupermercadoControler {
         return SupermercadoDAO.getSuper(user);
     }
 
+    // Actualiza los productos de un supermercado
+    public static void updateProducto(Supermercado supermercado){
+        SupermercadoDAO.updateProducto(supermercado);
+    }
+
     // Añade un producto a los propios del supermercado
     public static void addProducto(Supermercado supermercado){
         SupermercadoDAO.addProducto(supermercado);

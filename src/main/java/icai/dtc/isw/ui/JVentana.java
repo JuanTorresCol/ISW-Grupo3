@@ -27,6 +27,7 @@ public class JVentana extends JFrame {
     private int dia;
     private ListaCompra lista;
     private Receta receta;
+    private Producto producto;
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -72,6 +73,7 @@ public class JVentana extends JFrame {
         postAuthFactories.put("recetasGuardadas", () -> new GuardadasPanel(this));
         postAuthFactories.put("anadirNuevoProducto", () -> new NuevoProductoPanel(this));
         postAuthFactories.put("recetasGuardadasDetalle", () -> new GuardadasDetallePanel(this, receta));
+        postAuthFactories.put("editarProducto", () ->  new EditarProductoPanel(this));
 
         add(mainPanel);
 
@@ -175,9 +177,20 @@ public class JVentana extends JFrame {
         getSupermercado().anadirProducto(prod);
         SupermercadoControler.addProducto(getSupermercado());
         JOptionPane.showMessageDialog(this, "Producto registrado exitosamente");
-        refreshCard("productosSupermercado");
+        refreshCard("productosSuper");
         refreshCard("perfilSupermercado");
-        showCard("productosSupermercado");
+        showCard("productosSuper");
+    }
+
+    // edición válida de producto
+    public void onProdEditSuccess(Producto prod) {
+        getSupermercado().eliminarProducto(this.producto);
+        getSupermercado().anadirProducto(prod);
+        SupermercadoControler.updateProducto(getSupermercado());
+        JOptionPane.showMessageDialog(this, "Producto editado exitosamente");
+        refreshCard("productosSuper");
+        refreshCard("perfilSupermercado");
+        showCard("productosSuper");
     }
 
     // mensaje de error por msg motivo (en panel de edición de perfil)
@@ -265,6 +278,10 @@ public class JVentana extends JFrame {
     public void setReceta(Receta receta) {
         this.receta = receta;
     }
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+    public Producto getProducto() { return producto; }
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {

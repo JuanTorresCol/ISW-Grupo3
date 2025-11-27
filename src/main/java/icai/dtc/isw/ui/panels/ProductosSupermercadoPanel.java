@@ -96,6 +96,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
     }
 
     // contiene la información de un producto
+    // contiene la información de un producto
     private JPanel similarCard(Producto producto, String nombre, double precio, Unidad unidad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10, 0));
@@ -124,6 +125,11 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         textPanel.add(name);
         textPanel.add(meta);
 
+        JButton edit = outlineButton("EDITAR", _ ->{
+            app.setProducto(producto);
+            app.showCard("editarProducto");
+        });
+
         JButton sel = outlineButton("ELIMINAR", _ -> {
             app.getSupermercado().eliminarProducto(producto);
             eliminarProducto(app.getSupermercado(), producto);
@@ -135,10 +141,10 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
 
         JPanel buttonWrapper = new JPanel();
         buttonWrapper.setOpaque(false);
-        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.Y_AXIS));
-        buttonWrapper.add(Box.createVerticalGlue());
+        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.X_AXIS));
+        buttonWrapper.add(edit);
+        buttonWrapper.add(Box.createHorizontalStrut(8));
         buttonWrapper.add(sel);
-        buttonWrapper.add(Box.createVerticalGlue());
 
         info.add(textPanel, BorderLayout.CENTER);
         info.add(buttonWrapper, BorderLayout.EAST);
@@ -147,6 +153,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
 
         return card;
     }
+
 
     // opción para eliminar un producto de los que tiene el supermercado en stock
     public void eliminarProducto(Supermercado supermercado, Producto producto) {

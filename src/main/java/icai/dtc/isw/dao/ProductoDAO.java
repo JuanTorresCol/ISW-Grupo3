@@ -64,6 +64,27 @@ public class ProductoDAO {
         }
     }
 
+    // update de producto
+    public static boolean updateProducto(Producto prod){
+        Connection con=ConnectionDAO.getInstance().getConnection();
+        try (PreparedStatement pst = con.prepareStatement("UPDATE producto SET nombre = ?, unidad = ?, precio = ? WHERE productoId = ?")) {
+                pst.setString(1, prod.getNombre());
+                pst.setString(2, prod.getUnidadP().toString());
+                pst.setDouble(3, prod.getPrecio());
+                pst.setString(4, prod.getId());
+
+                int rowsUpdated = pst.executeUpdate();
+                if (rowsUpdated > 0) {
+                    System.out.println("Producto editado con éxito: " + prod.getId());
+                    return true;
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error al editar el producto: " + ex.getMessage());
+                return false;
+        }
+        return false;
+    }
+
     // busca un producto en la base de datos en funcion al nombre que tiene
     public static Producto getProductoName(String productoName) {
         Connection con=ConnectionDAO.getInstance().getConnection();

@@ -99,6 +99,24 @@ public class SupermercadoDAO {
         return null;
     }
 
+    public static void updateProducto(Supermercado superM) {
+        Connection con=ConnectionDAO.getInstance().getConnection();
+        try (PreparedStatement pst = con.prepareStatement("UPDATE usuarios SET favrecetas = ? WHERE id = ?")) {
+            pst.setArray(1, pst.getConnection().createArrayOf(
+                    "varchar",
+                    superM.getProductosId().toArray(new String[0])
+            ));
+            pst.setString(2, superM.getUserId());
+
+            int rowsUpdated = pst.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Producto editado con éxito: " + superM.getUserId());
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al editar el producto: " + ex.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         // insertar informacion a mano, por cada ejecución se introduce un nuevo super
         registerSupermercado(new Supermercado("Alcampo", "a123"));
