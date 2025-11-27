@@ -19,7 +19,7 @@ import static icai.dtc.isw.ui.UiUtils.*;
 public class MenuDiaPanel extends JPanel {
 
     private final String[] diasSemana = {"LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES"};
-    private int idxDia = 0;
+    private int idxDia;
     private final JLabel tituloDiaLabel;
     private MenuDiario menuDia;
     private final MenuSemanal menuSemanal;
@@ -32,9 +32,10 @@ public class MenuDiaPanel extends JPanel {
 
     // constructor que muestra el menu del dia con opciones para ver el resto de dias
     public MenuDiaPanel(JVentana app) {
+        this.idxDia = app.getDia();
         this.app = app;
         this.menuSemanal = app.getMenuSemanal();
-        this.menuDia = this.menuSemanal.getLunes();
+        this.menuDia = this.menuSemanal.getDia(app.getDia());
 
         setLayout(new BorderLayout());
         setBackground(BG);

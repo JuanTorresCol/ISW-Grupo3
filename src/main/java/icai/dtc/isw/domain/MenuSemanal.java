@@ -30,6 +30,14 @@ public class MenuSemanal {
     public MenuDiario getJueves() {return menus_semana.get("jueves");}
     public MenuDiario getViernes() {return menus_semana.get("viernes");}
 
+    public MenuDiario getDia(int dia){
+        if(dia == 0){return this.menus_semana.get("lunes");}
+        else if(dia == 1){return this.menus_semana.get("martes");}
+        else if(dia == 2){return this.menus_semana.get("miercoles");}
+        else if(dia == 3){return this.menus_semana.get("jueves");}
+        else if(dia == 4){return this.menus_semana.get("viernes");}
+        else{return null;}
+    }
     // rellena la semana con recetas, dos por dia
     public void generarMenu(JVentana app) {
         ArrayList<Receta> recetas = RecetaControler.getRecetas();
