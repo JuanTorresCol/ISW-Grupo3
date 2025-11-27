@@ -47,7 +47,7 @@ public class RegistroPanel extends JPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 resetFields();
-                scrollPane.getVerticalScrollBar().setValue(0); // subir al inicio al refrescar
+                scrollPane.getVerticalScrollBar().setValue(0);
 
             }
         });
@@ -153,11 +153,11 @@ public class RegistroPanel extends JPanel {
         if ("b".equals(resultado.getValue())) {
             app.onRegisterSuccess(resultado.getKey());
         } else {
-            if(userName==null){app.onAuthFailed("Introduzca un nombre de usuario");
+            if(userName==null){app.onAuthFailed("Introduzca un nombre de usuario", "registro");
             } else if(!pass.equals(passCheck)){
-                app.onAuthFailed("Ambas contraseñas no coinciden");
+                app.onAuthFailed("Ambas contraseñas no coinciden", "registro");
             } else{
-                app.onAuthFailed("El registro no se pudo completar");
+                app.onAuthFailed("El registro no se pudo completar", "registro");
             }
         }
     }

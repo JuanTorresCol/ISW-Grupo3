@@ -165,9 +165,9 @@ public class JVentana extends JFrame {
     }
 
     // mensaje de error por msg motivo (en panel de login/registro)
-    public void onAuthFailed(String msg) {
+    public void onAuthFailed(String msg, String panel) {
         JOptionPane.showMessageDialog(this, msg);
-        showCard("inicio");
+        showCard(panel);
     }
 
     // flujo de inserción de producto válida
