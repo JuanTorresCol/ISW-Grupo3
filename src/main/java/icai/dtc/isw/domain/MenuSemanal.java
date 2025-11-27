@@ -124,6 +124,7 @@ public class MenuSemanal {
     public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer, JVentana app){
         ArrayList<Receta> recetasSimilares = new ArrayList<>();
         Collections.shuffle(recetas);
+        ArrayList<Producto> productos = ProductoControler.getProductos();
         for(Receta recetaTry : recetas){
             if(recetasSimilares.size()>=4){break;}
             boolean flag = true;
@@ -132,7 +133,7 @@ public class MenuSemanal {
                     flag = false;
                     break;
                 }
-                if(menuDia.getPrecioMenu(app.getLista())< recetaTry.getPrecio(app.getLista())*2){
+                if(menuDia.getPrecioMenu(app.getLista())>recetaTry.getPrecioReceta(productos)*2){
                     flag = false;
                     break;
                 }

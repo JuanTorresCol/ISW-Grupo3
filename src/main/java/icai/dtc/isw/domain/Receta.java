@@ -2,6 +2,7 @@ package icai.dtc.isw.domain;
 
 import icai.dtc.isw.utils.Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,24 @@ public class Receta {
     @Override
     public String toString() {
         return getNombre() + " - " + getDuracion() + " mins - " +" \n" + "INGREDIENTES:\n" + getIngredientes() + "\nDESCRIPCIÓN: \n" + getDescripcion() + '\n';
+    }
+
+    public double getPrecioReceta(ArrayList<Producto> productos){
+        double precio = 0;
+        int num = 0;
+        for(Ingrediente ing : ingredientes.values()){
+            for(Producto prod : productos){
+                if(prod.getNombre().equals(ing.getNombre())&prod.getUnidadP().equals(ing.getUnidadP())){
+                    num+=1;
+                    precio += prod.getPrecio();
+                    break;
+                }
+            }
+            if(num>= ingredientes.size()){
+                break;
+            }
+        }
+        return precio;
     }
 
     // devuelve el precio de la lista de la compra

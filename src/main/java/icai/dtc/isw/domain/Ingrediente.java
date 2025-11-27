@@ -28,4 +28,12 @@ public class Ingrediente {
                 replace("l", "").replace("u", ""));
     }
 
+    public Unidad getUnidadP(){
+        if(cantidad.contains("kg")){ return Unidad.kg;}
+        else if(cantidad.contains("g")){ return Unidad.kg;}
+        else if(cantidad.contains("ml")){ return Unidad.l;}
+        else if(cantidad.contains("l")){ return Unidad.l;}
+        else if(cantidad.contains("u")){ return Unidad.u;}
+        else{return null;}
+    }
 }
