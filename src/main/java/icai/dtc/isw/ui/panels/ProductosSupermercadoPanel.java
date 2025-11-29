@@ -96,7 +96,6 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
     }
 
     // contiene la información de un producto
-    // contiene la información de un producto
     private JPanel similarCard(Producto producto, String nombre, double precio, Unidad unidad) {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10, 0));
@@ -127,6 +126,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
 
         JButton edit = outlineButton("EDITAR", _ ->{
             app.setProducto(producto);
+            app.refreshCard("editarProducto");
             app.showCard("editarProducto");
         });
 

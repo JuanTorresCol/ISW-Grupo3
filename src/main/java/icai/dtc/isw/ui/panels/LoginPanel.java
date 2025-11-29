@@ -67,7 +67,6 @@ public class LoginPanel extends JPanel {
                     if (supermercado != null) {
                         if(pass.equals(supermercado.getUserPass())) {
                             app.onLoginSuccessSupermercado(supermercado);
-                            System.out.println(app.getSupermercado().getProductosId());
                         } else {JOptionPane.showMessageDialog(this, "Contraseña incorrecta, vuelva a intentarlo");}
                     } else {
                         JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
