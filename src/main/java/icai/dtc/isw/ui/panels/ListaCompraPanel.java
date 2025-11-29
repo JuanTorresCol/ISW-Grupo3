@@ -11,7 +11,7 @@ import java.util.Collections;
 
 import static icai.dtc.isw.ui.UiUtils.*;
 
-public class ListaCompraPanel extends JPanel implements Refreshable {
+public class ListaCompraPanel extends JPanel implements Refreshable{
 
     private final JVentana app;
     private final DefaultListModel<String> model = new DefaultListModel<>();

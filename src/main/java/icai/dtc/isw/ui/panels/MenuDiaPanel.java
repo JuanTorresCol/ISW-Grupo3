@@ -208,6 +208,7 @@ public class MenuDiaPanel extends JPanel {
         JButton cambiar = outlineButton("CAMBIAR", _ -> {
             app.setBloque(bloque);
             app.setDia(idxDia);
+            app.setRecetaCambio(receta);
             app.refreshCard("recetasSimilares");
             app.showCard("recetasSimilares");
         });

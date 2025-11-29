@@ -2,7 +2,7 @@ package icai.dtc.isw.domain;
 
 import java.util.ArrayList;
 
-public class ListaCompra {
+public class ListaCompra implements Cloneable{
 
     private ArrayList<EntryLista> listaCompra;
 
@@ -36,5 +36,28 @@ public class ListaCompra {
 
     public ArrayList<EntryLista> getEntries(){
         return this.listaCompra;
+    }
+
+    @Override
+    public ListaCompra clone() {
+        try {
+            ListaCompra copia = (ListaCompra) super.clone();
+            copia.listaCompra = new ArrayList<>();
+            for (EntryLista entry : this.listaCompra) {
+                if (entry != null) {
+                    try {
+                        copia.listaCompra.add(entry.clone());
+                    } catch (Exception e) {
+                        copia.listaCompra.add(entry);
+                    }
+                } else {
+                    copia.listaCompra.add(entry);
+                }
+            }
+
+            return copia;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
     }
 }

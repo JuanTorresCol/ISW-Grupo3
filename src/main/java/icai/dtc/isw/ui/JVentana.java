@@ -28,6 +28,8 @@ public class JVentana extends JFrame {
     private ListaCompra lista;
     private Receta receta;
     private Producto producto;
+    private int presupuesto;
+    private Receta recetaCambio;
 
     // --- Layout raíz ---
     private CardLayout cardLayout;
@@ -282,6 +284,12 @@ public class JVentana extends JFrame {
         this.producto = producto;
     }
     public Producto getProducto() { return producto; }
+    public int getPresupuesto(){return this.presupuesto;}
+    public void setPresupuesto(int p){this.presupuesto = p;}
+    public Receta getRecetaCambio(){return this.recetaCambio;}
+    public void setRecetaCambio(Receta receta){
+        this.recetaCambio = receta;
+    }
 
     // ---------- GUI Main ----------
     public static void main(String[] args) {

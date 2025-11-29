@@ -128,32 +128,35 @@ public class MenuSemanal {
         return "";
     }
 
-    // devuelve una lista de recetas en funcion a las condiciones del usuario y su presupuesto
-    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer, JVentana app){
+    // devuelve una lista de recetas en función de las condiciones del usuario y su presupuesto
+    public ArrayList<Receta> getRecetasSimilares(ArrayList<Receta> recetas, Customer customer, JVentana app) {
         ArrayList<Receta> recetasSimilares = new ArrayList<>();
         Collections.shuffle(recetas);
-        ArrayList<Producto> productos = ProductoControler.getProductos();
-        for(Receta recetaTry : recetas){
-            if(recetasSimilares.size()>=4){break;}
+        for(Receta receta: recetas) {
+            if (recetasSimilares.size() >= 4) {
+                break;
+            }
             boolean flag = true;
-            for(MenuDiario menuDia :menus_semana.values()){
-                if(menuDia.getRecetas().containsValue(recetaTry)){
-                    flag = false;
-                    break;
-                }
-                if(menuDia.getPrecioMenu(app.getLista())>recetaTry.getPrecioReceta(productos)*2){
+            for (MenuDiario menuDia : menus_semana.values()) {
+                if (menuDia.getRecetas().containsValue(receta)) {
                     flag = false;
                     break;
                 }
             }
-            for(Ingrediente ingTry :recetaTry.getIngredientes().values()){
+            for(Ingrediente ingTry :receta.getIngredientes().values()){
                 if(customer.getIllegalFood().contains(ingTry.getNombre())){
                     flag=false;
                     break;
                 }
             }
-            if(flag){
-                recetasSimilares.add(recetaTry);
+            ListaCompra lista = app.getLista();
+            ListaCompra listaClon = lista.clone();
+            listaClon = updateLista(app.getRecetaCambio(), receta, listaClon);
+            if(listaClon.calculaPrecio()>app.getPresupuesto()){
+                flag=false;
+            }
+            if (flag) {
+                recetasSimilares.add(receta);
             }
         }
         return recetasSimilares;

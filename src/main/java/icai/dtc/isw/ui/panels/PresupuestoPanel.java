@@ -75,6 +75,7 @@ public class PresupuestoPanel extends JPanel {
                         if (lista != null && menu.getLunes() != null) {
                             app.setLista(lista);
                             guardarMenu(menu, app);
+                            app.setPresupuesto(presupuesto);
                             app.refreshCard("listaCompra");
                             app.refreshCard("menuDia");
                             app.showCard("menuDia");

@@ -3,7 +3,7 @@ package icai.dtc.isw.domain;
 import icai.dtc.isw.controler.ProductoControler;
 
 // clase usada para controlar los distintos productos y sus cantidades a comprar en la lista de la compra
-public class EntryLista {
+public class EntryLista implements Cloneable {
     private final String nombre;
     private double precioCompra;
     private double precio;
@@ -25,6 +25,15 @@ public class EntryLista {
         setPrecioyUnidad();
         this.cantidad = cantidad;
         this.precioCompra = this.precio;
+    }
+
+    @Override
+    public EntryLista clone() {
+        try {
+            return (EntryLista) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
     }
 
     // vuelve a aparecer el mismo ingrediente en una receta de la semana/receta añadida
