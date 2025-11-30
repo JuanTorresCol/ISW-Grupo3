@@ -30,11 +30,14 @@ public class PerfilSupermercadoPanel extends JPanel {
         // Header de perfil
         JPanel cab = roundedCard();
         cab.setLayout(new BoxLayout(cab, BoxLayout.Y_AXIS));
-        JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
+        /*JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
+         */
+        String user = usuario.getUserName().toUpperCase();
         cab.add(center(new JLabel("SUPERMERCADO", SwingConstants.CENTER)));
-        cab.add(center(user));
+        JLabel user_logo = new JLabel(cargarIcono(PerfilSupermercadoPanel.class,user,350,90));
+        cab.add(center(user_logo));
         // cab.add(Box.createVerticalStrut(6));
 
         // Datos básicos

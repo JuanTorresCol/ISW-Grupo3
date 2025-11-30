@@ -31,8 +31,13 @@ public class PerfilPanel extends JPanel {
         JPanel cab = roundedCard();
         cab.setLayout(new BoxLayout(cab, BoxLayout.Y_AXIS));
         JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
+        JLabel icono = new JLabel(cargarIcono(PerfilPanel.class,"usuario",80,80));
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
+        JPanel user_logo = new JPanel(new FlowLayout(FlowLayout.CENTER,10,0));
+        user_logo.setOpaque(false);
+        user_logo.add(icono);
+        user_logo.add(user);
 
         JButton editar = pillButton("Editar Perfil");
         JButton crearNuevoMenu = pillButton("Crear Nuevo Menú");
@@ -52,7 +57,7 @@ public class PerfilPanel extends JPanel {
         botones.add(editar);
         botones.add(crearNuevoMenu);
 
-        cab.add(center(user));
+        cab.add(center(user_logo));
         cab.add(Box.createVerticalStrut(6));
         cab.add(botones);
 
@@ -86,7 +91,7 @@ public class PerfilPanel extends JPanel {
         }
         content.add(keyValue("ALIMENTOS QUE NO COMES:", noCome));
 
-        content.add(Box.createVerticalStrut(12));
+        content.add(Box.createVerticalStrut(10));
 
         // Histórico (placeholder)
         JLabel prev = labelBold("OTROS");
