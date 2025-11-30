@@ -242,7 +242,9 @@ class CustomerDAOTest {
                     21,
                     new ArrayList<>(Arrays.asList("gluten")),
                     new ArrayList<>(Arrays.asList("pescado")),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    80
+
             );
 
             assertTrue(CustomerDAO.registerCliente(c));
@@ -284,7 +286,9 @@ class CustomerDAOTest {
                     21,
                     new ArrayList<>(Arrays.asList("gluten")),
                     new ArrayList<>(Arrays.asList("carne")),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    80
+
             );
             CustomerDAO.editCliente(c);
 
