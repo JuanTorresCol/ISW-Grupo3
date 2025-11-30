@@ -75,9 +75,13 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
                 try {
                     ArrayList<Receta> recetasCambio = get();
                     lista.removeAll();
-                    for (Receta r : recetasCambio) {
-                        lista.add(similarCard(r, r.getNombre(), r.getDuracion()+" mins", r.getDificultad().toString()));
-                        lista.add(Box.createVerticalStrut(12));
+                    if(recetasCambio.isEmpty()){
+                        lista.add(center(new JLabel("No hay mas recetas que cumplan las especificaciones.")));
+                    } else {
+                        for (Receta r : recetasCambio) {
+                            lista.add(similarCard(r, r.getNombre(), r.getDuracion() + " mins", r.getDificultad().toString()));
+                            lista.add(Box.createVerticalStrut(12));
+                        }
                     }
                 } catch (Exception ex) {
                     lista.removeAll();
@@ -105,7 +109,7 @@ public class RecetasSimilaresPanel extends JPanel implements Refreshable {
             Receta recetaVieja = app.getMenuSemanal().cambioReceta(receta, app.getBloque(), app.getDia());
             ListaCompra nuevaLista = app.getMenuSemanal().updateLista(recetaVieja, receta, app.getLista());
             app.setLista(nuevaLista);
-            CustomerControler.guardaMenu(app.getUsuario(), app.getMenuSemanal());
+            CustomerControler.guardaMenu(app.getUsuario(), app.getMenuSemanal(), app.getPresupuesto());
 
             app.refreshCard("menuDia");
             app.refreshCard("listaCompra");

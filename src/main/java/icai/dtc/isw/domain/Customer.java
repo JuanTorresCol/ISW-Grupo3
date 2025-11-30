@@ -17,6 +17,7 @@ public class Customer extends Usuario implements Serializable {
     private ArrayList<String> alimentosNoCome;
     //recetas que el cliente ha guardado como favoritas
     private ArrayList<Receta> recetas = new ArrayList<>();
+    private int presupuesto;
 
     public Customer() {
         super();
@@ -38,13 +39,14 @@ public class Customer extends Usuario implements Serializable {
 
     // Constructor con todos los atributos
     public Customer(String userId, String userName, String userPass, String userGender, int userAge,
-                    ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome, ArrayList<Receta> recetasFavo) {
+                    ArrayList<String> illegalFood, ArrayList<String> alimentosNoCome, ArrayList<Receta> recetasFavo, int presupuesto) {
         super(userId, userName, userPass);
         this.userGender = userGender;
         this.userAge = userAge;
         this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();
         this.alimentosNoCome = (alimentosNoCome != null) ? alimentosNoCome : new ArrayList<>();
         this.recetas = recetasFavo;
+        this.presupuesto = presupuesto;
     }
 
     //getters y setters
@@ -56,7 +58,8 @@ public class Customer extends Usuario implements Serializable {
     public void setIllegalFood(ArrayList<String> illegalFood) {this.illegalFood = (illegalFood != null) ? illegalFood : new ArrayList<>();}
     public ArrayList<String> getAlimentosNoCome() {return alimentosNoCome;}
     public void setAlimentosNoCome(ArrayList<String> alimentosNoCome) {this.alimentosNoCome = (alimentosNoCome != null) ? alimentosNoCome : new ArrayList<>();}
-
+    public void setPresupuesto(int presupuesto) {this.presupuesto = presupuesto;}
+    public int getPresupuesto(){return this.presupuesto;}
     // Devuelve los alimentos a los cuales el usuario es alérgico en formato String
     public String illegalFoodToString() {
         if (illegalFood == null || illegalFood.isEmpty()) {

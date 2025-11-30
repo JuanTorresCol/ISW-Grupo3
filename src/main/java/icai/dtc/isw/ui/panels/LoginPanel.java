@@ -69,6 +69,7 @@ public class LoginPanel extends JPanel {
                 if (pass.equals(customer.getUserPass())) {
                     MenuSemanal menuSemanal = container.getMenu();
                     app.setMenu(menuSemanal);
+                    app.setPresupuesto(customer.getPresupuesto());
                     loginSuccess(menuSemanal, app);
                     app.onLoginSuccess(customer);
                 } else {

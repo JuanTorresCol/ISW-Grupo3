@@ -56,8 +56,9 @@ public class CustomerDAO {
             for (String idReceta : favRecetasId) {
                 favRecetas.add(RecetaControler.getRecetaId(idReceta));
             }
+            int presupuesto = rs.getInt("presupuesto");
 
-            return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome, favRecetas);
+            return new Customer(id, name, pass, gender, age, illegalFood, alimentosNoCome, favRecetas, presupuesto);
         } else{return null;}
     }
 
@@ -180,16 +181,17 @@ public class CustomerDAO {
     }
 
     // Guarda en la base de datos
-    public static void guardaMenu(Customer cu, ArrayList<String> recetasId){
+    public static void guardaMenu(Customer cu, ArrayList<String> recetasId, int presupuesto){
         Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "UPDATE usuarios SET menusemanal = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET menusemanal = ?, presupuesto = ? WHERE id = ?";
 
         try(PreparedStatement pst = con.prepareStatement(sql)){
             pst.setArray(1, pst.getConnection().createArrayOf(
                     "varchar",
                     recetasId.toArray(new String[0])
             ));
-            pst.setString(2,cu.getUserId())
+            pst.setInt(2, presupuesto);
+            pst.setString(3,cu.getUserId())
             ;
             int rowsUpdated = pst.executeUpdate();
             if (rowsUpdated > 0) {

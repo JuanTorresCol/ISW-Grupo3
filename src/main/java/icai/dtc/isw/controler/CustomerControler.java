@@ -25,8 +25,8 @@ public class CustomerControler {
         return(CustomerDAO.getCliente(name));
     }
 
-    public static void guardaMenu(Customer cu, MenuSemanal ms){
-        CustomerDAO.guardaMenu(cu,ms.getRecetasId());
+    public static void guardaMenu(Customer cu, MenuSemanal ms, int presupuesto){
+        CustomerDAO.guardaMenu(cu,ms.getRecetasId(), presupuesto);
     }
 
     // realiza el registro de un nuevo cliente en la base de datos
@@ -111,7 +111,8 @@ public class CustomerControler {
                     edad,
                     alergias,
                     noComeList,
-                    usuario.getRecetasFav()
+                    usuario.getRecetasFav(),
+                    usuario.getPresupuesto()
             );
 
             CustomerDAO.editCliente(customerEdit);

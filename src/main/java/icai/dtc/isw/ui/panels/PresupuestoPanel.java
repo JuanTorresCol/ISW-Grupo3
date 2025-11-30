@@ -111,7 +111,7 @@ public class PresupuestoPanel extends JPanel {
 
     // guarda el menu dentro de los parámetros de la aplicación
     public void guardarMenu(MenuSemanal menu, JVentana app){
-        CustomerControler.guardaMenu(app.getUsuario(), menu);
+        CustomerControler.guardaMenu(app.getUsuario(), menu, ((Number) presupuestoSpinner.getValue()).intValue());
     }
 
 }
