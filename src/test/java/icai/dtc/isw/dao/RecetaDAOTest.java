@@ -39,13 +39,13 @@ class RecetaDAOTest {
             when(rs.getString(1)).thenReturn("ID123");
             when(rs.getString(2)).thenReturn("Tortilla");
             when(rs.getInt(3)).thenReturn(15);
-            when(rs.getDouble(4)).thenReturn(3.5);
-            when(rs.getString(5)).thenReturn("Clásica");
-            when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name());
-            when(rs.getArray(7)).thenReturn(sqlArray);
+            when(rs.getString(4)).thenReturn("Clásica");
+            when(rs.getString(5)).thenReturn(Dificultad.MEDIO.name());
+            when(rs.getArray(6)).thenReturn(sqlArray);
             when(sqlArray.getArray()).thenReturn(new String[]{
-                    "huevos,2ud,0.2",
-                    "patatas,300g,1.0"
+                    "huevos,2u",
+                    "patatas,300g",
+                    "cebolla, 1u"
             });
 
             Receta r = RecetaDAO.getRecetaId("ID123");
@@ -54,12 +54,11 @@ class RecetaDAOTest {
             assertEquals("ID123", r.getId());
             assertEquals("Tortilla", r.getNombre());
             assertEquals(15, r.getDuracion());
-            assertEquals(3.5, r.getPrecio(), 1e-9);
             assertEquals("Clásica", r.getDescripcion());
             assertEquals(Dificultad.MEDIO, r.getDificultad());
-            assertEquals(2, r.getIngredientes().size());
+            assertEquals(3, r.getIngredientes().size());
             assertTrue(r.getIngredientes().containsKey("huevos"));
-            assertEquals("2ud", r.getIngredientes().get("huevos").getCantidad());
+            assertEquals("2u", r.getIngredientes().get("huevos").getCantidad());
 
             verify(pst).setString(1, "ID123");
             verify(pst).executeQuery();
@@ -129,13 +128,12 @@ class RecetaDAOTest {
             when(rs.getString(1)).thenReturn("R1", "R2");
             when(rs.getString(2)).thenReturn("Tortilla", "Pasta");
             when(rs.getInt(3)).thenReturn(15, 20);
-            when(rs.getDouble(4)).thenReturn(3.5, 6.0);
-            when(rs.getString(5)).thenReturn("Huevos y patata", "Con tomate");
-            when(rs.getString(6)).thenReturn(Dificultad.MEDIO.name(), Dificultad.FACIL.name());
+            when(rs.getString(4)).thenReturn("Huevos y patata", "Tomate");
+            when(rs.getString(5)).thenReturn(Dificultad.MEDIO.name(), Dificultad.FACIL.name());
 
-            when(rs.getArray(7)).thenReturn(array1, array2);
-            when(array1.getArray()).thenReturn(new String[]{"huevos,2ud,0.2", "patatas,300g,1.0"});
-            when(array2.getArray()).thenReturn(new String[]{"pasta,200g,0.8", "tomate,100g,0.6"});
+            when(rs.getArray(6)).thenReturn(array1, array2);
+            when(array1.getArray()).thenReturn(new String[]{"huevos,2ud", "patatas,300g"});
+            when(array2.getArray()).thenReturn(new String[]{"pasta,200g", "tomate,100g"});
 
             ArrayList<Receta> lista = RecetaDAO.getRecetas();
 
@@ -162,7 +160,7 @@ class RecetaDAOTest {
             when(cdao.getConnection()).thenReturn(conn);
 
             when(conn.prepareStatement(
-                    "INSERT INTO recetas (id, nombre, duracion, precio, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?,?)"
+                    "INSERT INTO recetas (id, nombre, duracion, descripcion, dificultad, ingredientes) VALUES (?,?,?,?,?,?)"
             )).thenReturn(pst);
 
             when(pst.getConnection()).thenReturn(conn);
@@ -170,15 +168,16 @@ class RecetaDAOTest {
             when(pst.executeUpdate()).thenReturn(1);
 
             Map<String, Ingrediente> ing = new LinkedHashMap<>();
-            ing.put("huevos", new Ingrediente("huevos", "2ud", 0.2));
-            ing.put("patatas", new Ingrediente("patatas", "300g", 1.0));
+            ing.put("huevos", new Ingrediente("huevos", "2u"));
+            ing.put("patatas", new Ingrediente("patatas", "300g"));
+            ing.put("cebolla", new Ingrediente("cebolla", "1u"));
+
 
             Receta r = new Receta(
                     "ID123",
                     "Tortilla",
                     Dificultad.MEDIO,
                     15,
-                    3.5,
                     "Clásica",
                     ing
             );
@@ -188,17 +187,18 @@ class RecetaDAOTest {
             verify(pst).setString(1, "ID123");
             verify(pst).setString(2, "Tortilla");
             verify(pst).setInt(3, 15);
-            verify(pst).setDouble(4, 3.5);
-            verify(pst).setString(5, "Clásica");
-            verify(pst).setString(6, Dificultad.MEDIO.name());
+            verify(pst).setString(4, "Clásica");
+            verify(pst).setString(5, Dificultad.MEDIO.name());
 
             ArgumentCaptor<Object[]> cap = ArgumentCaptor.forClass(Object[].class);
             verify(conn).createArrayOf(eq("VARCHAR"), cap.capture());
             Object[] arr = cap.getValue();
-            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("huevos,2ud,0.2")));
-            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("patatas,300g,1.0")));
+            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("huevos,2u")));
+            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("patatas,300g")));
+            assertTrue(Arrays.stream(arr).anyMatch(o -> o.equals("cebolla,1u")));
 
-            verify(pst).setArray(7, createdArray);
+
+            verify(pst).setArray(6, createdArray);
             verify(pst).executeUpdate();
         }
     }

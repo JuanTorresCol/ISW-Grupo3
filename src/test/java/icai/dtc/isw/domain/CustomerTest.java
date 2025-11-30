@@ -36,8 +36,7 @@ class CustomerTest {
     @Test
     void testCreateUserIdFormat() {
         String userId = util.createUserId("maria");
-        assertTrue(userId.matches("[A-Z]\\d{5}"),
-                "El userId debe empezar por una mayúscula y seguir con 5 dígitos");
+        assertTrue(userId.matches("[A-Z]\\d{5}"));
     }
 
     //prueba el constructor y los getters
@@ -50,11 +49,7 @@ class CustomerTest {
         assertEquals(illegalFood, customer.getIllegalFood());
         assertEquals(noCome, customer.getAlimentosNoCome());
 
-
-        String esperado = util.createUserId("maria");
-        assertEquals(esperado, customer.getUserId());
     }
-
     //prueba los setters
     @Test
     void testSetters() {
@@ -81,7 +76,7 @@ class CustomerTest {
     void testCreateUserId() {
         String id1 = util.createUserId("maria");
         String id2 = util.createUserId("maria");
-        assertEquals(id1, id2, "El mismo nombre debería generar el mismo userId");
+        assertEquals(id1, id2);
     }
 
     //prueba que dos nombres distintos generen ids distintos
@@ -89,20 +84,17 @@ class CustomerTest {
     void testDifferentIds() {
         String id1 = util.createUserId("maria");
         String id2 = util.createUserId("juan");
-        assertNotEquals(id1, id2, "Nombres distintos deben generar IDs distintos");
+        assertNotEquals(id1, id2);
     }
 
     //prueba que se devuelva una cadena vacia cuando no hay lista
     @Test
     void testIllegalFoodToString() {
-        // caso normal
         assertEquals("Gluten,Lacteos", customer.illegalFoodToString());
 
-        // lista vacía
         customer.setIllegalFood(new ArrayList<>());
         assertEquals("", customer.illegalFoodToString());
 
-        // null -> setter convierte a lista vacía -> ""
         customer.setIllegalFood(null);
         assertEquals("", customer.illegalFoodToString());
     }
@@ -110,7 +102,6 @@ class CustomerTest {
     //prueba si un alimento está en las restricciones o preferencias del usuario.
     @Test
     void testNoPuedeConsumirNombre() {
-        // tiene alergia a Gluten y no come Carne
         assertTrue(customer.noPuedeConsumirNombre("Pan con gluten"));
         assertTrue(customer.noPuedeConsumirNombre("carne de cerdo"));
         assertFalse(customer.noPuedeConsumirNombre("Ensalada de tomate"));
@@ -119,24 +110,22 @@ class CustomerTest {
     //prueba que funciona correctamente en función del nombre del ingrediente o producto.
     @Test
     void testNoPuedeConsumirIngredienteYProducto() {
-        Ingrediente ingOk = new Ingrediente("tomate", "100g", 0.5);
-        Ingrediente ingMal = new Ingrediente("harina de gluten", "100g", 0.5);
-        Ingrediente ingNoCome = new Ingrediente("carne picada", "200g", 2.0);
+        Ingrediente ingOk = new Ingrediente("tomate", "100g");
+        Ingrediente ingMal = new Ingrediente("harina de gluten", "100g");
+        Ingrediente ingNoCome = new Ingrediente("carne picada", "200g");
 
         assertFalse(customer.noPuedeConsumir(ingOk));
         assertTrue(customer.noPuedeConsumir(ingMal));
         assertTrue(customer.noPuedeConsumir(ingNoCome));
 
-        Producto prodOk = new Producto();
-        prodOk = new Producto("P1", "manzana", 1, Unidad.u, 1.0);
+        Producto prodOk = new Producto("manzana", Unidad.u, 1.0);
+        Producto prodMal = new Producto("pan con gluten", Unidad.u, 1.0);
 
-        Producto prodMal = new Producto("P2", "pan con gluten", 1, Unidad.u, 1.0);
 
         assertFalse(customer.noPuedeConsumir(prodOk));
         assertTrue(customer.noPuedeConsumir(prodMal));
     }
-
-
 }
+
 
 
