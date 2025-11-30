@@ -179,11 +179,13 @@ public class MenuDiaPanel extends JPanel {
         card.add(Box.createVerticalStrut(3));
 
         JPanel img = new JPanel();
+        img.setLayout(new BorderLayout());
         Dimension d = new Dimension(240,85);
-        img.setPreferredSize(d);
+        //img.setPreferredSize(d);
         img.setMinimumSize(d);
         img.setBackground(new Color(170, 187, 197));
-        img.add(new JLabel("Imagen"));
+        JLabel comida = new JLabel(cargarIcono(MenuDiaPanel.class,"comida",400,300));
+        img.add(comida);
         card.add(img);
         card.add(Box.createVerticalStrut(6));
 

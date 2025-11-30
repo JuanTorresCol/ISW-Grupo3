@@ -91,9 +91,11 @@ public class GuardadasPanel extends JPanel implements Refreshable {
         card.setLayout(new BorderLayout(10,0));
 
         JPanel img = new JPanel();
+        img.setLayout(new BorderLayout());
         img.setPreferredSize(new Dimension(140, 80));
         img.setBackground(new Color(170, 187, 197));
-        img.add(new JLabel("Img"));
+        JLabel comida = new JLabel(cargarIcono(GuardadasPanel.class,"comida",150,120));
+        img.add(comida);
 
         JPanel info = new JPanel();
         info.setOpaque(false);
