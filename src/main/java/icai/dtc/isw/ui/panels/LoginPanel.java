@@ -48,32 +48,45 @@ public class LoginPanel extends JPanel {
         btnEntrar.addActionListener(_ -> {
             String userName = usuarioLoginField.getText().trim();
             String pass = new String(contrasenaLoginField.getPassword());
-            ContainerMenuCustomer container = controler.getCustomerMenu(userName);
 
-            // a continuación el programa diferencia entre un Customer y un Supermercado
-            if (container != null) {
-                if (!(container.getCustomer() == null)) {
-                    if (pass.equals(container.getCustomer().getUserPass())) {
-                        Customer customerCheck = container.getCustomer();
-                        MenuSemanal menuSemanal = container.getMenu();
-                        app.setMenu(menuSemanal);
-                        loginSuccess(menuSemanal, app);
-                        app.onLoginSuccess(customerCheck);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Contraseña incorrecta, pruebe otra vez.");
-                    }
+            ContainerMenuCustomer container = controler.getCustomerMenu(userName);
+            Customer customer = (container != null) ? container.getCustomer() : null;
+
+            Supermercado supermercado = SupermercadoControler.loginSupermercado(userName);
+
+            boolean esCustomer = (customer != null);
+            boolean esSupermercado = (supermercado != null);
+
+            //si no existe customer ni supermercado en la tabla
+            if (!esCustomer && !esSupermercado) {
+                JOptionPane.showMessageDialog(this,
+                        "Usuario no existente.");
+                return;
+            }
+
+            // separamos la lógica de iniciar como super o como customer
+            if (esCustomer) {
+                if (pass.equals(customer.getUserPass())) {
+                    MenuSemanal menuSemanal = container.getMenu();
+                    app.setMenu(menuSemanal);
+                    loginSuccess(menuSemanal, app);
+                    app.onLoginSuccess(customer);
                 } else {
-                    Supermercado supermercado = SupermercadoControler.loginSupermercado(userName);
-                    if (supermercado != null) {
-                        if(pass.equals(supermercado.getUserPass())) {
-                            app.onLoginSuccessSupermercado(supermercado);
-                        } else {JOptionPane.showMessageDialog(this, "Contraseña incorrecta, vuelva a intentarlo");}
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Inicio de sesión fallido");
-                    }
+                    JOptionPane.showMessageDialog(this,
+                            "Contraseña incorrecta.");
+                }
+                return;
+            }
+            if (esSupermercado) {
+                if (pass.equals(supermercado.getUserPass())) {
+                    app.onLoginSuccessSupermercado(supermercado);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Contraseña incorrecta.");
                 }
             }
         });
+
 
         JButton btnBack = pillButton("Volver al inicio");
         btnBack.addActionListener(_ -> app.showCard("inicio"));
