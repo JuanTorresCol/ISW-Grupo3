@@ -43,9 +43,10 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("MENUMASTER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450, 680);
+        setSize(420, 680);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG);
+        setResizable(false);
 
         configurarInterfaz();
     }
@@ -55,6 +56,7 @@ public class JVentana extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
         mainPanel.setBackground(BG);
+
 
         // PRE-AUTH
         mainPanel.add(new InicioPanel(this), "inicio");
