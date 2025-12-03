@@ -168,7 +168,7 @@ public final class UiUtils {
         b.setBackground(ACCENT);
         b.setUI(new BasicButtonUI());
         b.setFocusPainted(false);
-        b.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        b.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return b;
     }

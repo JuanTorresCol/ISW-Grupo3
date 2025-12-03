@@ -52,7 +52,7 @@ public class PerfilPanel extends JPanel {
         editar.setAlignmentX(Component.CENTER_ALIGNMENT);
         crearNuevoMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel botones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.CENTER, 7, 0));
         botones.setOpaque(false);
         botones.add(editar);
         botones.add(crearNuevoMenu);

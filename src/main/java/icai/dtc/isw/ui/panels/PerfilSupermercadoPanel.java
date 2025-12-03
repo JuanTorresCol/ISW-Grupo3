@@ -36,7 +36,7 @@ public class PerfilSupermercadoPanel extends JPanel {
          */
         String user = usuario.getUserName().toUpperCase();
         cab.add(center(new JLabel("SUPERMERCADO", SwingConstants.CENTER)));
-        JLabel user_logo = new JLabel(cargarIcono(PerfilSupermercadoPanel.class,user,350,90));
+        JLabel user_logo = new JLabel(cargarIcono(PerfilSupermercadoPanel.class,user,320,70));
         cab.add(center(user_logo));
         // cab.add(Box.createVerticalStrut(6));
 

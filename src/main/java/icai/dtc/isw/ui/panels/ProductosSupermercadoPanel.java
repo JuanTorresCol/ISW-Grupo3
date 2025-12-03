@@ -100,7 +100,7 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         JPanel card = roundedCard();
         card.setLayout(new BorderLayout(10, 0));
 
-        int CARD_WIDTH = 400;
+        int CARD_WIDTH = 350;
         int CARD_HEIGHT = 60;
         Dimension cardSize = new Dimension(CARD_WIDTH, CARD_HEIGHT);
 
