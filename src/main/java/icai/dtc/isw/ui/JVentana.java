@@ -43,7 +43,7 @@ public class JVentana extends JFrame {
     public JVentana() {
         setTitle("MENUMASTER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 680);
+        setSize(440, 680);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG);
         setResizable(false);

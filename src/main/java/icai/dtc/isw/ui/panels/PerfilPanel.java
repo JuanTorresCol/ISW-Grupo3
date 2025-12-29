@@ -20,10 +20,11 @@ public class PerfilPanel extends JPanel {
         JPanel titulo = basePanel(new BorderLayout());
         titulo.add(t,BorderLayout.NORTH);
 
+
         JPanel content = new JPanel();
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBorder(new EmptyBorder(10, 30, 30, 30));
+        content.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         Customer usuario = app.getUsuario();
 
@@ -100,9 +101,17 @@ public class PerfilPanel extends JPanel {
             app.showCard("recetasGuardadas");
         });
         JButton exit = flatLink("Cerrar Sesión >", _ -> app.logout());
-        content.add(center(prev));
-        content.add(center(s1));
-        content.add(center(exit));
+
+        prev.setAlignmentX(Component.CENTER_ALIGNMENT);
+        s1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exit.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        content.add(Box.createVerticalStrut(10));
+        content.add(prev);
+        content.add(Box.createVerticalStrut(4));
+        content.add(s1);
+        content.add(Box.createVerticalStrut(4));
+        content.add(exit);
 
         add(content, BorderLayout.CENTER);
         add(bottomNav(
