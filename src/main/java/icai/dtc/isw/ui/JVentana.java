@@ -46,7 +46,7 @@ public class JVentana extends JFrame {
         setSize(440, 680);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG);
-        setResizable(false);
+        //setResizable(false);
 
         configurarInterfaz();
     }

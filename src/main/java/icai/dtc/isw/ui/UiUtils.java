@@ -155,7 +155,7 @@ public final class UiUtils {
         if (top instanceof JComponent t) t.setAlignmentX(Component.CENTER_ALIGNMENT);
         if (mid instanceof JComponent m) m.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.add(top);
-        p.add(Box.createVerticalStrut(10));
+        //p.add(Box.createVerticalStrut(2));
         p.add(mid);
         return p;
     }
@@ -228,6 +228,12 @@ public final class UiUtils {
         v.setFont(BODY);
         p.add(k); p.add(v);
         return p;
+    }
+
+    public static JLabel body(String s){
+        JLabel v = new JLabel(" "+s);
+        v.setFont(BODY);
+        return v;
     }
 
     public static JButton outlineButton(String text, ActionListener al) {

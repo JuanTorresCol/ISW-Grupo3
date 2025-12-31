@@ -2,6 +2,7 @@ package icai.dtc.isw.ui.panels;
 
 import icai.dtc.isw.domain.Customer;
 import icai.dtc.isw.ui.JVentana;
+import icai.dtc.isw.ui.UiUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,7 +33,7 @@ public class PerfilPanel extends JPanel {
         JPanel cab = roundedCard();
         cab.setLayout(new BoxLayout(cab, BoxLayout.Y_AXIS));
         JLabel user = new JLabel(usuario.getUserName().toUpperCase(), SwingConstants.CENTER);
-        JLabel icono = new JLabel(cargarIcono(PerfilPanel.class,"usuario",80,80));
+        JLabel icono = new JLabel(cargarIcono(PerfilPanel.class,"usuario",80,90));
         user.setAlignmentX(Component.CENTER_ALIGNMENT);
         user.setFont(H3);
         JPanel user_logo = new JPanel(new FlowLayout(FlowLayout.CENTER,10,0));
@@ -90,28 +91,47 @@ public class PerfilPanel extends JPanel {
                     .replace("}", "")
                     .toUpperCase();
         }
-        content.add(keyValue("ALIMENTOS QUE NO COMES:", noCome));
 
-        content.add(Box.createVerticalStrut(10));
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(labelBold( " ALIMENTOS QUE NO COMES:"+ " "));
+        panel.add(Box.createVerticalStrut(3));
+        panel.add(body(noCome));
+        JScrollPane scroll = new JScrollPane(panel);
+        scroll.getViewport().setBackground(BG);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        content.add(scroll);
+
+        //content.add(Box.createVerticalStrut(3));
 
         // Histórico (placeholder)
-        JLabel prev = labelBold("OTROS");
+        JLabel prev = labelBold(" OTROS ");
+        prev.setBorder(BorderFactory.createLineBorder(TITLE,1));
         JButton s1 = flatLink("Recetas Guardadas", _ -> {
             app.refreshCard("recetasGuardadas");
             app.showCard("recetasGuardadas");
         });
         JButton exit = flatLink("Cerrar Sesión >", _ -> app.logout());
 
-        prev.setAlignmentX(Component.CENTER_ALIGNMENT);
-        s1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        exit.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel otros = new JPanel();
+        otros.setLayout(new BoxLayout(otros, BoxLayout.Y_AXIS));
+        JPanel otros_left = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        otros_left.setOpaque(false);
+        otros.setOpaque(false);
+        prev.setAlignmentX(Component.LEFT_ALIGNMENT);
+        s1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        exit.setAlignmentX(Component.LEFT_ALIGNMENT);
+        otros.add(prev);
+        otros.add(Box.createVerticalStrut(8));
+        otros.add(s1);
+        otros.add(Box.createVerticalStrut(4));
+        otros.add(exit);
+        otros_left.add(otros);
 
-        content.add(Box.createVerticalStrut(10));
-        content.add(prev);
-        content.add(Box.createVerticalStrut(4));
-        content.add(s1);
-        content.add(Box.createVerticalStrut(4));
-        content.add(exit);
+        content.add(Box.createVerticalStrut(8));
+        content.add(otros_left);
+
 
         add(content, BorderLayout.CENTER);
         add(bottomNav(

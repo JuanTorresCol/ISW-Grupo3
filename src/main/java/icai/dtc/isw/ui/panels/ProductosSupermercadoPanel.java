@@ -28,6 +28,10 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         setBackground(BG);
 
         JLabel t = pillTitle("PRODUCTOS");
+        JPanel titulo = new JPanel(new FlowLayout());
+        titulo.setOpaque(false);
+        titulo.add(Box.createVerticalStrut(20));
+        titulo.add(t);
 
         lista = new JPanel();
         lista.setOpaque(false);
@@ -51,7 +55,8 @@ public class ProductosSupermercadoPanel extends JPanel implements Refreshable {
         barra.add(Box.createHorizontalStrut(10));
         barra.add(exit);
 
-        add(center(t), BorderLayout.NORTH);
+
+        add(center(titulo), BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
         add(barra, BorderLayout.SOUTH);
 

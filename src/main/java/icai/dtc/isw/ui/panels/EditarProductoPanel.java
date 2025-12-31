@@ -76,13 +76,13 @@ public class EditarProductoPanel extends JPanel {
         else if(app.getProducto().getUnidadP().equals(Unidad.kg)){kgCheckBox.setSelected(true);}
 
         form.add(labels("CÓDIGO DE IDENTIFICACIÓN"));
-        form.add(fieldWrapWest(codigoField));
+        form.add(fieldWrap(codigoField,new Dimension(375,30)));
 
         form.add(labels("NOMBRE"));
-        form.add(fieldWrapWest(nombreField));
+        form.add(fieldWrap(nombreField,new Dimension(375,30)));
 
         form.add(labels("PRECIO"));
-        form.add(fieldWrapWest(precioField));
+        form.add(fieldWrap(precioField,new Dimension(375,30)));
 
         form.add(labels("UNIDAD DE VENTA"));
         JPanel unidades = gridLayout();

@@ -144,7 +144,7 @@ public class MenuDiaPanel extends JPanel {
                         menuDia.getComida().getDuracion() + " mins",
                         String.valueOf(menuDia.getComida().getDificultad())
                 ));
-                cards.add(Box.createVerticalStrut(10));
+                cards.add(Box.createVerticalStrut(8));
             }
 
             if (menuDia.getCena() != null) {
@@ -176,18 +176,18 @@ public class MenuDiaPanel extends JPanel {
         cab.setFont(H2);
         cab.setForeground(TITLE);
         card.add(center(cab));
-        card.add(Box.createVerticalStrut(3));
+        //card.add(Box.createVerticalStrut(2));
 
         JPanel img = new JPanel();
         img.setLayout(new BorderLayout());
-        Dimension d = new Dimension(240,85);
+        Dimension d = new Dimension(240,80);
         //img.setPreferredSize(d);
         img.setMinimumSize(d);
         img.setBackground(new Color(170, 187, 197));
         JLabel comida = new JLabel(cargarIcono(MenuDiaPanel.class,"comida",400,300));
         img.add(comida);
         card.add(img);
-        card.add(Box.createVerticalStrut(6));
+        //card.add(Box.createVerticalStrut(3));
 
         // borde aplicado a la card
         card.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));

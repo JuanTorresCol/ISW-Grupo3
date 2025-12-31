@@ -17,7 +17,7 @@ import static icai.dtc.isw.ui.UiUtils.*;
 
 public class NuevoProductoPanel extends JPanel {
 
-    private final int ancho = 33;
+    private final int ancho = 20;
     private final JTextField nombreField = textField(ancho);
     private final JTextField precioField = textField(ancho);
     private final JCheckBox kgCheckBox = new JCheckBox("KG");
@@ -46,8 +46,8 @@ public class NuevoProductoPanel extends JPanel {
         scrollPane.getViewport().setBackground(BG);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        JButton btnBack = pillButton("Volver al perfil");
-        btnBack.addActionListener(_ -> app.showCard("perfilSupermercado"));
+        JButton btnBack = pillButton("Volver");
+        btnBack.addActionListener(_ -> app.showCard("productosSuper"));
 
         add(t, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -69,9 +69,9 @@ public class NuevoProductoPanel extends JPanel {
 
         form.add(Box.createVerticalStrut(20));
         form.add(labels("NOMBRE"));
-        form.add(fieldWrap(nombreField,new Dimension(400,30)));
+        form.add(fieldWrap(nombreField,new Dimension(375,30)));
         form.add(labels("PRECIO"));
-        form.add(fieldWrap(precioField,new Dimension(400,30)));
+        form.add(fieldWrap(precioField,new Dimension(375,30)));
 
         form.add(labels("UNIDAD DE VENTA"));
         JPanel unidades = gridLayout();

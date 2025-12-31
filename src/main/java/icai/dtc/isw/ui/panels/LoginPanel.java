@@ -27,6 +27,7 @@ public class LoginPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(BG);
 
+
         JLabel t = title("Inicio de sesión");
         t.setBorder(new javax.swing.border.EmptyBorder(120, 40, 20, 40));
 

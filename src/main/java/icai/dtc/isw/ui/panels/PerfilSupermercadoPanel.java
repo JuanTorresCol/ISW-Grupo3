@@ -36,7 +36,7 @@ public class PerfilSupermercadoPanel extends JPanel {
          */
         String user = usuario.getUserName().toUpperCase();
         cab.add(center(new JLabel("SUPERMERCADO", SwingConstants.CENTER)));
-        JLabel user_logo = new JLabel(cargarIcono(PerfilSupermercadoPanel.class,user,320,70));
+        JLabel user_logo = new JLabel(cargarIcono(PerfilSupermercadoPanel.class,user,320,80));
         cab.add(center(user_logo));
         // cab.add(Box.createVerticalStrut(6));
 
@@ -51,15 +51,34 @@ public class PerfilSupermercadoPanel extends JPanel {
 
         content.add(keyValue("NÚMERO DE PRODUCTOS: ", String.valueOf(usuario.getNumProd())));
 
-        JLabel prev = labelBold("OTROS");
+        JPanel otros = new JPanel();
+        otros.setLayout(new BoxLayout(otros, BoxLayout.Y_AXIS));
+        JPanel otros_left = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        otros_left.setOpaque(false);
+        otros.setOpaque(false);
+
+        JLabel prev = labelBold(" OTROS ");
+
         JButton s1 = flatLink("Productos en Stock", _ -> {
             app.refreshCard("productosSuper");
             app.showCard("productosSuper");
         });
         JButton exit = flatLink("Cerrar Sesión >", _ -> app.logoutSuper());
-        content.add(center(prev));
-        content.add(center(s1));
-        content.add(center(exit));
+
+
+        prev.setAlignmentX(Component.LEFT_ALIGNMENT);
+        s1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        exit.setAlignmentX(Component.LEFT_ALIGNMENT);
+        otros.add(prev);
+        otros.add(Box.createVerticalStrut(10));
+        otros.add(s1);
+        otros.add(Box.createVerticalStrut(4));
+        otros.add(exit);
+        otros_left.add(otros);
+
+        content.add(Box.createVerticalStrut(8));
+        content.add(otros_left);
+
         add(content);
 
     }
